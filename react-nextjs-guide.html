@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>React ⚛️ &amp; Next.js — Hướng dẫn toàn tập · Hooks &amp; Lifecycle</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080810;--s1:#0e0e1c;--s2:#131326;--s3:#18182e;--s4:#1e1e38;
+  --border:#222240;--border2:#2c2c50;--text:#e6e6f2;--muted:#666698;--faint:#363660;
+  --acc:#61dafb;--acc-d:#20a8d8;--acc-dim:rgba(97,218,251,.11);--acc-glow:rgba(97,218,251,.24);
+  --green:#40d88e;--green-dim:rgba(64,216,142,.10);
+  --blue:#5ba8ff;--blue-dim:rgba(91,168,255,.10);
+  --purple:#a07af4;--purple-dim:rgba(160,122,244,.10);
+  --yellow:#ffd060;--yellow-dim:rgba(255,208,96,.10);
+  --teal:#30d8c0;--teal-dim:rgba(48,216,192,.10);
+  --orange:#ff8c50;--orange-dim:rgba(255,140,80,.10);
+  --pink:#ff6584;--pink-dim:rgba(255,101,132,.11);--pink-glow:rgba(255,101,132,.22);
+  --sky:#38bdf8;--sky-dim:rgba(56,189,248,.10);
+  /* React brand: cyan atom */
+  --oc:#61dafb;--oc-dim:rgba(97,218,251,.13);--oc-glow:rgba(97,218,251,.30);
+  --oc2:#00b4d8;--oc2-dim:rgba(0,180,216,.12);
+  /* sections */
+  --ins:#5ba8ff;--ins-dim:rgba(91,168,255,.12);--ins-glow:rgba(91,168,255,.28);
+  --ch:#40d88e;--ch-dim:rgba(64,216,142,.12);--ch-glow:rgba(64,216,142,.28);
+  --sk:#a07af4;--sk-dim:rgba(160,122,244,.12);--sk-glow:rgba(160,122,244,.28);
+  --au:#ffd060;--au-dim:rgba(255,208,96,.12);--au-glow:rgba(255,208,96,.28);
+  --code-bg:#05050e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:15px;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:0;width:268px;height:100vh;background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;z-index:400;display:flex;flex-direction:column}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-brand{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.logo-icon{width:44px;height:44px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,var(--oc),var(--oc2));display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 26px var(--oc-glow)}
+.logo-text h2{font-size:15px;font-weight:800;letter-spacing:-.4px}
+.logo-text p{font-size:10.5px;color:var(--muted);margin-top:2px}
+.prog-wrap{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--oc),var(--ins),var(--ch),var(--sk),var(--au));width:0%;transition:width .4s;border-radius:2px}
+.nav-section{padding:8px 0 4px}
+.nav-sect-label{padding:8px 18px 3px;font-size:9.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--faint)}
+.nav-group-hdr{display:flex;align-items:center;gap:7px;margin:6px 12px 3px;padding:6px 10px;border-radius:7px;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.ngh-oc{background:var(--oc-dim);color:var(--oc)}
+.ngh-ins{background:var(--ins-dim);color:var(--ins)}
+.ngh-ch{background:var(--ch-dim);color:var(--ch)}
+.ngh-sk{background:var(--sk-dim);color:var(--sk)}
+.ngh-au{background:var(--au-dim);color:var(--au)}
+.ngh-other{background:rgba(255,255,255,.05);color:var(--muted)}
+.nav-link{display:flex;align-items:center;gap:9px;padding:6px 18px;color:var(--muted);text-decoration:none;font-size:12.5px;font-weight:600;border-left:2px solid transparent;transition:all .14s}
+.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(97,218,251,.07);border-left-color:var(--acc)}
+.nav-link .ico{font-size:13px;flex-shrink:0;width:16px;text-align:center}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;background:var(--acc-dim);color:var(--acc)}
+
+/* MAIN */
+.main{margin-left:268px;min-height:100vh}
+.hero{padding:80px 64px 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);
+  background:radial-gradient(ellipse 65% 55% at 75% 22%,rgba(97,218,251,.12) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 55% at 10% 82%,rgba(91,168,255,.07) 0%,transparent 55%),
+             radial-gradient(ellipse 40% 50% at 50% 50%,rgba(64,216,142,.04) 0%,transparent 60%),var(--bg)}
+.hero-dots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.028) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.hero-glow{position:absolute;right:-90px;top:-90px;width:520px;height:520px;background:radial-gradient(circle,rgba(97,218,251,.10) 0%,transparent 65%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--oc-dim);border:1px solid rgba(97,218,251,.38);color:var(--oc);padding:5px 16px;border-radius:100px;font-size:11.5px;font-weight:700;margin-bottom:26px;letter-spacing:.3px}
+.hero-eyebrow .pulse{width:6px;height:6px;border-radius:50%;background:var(--oc);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero h1{font-size:52px;font-weight:900;letter-spacing:-2.5px;line-height:1.04;margin-bottom:18px}
+.h-oc{color:var(--oc)}.h-ins{color:var(--ins)}.h-ch{color:var(--ch)}.h-sk{color:var(--sk)}.h-au{color:var(--au)}.h-acc{color:var(--acc)}
+.h-grad{background:linear-gradient(135deg,var(--oc) 0%,var(--oc2) 50%,var(--ins) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:16px;color:var(--muted);max-width:580px;line-height:1.72;margin-bottom:30px}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:5px 14px;border-radius:7px;font-size:12px;font-weight:700}
+.chip-oc{background:var(--oc-dim);color:var(--oc)}.chip-ins{background:var(--ins-dim);color:var(--ins)}
+.chip-ch{background:var(--ch-dim);color:var(--ch)}.chip-sk{background:var(--sk-dim);color:var(--sk)}
+.chip-au{background:var(--au-dim);color:var(--au)}.chip-t{background:var(--teal-dim);color:var(--teal)}
+.chip-p{background:var(--pink-dim);color:var(--pink)}.chip-s{background:var(--sky-dim);color:var(--sky)}
+
+/* CAT BANNERS */
+.cat-banner{display:flex;align-items:center;gap:16px;padding:20px 24px;border-radius:14px;margin-bottom:44px;position:relative;overflow:hidden}
+.cat-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cb-oc{background:var(--oc-dim);border:1px solid rgba(97,218,251,.30)}.cb-oc::before{background:linear-gradient(90deg,var(--oc),var(--oc2))}
+.cb-ins{background:var(--ins-dim);border:1px solid rgba(91,168,255,.30)}.cb-ins::before{background:linear-gradient(90deg,var(--ins),var(--sky))}
+.cb-ch{background:var(--ch-dim);border:1px solid rgba(64,216,142,.30)}.cb-ch::before{background:linear-gradient(90deg,var(--ch),var(--teal))}
+.cb-sk{background:var(--sk-dim);border:1px solid rgba(160,122,244,.30)}.cb-sk::before{background:linear-gradient(90deg,var(--sk),var(--pink))}
+.cb-au{background:var(--au-dim);border:1px solid rgba(255,208,96,.30)}.cb-au::before{background:linear-gradient(90deg,var(--au),var(--orange))}
+.cb-icon{font-size:38px;flex-shrink:0}
+.cb-badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;display:inline-block;margin-bottom:5px}
+.cb-oc .cb-badge{background:var(--oc-dim);color:var(--oc)}
+.cb-ins .cb-badge{background:var(--ins-dim);color:var(--ins)}
+.cb-ch .cb-badge{background:var(--ch-dim);color:var(--ch)}
+.cb-sk .cb-badge{background:var(--sk-dim);color:var(--sk)}
+.cb-au .cb-badge{background:var(--au-dim);color:var(--au)}
+.cb-title{font-size:20px;font-weight:800;letter-spacing:-.5px}.cb-sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+
+/* CONTENT */
+.content{padding:56px 64px;max-width:1020px}
+.section{margin-bottom:72px}
+.sec-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:30px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.sec-tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 10px;border-radius:5px;margin-top:5px;flex-shrink:0;letter-spacing:.5px}
+.st-oc{color:var(--oc);background:var(--oc-dim);border:1px solid var(--oc-glow)}
+.st-ins{color:var(--ins);background:var(--ins-dim);border:1px solid var(--ins-glow)}
+.st-ch{color:var(--ch);background:var(--ch-dim);border:1px solid var(--ch-glow)}
+.st-sk{color:var(--sk);background:var(--sk-dim);border:1px solid var(--sk-glow)}
+.st-au{color:var(--au);background:var(--au-dim);border:1px solid var(--au-glow)}
+.st-y{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(255,208,96,.24)}
+.sec-title{font-size:23px;font-weight:800;letter-spacing:-.6px;margin-bottom:5px}
+.sec-sub{font-size:13px;color:var(--muted)}
+.sub{margin-bottom:38px}
+.sub-title{font-size:14.5px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:10px}
+.sub-title::before{content:'';display:inline-block;width:14px;height:3px;background:var(--acc);border-radius:2px;flex-shrink:0}
+.sub p,.sub ul,.sub ol{color:var(--muted);font-size:13.5px;margin-bottom:11px;line-height:1.75}
+.sub ul,.sub ol{padding-left:22px}.sub li{margin-bottom:5px}.sub strong{color:var(--text)}
+
+/* GRIDS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:11px;padding:16px;transition:all .2s;cursor:default}
+.card:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.38)}
+.card-icon{font-size:24px;margin-bottom:8px}.card-title{font-size:13px;font-weight:700;margin-bottom:4px}.card-desc{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* CODE BLOCKS */
+.cblock{background:var(--code-bg);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin:13px 0}
+.cb-head{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--s2);border-bottom:1px solid var(--border)}
+.cb-dots{display:flex;gap:5px}.cbd{width:10px;height:10px;border-radius:50%}
+.cbd.r{background:#ff5f56}.cbd.y{background:#ffbd2e}.cbd.g{background:#27c93f}
+.cb-name{font-size:11.5px;font-weight:700;color:var(--muted);font-family:'JetBrains Mono',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cb-tag{margin-left:auto;font-size:9px;font-weight:700;padding:2px 9px;border-radius:100px;flex-shrink:0}
+.ct-oc{background:var(--oc-dim);color:var(--oc)}.ct-ins{background:var(--ins-dim);color:var(--ins)}
+.ct-ch{background:var(--ch-dim);color:var(--ch)}.ct-sk{background:var(--sk-dim);color:var(--sk)}
+.ct-au{background:var(--au-dim);color:var(--au)}.ct-y{background:var(--yellow-dim);color:var(--yellow)}
+.ct-g{background:var(--green-dim);color:var(--green)}.ct-t{background:var(--teal-dim);color:var(--teal)}
+.cb-body{padding:18px 20px;overflow-x:auto}
+.cb-body pre{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.72;white-space:pre;color:#8899bb}
+/* syntax */
+.kw{color:#c792ea}.tp{color:#ffcb6b}.fn{color:#82aaff}.st-s{color:#c3e88d}
+.cm{color:#546e7a;font-style:italic}.nm{color:#f78c6c}.an{color:#ff6584}
+.pr{color:#89ddff}.vr{color:#eeffff}.cl{color:#ffcb6b}
+.c-r{color:#ff6584}.c-b{color:#5ba8ff}.c-g{color:#40d88e}
+.c-t{color:#30d8c0}.c-y{color:#ffd060}.c-o{color:#ff8c50}.c-p{color:#a07af4}.c-s{color:#38bdf8}
+/* shell prompt */
+.sh-prompt{color:var(--ch);font-weight:700;user-select:none}
+.sh-cmd{color:var(--text)}
+.sh-arg{color:var(--sky)}
+.sh-str{color:var(--green)}
+.sh-flag{color:var(--au)}
+.sh-cmt{color:#546e7a;font-style:italic}
+/* chat bubble */
+.chat{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.bubble{padding:11px 16px;border-radius:12px;font-size:13px;line-height:1.6;max-width:85%}
+.bubble-user{background:var(--ins-dim);border:1px solid rgba(91,168,255,.25);color:var(--text);align-self:flex-end;border-bottom-right-radius:4px}
+.bubble-bot{background:var(--s2);border:1px solid var(--border2);color:var(--muted);align-self:flex-start;border-bottom-left-radius:4px}
+.bubble-label{font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.lbl-user{color:var(--ins)}.lbl-bot{color:var(--oc)}
+
+/* INFO BOXES */
+.info{display:flex;gap:12px;padding:14px 16px;border-radius:9px;margin:13px 0;font-size:13px;line-height:1.6}
+.info-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.i-ok{background:var(--green-dim);border:1px solid rgba(64,216,142,.2);color:#30a870}
+.i-warn{background:var(--yellow-dim);border:1px solid rgba(255,208,96,.2);color:#b09030}
+.i-tip{background:var(--blue-dim);border:1px solid rgba(91,168,255,.2);color:#3878d0}
+.i-note{background:var(--purple-dim);border:1px solid rgba(160,122,244,.2);color:#8060d0}
+.i-err{background:var(--pink-dim);border:1px solid rgba(255,101,132,.2);color:#cc3355}
+
+/* RW BOX */
+.rw-box{background:var(--s1);border:1px solid var(--border2);border-radius:12px;padding:18px 20px;margin:14px 0;position:relative;overflow:hidden}
+.rw-box::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.rw-oc::before{background:var(--oc)}.rw-ins::before{background:var(--ins)}
+.rw-ch::before{background:var(--ch)}.rw-sk::before{background:var(--sk)}
+.rw-au::before{background:var(--au)}.rw-y::before{background:var(--yellow)}
+.rw-label{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.rw-oc .rw-label{color:var(--oc)}.rw-ins .rw-label{color:var(--ins)}
+.rw-ch .rw-label{color:var(--ch)}.rw-sk .rw-label{color:var(--sk)}
+.rw-au .rw-label{color:var(--au)}.rw-y .rw-label{color:var(--yellow)}
+.rw-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.rw-body{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:13px 0;border-radius:11px;overflow:hidden}
+.tbl th{background:var(--s3);padding:10px 14px;text-align:left;font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-bottom:1px solid var(--border2)}
+.tbl td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted);vertical-align:top}
+.tbl tr:hover td{background:rgba(255,255,255,.025)}
+.tbl code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--code-bg);padding:2px 7px;border-radius:4px;color:var(--teal)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;margin:14px 0}
+.step{display:flex;gap:16px}
+.step-L{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
+.step-num{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--acc);background:var(--acc-dim);border:2px solid var(--acc-glow)}
+.step-line{width:2px;flex:1;background:var(--border);margin:5px 0;min-height:14px}
+.step-B{padding:3px 0 26px}.step-B h4{font-size:14px;font-weight:700;margin-bottom:5px}
+.step-B p{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* CHEAT SHEET */
+.cheat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.cheat-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:15px}
+.cheat-card h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:11px}
+.h4-oc{color:var(--oc)}.h4-ins{color:var(--ins)}.h4-ch{color:var(--ch)}.h4-sk{color:var(--sk)}.h4-au{color:var(--au)}
+.cheat-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.cheat-row:last-child{border-bottom:none}.ck{color:var(--muted)}.cv{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--teal)}
+
+/* PLATFORM PILLS */
+.platforms{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.plat{display:inline-flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--border2);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;color:var(--muted)}
+.plat-icon{font-size:14px}
+
+/* ARCH DIAGRAM */
+.arch{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:0;margin:18px 0}
+.arch-box{background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;text-align:center}
+.arch-title{font-size:12px;font-weight:700;margin-bottom:3px}
+.arch-desc{font-size:11px;color:var(--muted)}
+.arch-arrow{text-align:center;color:var(--muted);font-size:20px;padding:0 8px}
+
+p code,li code,td code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(97,218,251,.1);color:var(--acc);padding:2px 6px;border-radius:4px}
+hr.dv{border:none;border-top:1px solid var(--border);margin:58px 0}
+.footer{border-top:1px solid var(--border);padding:28px 64px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+@media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.hero,.content,.footer{padding-left:22px;padding-right:22px}.hero h1{font-size:32px}.grid-2,.grid-3,.grid-4,.cheat-grid{grid-template-columns:1fr}.arch{grid-template-columns:1fr;gap:8px}.arch-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-brand">
+      <div class="logo-icon">⚛️</div>
+      <div class="logo-text"><h2>React &amp; Next.js</h2><p>Hooks · Lifecycle · Ví dụ thực chiến</p></div>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar" id="pbar"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-sect-label">Tổng quan</div>
+    <a href="#s0" class="nav-link active"><span class="ico">🗺️</span> React &amp; Next.js là gì? <span class="nav-badge">START</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ins">🔵 React cơ bản — 3 sections</div>
+    <a href="#s1" class="nav-link"><span class="ico">📦</span> Cài đặt dự án</a>
+    <a href="#s2" class="nav-link"><span class="ico">🧩</span> JSX &amp; Components</a>
+    <a href="#s3" class="nav-link"><span class="ico">🔧</span> Props &amp; State</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ch">🟢 Hooks — 5 sections</div>
+    <a href="#s4" class="nav-link"><span class="ico">💾</span> useState</a>
+    <a href="#s5" class="nav-link"><span class="ico">🔄</span> useEffect</a>
+    <a href="#s6" class="nav-link"><span class="ico">🌳</span> useContext &amp; useRef</a>
+    <a href="#s7" class="nav-link"><span class="ico">⚡</span> useMemo, useCallback, useReducer</a>
+    <a href="#s8" class="nav-link"><span class="ico">✏️</span> Custom Hooks</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-sk">🟣 Lifecycle — 2 sections</div>
+    <a href="#s9" class="nav-link"><span class="ico">🌱</span> Vòng đời Component</a>
+    <a href="#s10" class="nav-link"><span class="ico">⚖️</span> Class vs Hooks Lifecycle</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-au">🟡 Next.js — 4 sections</div>
+    <a href="#s11" class="nav-link"><span class="ico">🗂️</span> App Router &amp; cấu trúc</a>
+    <a href="#s12" class="nav-link"><span class="ico">🖥️</span> Server vs Client Components</a>
+    <a href="#s13" class="nav-link"><span class="ico">📡</span> Data Fetching &amp; Server Actions</a>
+    <a href="#s14" class="nav-link"><span class="ico">🧭</span> Routing động, Layout, Metadata</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-oc">⚛️ Ví dụ thực chiến — 2 sections</div>
+    <a href="#s15" class="nav-link"><span class="ico">✅</span> Todo App hoàn chỉnh</a>
+    <a href="#s16" class="nav-link"><span class="ico">📰</span> Next.js Blog + API</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-other">📋 Tham khảo nhanh</div>
+    <a href="#s17" class="nav-link"><span class="ico">📋</span> Cheat Sheet</a>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-dots"></div><div class="hero-glow"></div>
+  <div class="hero-eyebrow"><span class="pulse"></span> React 18/19 · Next.js App Router · Hướng dẫn tiếng Việt 2026</div>
+  <h1><span class="h-grad">React</span> ⚛️<br><span class="h-acc">&amp; Next.js</span><br><span class="h-ins">Toàn tập</span></h1>
+  <p class="hero-desc">Hướng dẫn chi tiết từ component đầu tiên đến ứng dụng Next.js production-ready. JSX, Props/State, toàn bộ Hooks quan trọng, vòng đời component, App Router, Server/Client Components — kèm ví dụ chạy được thực tế.</p>
+  <div class="hero-chips">
+    <span class="chip chip-oc">⚛️ React 18/19</span>
+    <span class="chip chip-ins">🧩 JSX &amp; Components</span>
+    <span class="chip chip-ch">🟢 Hooks</span>
+    <span class="chip chip-sk">🟣 Lifecycle</span>
+    <span class="chip chip-au">🗂️ App Router</span>
+    <span class="chip chip-t">🖥️ Server Components</span>
+    <span class="chip chip-p">📡 Data Fetching</span>
+    <span class="chip chip-s">✅ Ví dụ thực tế</span>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ════ S0 — OVERVIEW ════ -->
+<div class="section" id="s0">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">OVERVIEW</span>
+    <div><h2 class="sec-title">React &amp; Next.js là gì &amp; Vì sao dùng chung?</h2>
+    <p class="sec-sub">Khái niệm cốt lõi, kiến trúc, quan hệ giữa React và Next.js</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">React — thư viện dựng giao diện theo Component</div>
+    <p>React là <strong>thư viện JavaScript</strong> (không phải framework đầy đủ) để xây dựng giao diện người dùng bằng cách chia UI thành các <strong>component</strong> tái sử dụng được. Mỗi component quản lý trạng thái (state) riêng, nhận dữ liệu qua props, và tự động render lại khi dữ liệu thay đổi — nhờ cơ chế <strong>Virtual DOM</strong>.</p>
+    <div class="grid-3">
+      <div class="card"><div class="card-icon">🧩</div><div class="card-title" style="color:var(--ins)">Component-based</div><div class="card-desc">UI = tập hợp component nhỏ, tái sử dụng được, ghép lại như Lego.</div></div>
+      <div class="card"><div class="card-icon">🔄</div><div class="card-title" style="color:var(--ch)">Declarative</div><div class="card-desc">Bạn mô tả UI "trông như thế nào" dựa trên state, React tự lo việc cập nhật DOM.</div></div>
+      <div class="card"><div class="card-icon">⚡</div><div class="card-title" style="color:var(--sk)">Virtual DOM</div><div class="card-desc">React so sánh (diff) cây ảo trước/sau, chỉ cập nhật đúng phần DOM thật đã thay đổi.</div></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Next.js — framework full-stack xây trên React</div>
+    <p>Next.js là <strong>framework</strong> đóng gói React cùng router, server rendering, tối ưu build, API routes — giúp bạn không phải tự cấu hình Webpack/Babel hay tự viết routing. Next.js thêm khả năng render trên <strong>server</strong> (SSR/SSG/ISR) mà React thuần (client-only) không có sẵn.</p>
+    <div class="arch">
+      <div class="arch-box" style="border-color:rgba(97,218,251,.3)">
+        <div class="arch-title" style="color:var(--oc)">⚛️ React</div>
+        <div class="arch-desc">Thư viện UI<br>Component · State · Hooks<br>Chạy trong trình duyệt</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(255,208,96,.3)">
+        <div class="arch-title" style="color:var(--au)">🗂️ Next.js</div>
+        <div class="arch-desc">Framework full-stack<br>Router · SSR/SSG · API<br>Chạy server + client</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(160,122,244,.3)">
+        <div class="arch-title" style="color:var(--sk)">🚀 Production</div>
+        <div class="arch-desc">Vercel / self-host<br>SEO tốt · Load nhanh<br>Sẵn sàng deploy</div>
+      </div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Ghi nhớ:</strong> Học React trước để hiểu component, state, hooks. Next.js chỉ thêm lớp routing + server rendering lên trên nền React — mọi kiến thức Hooks/Lifecycle bên dưới áp dụng y hệt trong Next.js.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">So sánh nhanh React thuần vs Next.js</div>
+    <table class="tbl">
+      <thead><tr><th></th><th>React (Vite/CRA)</th><th>Next.js</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Routing</strong></td><td>Cần thư viện ngoài (react-router)</td><td>✅ File-based routing tích hợp</td></tr>
+        <tr><td><strong>Rendering</strong></td><td>Chỉ Client-Side Rendering (CSR)</td><td>✅ SSR, SSG, ISR, CSR — chọn tuỳ trang</td></tr>
+        <tr><td><strong>SEO</strong></td><td>⚠️ Yếu hơn (HTML rỗng ban đầu)</td><td>✅ Tốt — HTML render sẵn từ server</td></tr>
+        <tr><td><strong>API Backend</strong></td><td>Cần server riêng (Express, Nest...)</td><td>✅ API Routes / Server Actions tích hợp</td></tr>
+        <tr><td><strong>Khi nào dùng</strong></td><td>App nội bộ, dashboard, không cần SEO</td><td>Website public, e-commerce, blog, SaaS</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — REACT CƠ BẢN ════ -->
+<div class="cat-banner cb-ins">
+  <div class="cb-icon">🧩</div>
+  <div>
+    <div class="cb-badge">REACT CƠ BẢN</div>
+    <div class="cb-title">Phần 1 — Cài đặt, JSX, Components, Props &amp; State</div>
+    <div class="cb-sub">Tạo dự án · Cú pháp JSX · Component function · Truyền dữ liệu · Quản lý trạng thái</div>
+  </div>
+</div>
+
+<!-- ════ S1 — CÀI ĐẶT ════ -->
+<div class="section" id="s1">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">REACT CƠ BẢN</span>
+    <div><h2 class="sec-title">Cài đặt dự án React</h2>
+    <p class="sec-sub">Vite (khuyên dùng) và tạo dự án Next.js</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Tạo dự án React với Vite — nhanh nhất hiện nay</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Terminal — khởi tạo dự án</span><span class="cb-tag ct-ins">SETUP</span></div>
+      <div class="cb-body"><pre><span class="sh-cmt"># React thuần với Vite (nhẹ, khởi động cực nhanh)</span>
+<span class="sh-prompt">$</span> <span class="sh-cmd">npm create</span> <span class="sh-arg">vite@latest</span> <span class="sh-str">my-app</span> <span class="sh-flag">--</span> <span class="sh-flag">--template react</span>
+<span class="sh-prompt">$</span> <span class="sh-cmd">cd</span> <span class="sh-arg">my-app</span> <span class="sh-cmd">&amp;&amp; npm install &amp;&amp; npm run dev</span>
+
+<span class="sh-cmt"># Next.js — tạo dự án full-stack</span>
+<span class="sh-prompt">$</span> <span class="sh-cmd">npx</span> <span class="sh-arg">create-next-app@latest</span> <span class="sh-str">my-next-app</span>
+<span class="sh-cmt">#   ✔ TypeScript?      → Yes</span>
+<span class="sh-cmt">#   ✔ ESLint?           → Yes</span>
+<span class="sh-cmt">#   ✔ Tailwind CSS?     → Yes</span>
+<span class="sh-cmt">#   ✔ src/ directory?   → Yes</span>
+<span class="sh-cmt">#   ✔ App Router?       → Yes (bắt buộc dùng App Router hiện đại)</span>
+<span class="sh-prompt">$</span> <span class="sh-cmd">cd</span> <span class="sh-arg">my-next-app</span> <span class="sh-cmd">&amp;&amp; npm run dev</span></pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Không dùng create-react-app nữa.</strong> CRA đã ngừng bảo trì — cộng đồng React chính thức khuyên dùng <code>Vite</code> cho SPA thuần, hoặc <code>Next.js</code> khi cần server-rendering/routing.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S2 — JSX & COMPONENTS ════ -->
+<div class="section" id="s2">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">REACT CƠ BẢN</span>
+    <div><h2 class="sec-title">JSX &amp; Components</h2>
+    <p class="sec-sub">Cú pháp JSX, function component, cách ghép component lại với nhau</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">JSX là gì?</div>
+    <p>JSX là cú pháp mở rộng cho phép viết "HTML" ngay trong JavaScript. Nó được biên dịch thành lời gọi hàm <code>React.createElement()</code>. Mọi component React đều là một <strong>hàm JavaScript trả về JSX</strong>.</p>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Greeting.jsx</span><span class="cb-tag ct-ins">COMPONENT</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">Greeting</span>() {
+  <span class="kw">const</span> <span class="vr">name</span> = <span class="st-s">"Minh"</span>;
+  <span class="kw">return</span> (
+    <span class="an">&lt;div</span> <span class="pr">className</span>=<span class="st-s">"card"</span><span class="an">&gt;</span>
+      <span class="an">&lt;h1&gt;</span>Xin chào, {<span class="vr">name</span>}! 👋<span class="an">&lt;/h1&gt;</span>
+      <span class="an">&lt;p&gt;</span>Đây là JSX — HTML lồng trong JS.<span class="an">&lt;/p&gt;</span>
+    <span class="an">&lt;/div&gt;</span>
+  );
+}
+
+<span class="kw">export default</span> <span class="vr">Greeting</span>;</pre></div>
+    </div>
+    <ul>
+      <li>Mỗi component <strong>phải trả về một root element duy nhất</strong> (hoặc dùng <code>&lt;&gt;...&lt;/&gt;</code> Fragment).</li>
+      <li>Dùng <code>{ }</code> để nhúng biểu thức JavaScript vào JSX.</li>
+      <li>Attribute HTML đổi tên: <code>class</code> → <code>className</code>, <code>for</code> → <code>htmlFor</code>.</li>
+      <li>Tên component <strong>luôn viết hoa chữ cái đầu</strong> (<code>Greeting</code>, không phải <code>greeting</code>).</li>
+    </ul>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Ghép component lại — cây component (Component Tree)</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">App.jsx</span><span class="cb-tag ct-ch">COMPOSE</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">Header</span>() {
+  <span class="kw">return</span> <span class="an">&lt;header&gt;</span><span class="an">&lt;h1&gt;</span>My Shop<span class="an">&lt;/h1&gt;</span><span class="an">&lt;/header&gt;</span>;
+}
+
+<span class="kw">function</span> <span class="fn">Footer</span>() {
+  <span class="kw">return</span> <span class="an">&lt;footer&gt;</span>© 2026<span class="an">&lt;/footer&gt;</span>;
+}
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    <span class="an">&lt;&gt;</span>
+      <span class="an">&lt;Header</span> <span class="an">/&gt;</span>
+      <span class="an">&lt;main&gt;</span>Nội dung chính<span class="an">&lt;/main&gt;</span>
+      <span class="an">&lt;Footer</span> <span class="an">/&gt;</span>
+    <span class="an">&lt;/&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div>Component lớn (<code>App</code>) chứa component nhỏ (<code>Header</code>, <code>Footer</code>) — đây là bản chất "cây component" mà React quản lý để biết cái gì cần render lại khi có thay đổi.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S3 — PROPS & STATE ════ -->
+<div class="section" id="s3">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">REACT CƠ BẢN</span>
+    <div><h2 class="sec-title">Props &amp; State</h2>
+    <p class="sec-sub">Truyền dữ liệu xuống con (props) và dữ liệu nội bộ thay đổi được (state)</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Props — dữ liệu truyền từ cha xuống con (chỉ đọc)</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">UserCard.jsx</span><span class="cb-tag ct-ins">PROPS</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">UserCard</span>({ <span class="vr">name</span>, <span class="vr">age</span>, <span class="vr">onGreet</span> }) {
+  <span class="kw">return</span> (
+    <span class="an">&lt;div</span> <span class="pr">className</span>=<span class="st-s">"card"</span><span class="an">&gt;</span>
+      <span class="an">&lt;h3&gt;</span>{<span class="vr">name</span>} ({<span class="vr">age</span>} tuổi)<span class="an">&lt;/h3&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="vr">onGreet</span>(<span class="vr">name</span>)}<span class="an">&gt;</span>Chào<span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/div&gt;</span>
+  );
+}
+
+<span class="cm">// Sử dụng — truyền props như thuộc tính HTML</span>
+<span class="an">&lt;UserCard</span> <span class="pr">name</span>=<span class="st-s">"Lan"</span> <span class="pr">age</span>={<span class="nm">28</span>} <span class="pr">onGreet</span>={(<span class="vr">n</span>) =&gt; <span class="fn">alert</span>(<span class="st-s">`Chào `</span> + <span class="vr">n</span>)} <span class="an">/&gt;</span></pre></div>
+    </div>
+    <ul>
+      <li>Props là <strong>read-only</strong> — component con không được sửa trực tiếp props nhận vào.</li>
+      <li>Có thể truyền bất kỳ giá trị JS: string, number, object, array, thậm chí hàm callback.</li>
+      <li>Dùng <code>props.children</code> để truyền nội dung JSX lồng bên trong thẻ component.</li>
+    </ul>
+  </div>
+  <div class="sub">
+    <div class="sub-title">State — dữ liệu nội bộ, thay đổi khiến component render lại</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Counter.jsx</span><span class="cb-tag ct-ch">STATE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useState</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> [<span class="vr">count</span>, <span class="vr">setCount</span>] = <span class="fn">useState</span>(<span class="nm">0</span>); <span class="cm">// state ban đầu = 0</span>
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;div&gt;</span>
+      <span class="an">&lt;p&gt;</span>Bạn đã bấm {<span class="vr">count</span>} lần<span class="an">&lt;/p&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">setCount</span>(<span class="vr">count</span> + <span class="nm">1</span>)}<span class="an">&gt;</span>+1<span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/div&gt;</span>
+  );
+}</pre></div>
+    </div>
+  </div>
+  <div class="rw-box rw-ins">
+    <div class="rw-label">🔵 SO SÁNH</div>
+    <div class="rw-title">Props vs State</div>
+    <div class="rw-body">Props đến <strong>từ bên ngoài</strong> (component cha), component con không sửa được. State là dữ liệu <strong>nội bộ</strong> của component, tự thay đổi qua hàm setter và khiến component tự render lại.</div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — HOOKS ════ -->
+<div class="cat-banner cb-ch">
+  <div class="cb-icon">🪝</div>
+  <div>
+    <div class="cb-badge">HOOKS</div>
+    <div class="cb-title">Phần 2 — Toàn bộ Hooks quan trọng của React</div>
+    <div class="cb-sub">useState · useEffect · useContext · useRef · useMemo · useCallback · useReducer · Custom Hooks</div>
+  </div>
+</div>
+
+<!-- ════ S4 — useState ════ -->
+<div class="section" id="s4">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HOOKS</span>
+    <div><h2 class="sec-title">useState — quản lý trạng thái</h2>
+    <p class="sec-sub">Hook cơ bản nhất, dùng trong gần như mọi component</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Cú pháp &amp; quy tắc</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useState — ví dụ form</span><span class="cb-tag ct-ch">HOOK</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useState</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">function</span> <span class="fn">LoginForm</span>() {
+  <span class="kw">const</span> [<span class="vr">email</span>, <span class="vr">setEmail</span>] = <span class="fn">useState</span>(<span class="st-s">""</span>);
+  <span class="kw">const</span> [<span class="vr">isValid</span>, <span class="vr">setIsValid</span>] = <span class="fn">useState</span>(<span class="kw">false</span>);
+
+  <span class="kw">function</span> <span class="fn">handleChange</span>(<span class="vr">e</span>) {
+    <span class="kw">const</span> <span class="vr">value</span> = <span class="vr">e</span>.<span class="vr">target</span>.<span class="vr">value</span>;
+    <span class="fn">setEmail</span>(<span class="vr">value</span>);
+    <span class="fn">setIsValid</span>(<span class="vr">value</span>.<span class="fn">includes</span>(<span class="st-s">"@"</span>));
+  }
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;input</span> <span class="pr">value</span>={<span class="vr">email</span>} <span class="pr">onChange</span>={<span class="vr">handleChange</span>}
+      <span class="pr">style</span>={{ <span class="vr">borderColor</span>: <span class="vr">isValid</span> ? <span class="st-s">"green"</span> : <span class="st-s">"red"</span> }} <span class="an">/&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <ul>
+      <li><code>useState(initial)</code> trả về mảng <code>[giá trị, hàm cập nhật]</code>.</li>
+      <li>Gọi hàm setter luôn <strong>trigger re-render</strong> — không sửa trực tiếp biến state.</li>
+      <li>Khi state mới phụ thuộc state cũ, dùng <strong>functional update</strong>: <code>setCount(c =&gt; c + 1)</code> để tránh bug khi cập nhật liên tiếp.</li>
+    </ul>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Lỗi thường gặp:</strong> Với object/array trong state, phải tạo <strong>bản sao mới</strong> (<code>setUser({...user, name: "Lan"})</code>) — không mutate trực tiếp, vì React so sánh reference để biết có thay đổi hay không.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S5 — useEffect ════ -->
+<div class="section" id="s5">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HOOKS</span>
+    <div><h2 class="sec-title">useEffect — side effects</h2>
+    <p class="sec-sub">Gọi API, subscribe, đồng bộ với hệ thống bên ngoài component</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">3 dạng dependency array</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useEffect — fetch dữ liệu người dùng</span><span class="cb-tag ct-ch">HOOK</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useState</span>, <span class="vr">useEffect</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">function</span> <span class="fn">UserProfile</span>({ <span class="vr">userId</span> }) {
+  <span class="kw">const</span> [<span class="vr">user</span>, <span class="vr">setUser</span>] = <span class="fn">useState</span>(<span class="kw">null</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">let</span> <span class="vr">cancelled</span> = <span class="kw">false</span>;
+    <span class="fn">fetch</span>(<span class="st-s">`/api/users/`</span> + <span class="vr">userId</span>)
+      .<span class="fn">then</span>((<span class="vr">res</span>) =&gt; <span class="vr">res</span>.<span class="fn">json</span>())
+      .<span class="fn">then</span>((<span class="vr">data</span>) =&gt; { <span class="kw">if</span> (!<span class="vr">cancelled</span>) <span class="fn">setUser</span>(<span class="vr">data</span>); });
+
+    <span class="kw">return</span> () =&gt; { <span class="vr">cancelled</span> = <span class="kw">true</span>; }; <span class="cm">// cleanup — huỷ khi unmount/đổi userId</span>
+  }, [<span class="vr">userId</span>]); <span class="cm">// chỉ chạy lại khi userId thay đổi</span>
+
+  <span class="kw">if</span> (!<span class="vr">user</span>) <span class="kw">return</span> <span class="an">&lt;p&gt;</span>Đang tải...<span class="an">&lt;/p&gt;</span>;
+  <span class="kw">return</span> <span class="an">&lt;h2&gt;</span>{<span class="vr">user</span>.<span class="vr">name</span>}<span class="an">&lt;/h2&gt;</span>;
+}</pre></div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Dependency array</th><th>Khi nào chạy</th><th>Dùng khi nào</th></tr></thead>
+      <tbody>
+        <tr><td><code>useEffect(fn)</code></td><td>Sau mỗi lần render</td><td>Hiếm dùng — dễ gây vòng lặp</td></tr>
+        <tr><td><code>useEffect(fn, [])</code></td><td>Chỉ 1 lần sau mount</td><td>Fetch dữ liệu ban đầu, setup subscription</td></tr>
+        <tr><td><code>useEffect(fn, [a, b])</code></td><td>Khi <code>a</code> hoặc <code>b</code> đổi</td><td>Đồng bộ theo props/state cụ thể</td></tr>
+        <tr><td><code>return () =&gt; {...}</code></td><td>Trước lần chạy tiếp theo &amp; khi unmount</td><td>Cleanup: huỷ subscribe, clear timer, abort fetch</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ S6 — useContext & useRef ════ -->
+<div class="section" id="s6">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HOOKS</span>
+    <div><h2 class="sec-title">useContext &amp; useRef</h2>
+    <p class="sec-sub">Chia sẻ dữ liệu toàn cục &amp; truy cập DOM / lưu giá trị không gây render</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useContext — tránh "props drilling"</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">ThemeContext.jsx</span><span class="cb-tag ct-sk">CONTEXT</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">createContext</span>, <span class="vr">useContext</span>, <span class="vr">useState</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">const</span> <span class="vr">ThemeContext</span> = <span class="fn">createContext</span>(<span class="kw">null</span>);
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">const</span> [<span class="vr">theme</span>, <span class="vr">setTheme</span>] = <span class="fn">useState</span>(<span class="st-s">"dark"</span>);
+  <span class="kw">return</span> (
+    <span class="an">&lt;ThemeContext.Provider</span> <span class="pr">value</span>={{ <span class="vr">theme</span>, <span class="vr">setTheme</span> }}<span class="an">&gt;</span>
+      <span class="an">&lt;Toolbar</span> <span class="an">/&gt;</span> <span class="cm">{/* con cháu sâu bao nhiêu tầng cũng đọc được theme */}</span>
+    <span class="an">&lt;/ThemeContext.Provider&gt;</span>
+  );
+}
+
+<span class="kw">function</span> <span class="fn">Toolbar</span>() {
+  <span class="kw">const</span> { <span class="vr">theme</span>, <span class="vr">setTheme</span> } = <span class="fn">useContext</span>(<span class="vr">ThemeContext</span>); <span class="cm">// không cần truyền qua props</span>
+  <span class="kw">return</span> <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">setTheme</span>(<span class="vr">theme</span> === <span class="st-s">"dark"</span> ? <span class="st-s">"light"</span> : <span class="st-s">"dark"</span>)}<span class="an">&gt;</span>
+    Theme: {<span class="vr">theme</span>}
+  <span class="an">&lt;/button&gt;</span>;
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useRef — giá trị "sống sót" qua render, không gây render lại</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useRef — focus input &amp; đếm render</span><span class="cb-tag ct-sk">REF</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useRef</span>, <span class="vr">useEffect</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">function</span> <span class="fn">SearchBox</span>() {
+  <span class="kw">const</span> <span class="vr">inputRef</span> = <span class="fn">useRef</span>(<span class="kw">null</span>);       <span class="cm">// tham chiếu DOM element</span>
+  <span class="kw">const</span> <span class="vr">renderCount</span> = <span class="fn">useRef</span>(<span class="nm">0</span>);   <span class="cm">// biến "ẩn", đổi không gây render</span>
+
+  <span class="fn">useEffect</span>(() =&gt; { <span class="vr">inputRef</span>.<span class="vr">current</span>.<span class="fn">focus</span>(); }, []); <span class="cm">// auto-focus khi mount</span>
+  <span class="vr">renderCount</span>.<span class="vr">current</span>++;
+
+  <span class="kw">return</span> <span class="an">&lt;input</span> <span class="pr">ref</span>={<span class="vr">inputRef</span>} <span class="pr">placeholder</span>=<span class="st-s">"Tìm kiếm..."</span> <span class="an">/&gt;</span>;
+}</pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">📝</span>
+      <div><strong style="color:var(--text)">useRef vs useState:</strong> Đổi <code>.current</code> của ref <strong>không</strong> khiến component render lại. Dùng ref cho: tham chiếu DOM, lưu timer ID, giữ giá trị trước đó — những thứ không cần hiển thị lên UI.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S7 — useMemo / useCallback / useReducer ════ -->
+<div class="section" id="s7">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HOOKS</span>
+    <div><h2 class="sec-title">useMemo, useCallback &amp; useReducer</h2>
+    <p class="sec-sub">Tối ưu hiệu năng &amp; quản lý state phức tạp</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useMemo — cache kết quả tính toán nặng</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useMemo — lọc danh sách lớn</span><span class="cb-tag ct-au">MEMO</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useMemo</span>, <span class="vr">useState</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">function</span> <span class="fn">ProductList</span>({ <span class="vr">products</span> }) {
+  <span class="kw">const</span> [<span class="vr">query</span>, <span class="vr">setQuery</span>] = <span class="fn">useState</span>(<span class="st-s">""</span>);
+
+  <span class="kw">const</span> <span class="vr">filtered</span> = <span class="fn">useMemo</span>(() =&gt; {
+    <span class="kw">return</span> <span class="vr">products</span>.<span class="fn">filter</span>((<span class="vr">p</span>) =&gt; <span class="vr">p</span>.<span class="vr">name</span>.<span class="fn">includes</span>(<span class="vr">query</span>));
+  }, [<span class="vr">products</span>, <span class="vr">query</span>]); <span class="cm">// chỉ tính lại khi products hoặc query đổi</span>
+
+  <span class="kw">return</span> <span class="an">&lt;ul&gt;</span>{<span class="vr">filtered</span>.<span class="fn">map</span>((<span class="vr">p</span>) =&gt; <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">p</span>.<span class="vr">id</span>}<span class="an">&gt;</span>{<span class="vr">p</span>.<span class="vr">name</span>}<span class="an">&lt;/li&gt;</span>)}<span class="an">&lt;/ul&gt;</span>;
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useCallback — cache một hàm giữa các lần render</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useCallback — tránh re-render con không cần thiết</span><span class="cb-tag ct-au">CALLBACK</span></div>
+      <div class="cb-body"><pre><span class="kw">const</span> <span class="vr">handleAdd</span> = <span class="fn">useCallback</span>((<span class="vr">item</span>) =&gt; {
+  <span class="fn">setItems</span>((<span class="vr">prev</span>) =&gt; [...<span class="vr">prev</span>, <span class="vr">item</span>]);
+}, []); <span class="cm">// hàm giữ nguyên reference qua các lần render</span>
+
+<span class="cm">// Kết hợp React.memo ở component con để thực sự có hiệu quả:</span>
+<span class="kw">const</span> <span class="vr">ItemButton</span> = <span class="vr">React</span>.<span class="fn">memo</span>(<span class="kw">function</span> <span class="fn">ItemButton</span>({ <span class="vr">onAdd</span> }) {
+  <span class="kw">return</span> <span class="an">&lt;button</span> <span class="pr">onClick</span>={<span class="vr">onAdd</span>}<span class="an">&gt;</span>Thêm<span class="an">&lt;/button&gt;</span>;
+});</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Đừng lạm dụng.</strong> <code>useMemo</code>/<code>useCallback</code> chỉ hữu ích khi tính toán thật sự nặng hoặc con được bọc <code>React.memo</code>. Dùng tràn lan làm code phức tạp mà không tăng hiệu năng đáng kể.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useReducer — state phức tạp, nhiều hành động liên quan</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useReducer — giỏ hàng</span><span class="cb-tag ct-au">REDUCER</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useReducer</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">function</span> <span class="fn">cartReducer</span>(<span class="vr">state</span>, <span class="vr">action</span>) {
+  <span class="kw">switch</span> (<span class="vr">action</span>.<span class="vr">type</span>) {
+    <span class="kw">case</span> <span class="st-s">"add"</span>:
+      <span class="kw">return</span> { ...<span class="vr">state</span>, <span class="vr">items</span>: [...<span class="vr">state</span>.<span class="vr">items</span>, <span class="vr">action</span>.<span class="vr">payload</span>] };
+    <span class="kw">case</span> <span class="st-s">"remove"</span>:
+      <span class="kw">return</span> { ...<span class="vr">state</span>, <span class="vr">items</span>: <span class="vr">state</span>.<span class="vr">items</span>.<span class="fn">filter</span>((<span class="vr">i</span>) =&gt; <span class="vr">i</span>.<span class="vr">id</span> !== <span class="vr">action</span>.<span class="vr">payload</span>) };
+    <span class="kw">case</span> <span class="st-s">"clear"</span>:
+      <span class="kw">return</span> { ...<span class="vr">state</span>, <span class="vr">items</span>: [] };
+    <span class="kw">default</span>:
+      <span class="kw">return</span> <span class="vr">state</span>;
+  }
+}
+
+<span class="kw">function</span> <span class="fn">Cart</span>() {
+  <span class="kw">const</span> [<span class="vr">state</span>, <span class="vr">dispatch</span>] = <span class="fn">useReducer</span>(<span class="vr">cartReducer</span>, { <span class="vr">items</span>: [] });
+  <span class="kw">return</span> (
+    <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">dispatch</span>({ <span class="vr">type</span>: <span class="st-s">"add"</span>, <span class="vr">payload</span>: { <span class="vr">id</span>: <span class="nm">1</span>, <span class="vr">name</span>: <span class="st-s">"Áo"</span> } })}<span class="an">&gt;</span>
+      Thêm vào giỏ ({<span class="vr">state</span>.<span class="vr">items</span>.<span class="vr">length</span>})
+    <span class="an">&lt;/button&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div>Dùng <code>useReducer</code> thay <code>useState</code> khi state có <strong>nhiều thuộc tính liên quan</strong> hoặc <strong>nhiều loại hành động cập nhật</strong> — logic tập trung một chỗ, dễ test và debug hơn nhiều <code>useState</code> rời rạc.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S8 — CUSTOM HOOKS ════ -->
+<div class="section" id="s8">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HOOKS</span>
+    <div><h2 class="sec-title">Custom Hooks — tái sử dụng logic</h2>
+    <p class="sec-sub">Đóng gói logic có state thành hook riêng, dùng lại ở nhiều component</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Ví dụ: useFetch — hook gọi API tái sử dụng</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useFetch.js</span><span class="cb-tag ct-ch">CUSTOM HOOK</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useState</span>, <span class="vr">useEffect</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">function</span> <span class="fn">useFetch</span>(<span class="vr">url</span>) {
+  <span class="kw">const</span> [<span class="vr">data</span>, <span class="vr">setData</span>] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> [<span class="vr">loading</span>, <span class="vr">setLoading</span>] = <span class="fn">useState</span>(<span class="kw">true</span>);
+  <span class="kw">const</span> [<span class="vr">error</span>, <span class="vr">setError</span>] = <span class="fn">useState</span>(<span class="kw">null</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="fn">setLoading</span>(<span class="kw">true</span>);
+    <span class="fn">fetch</span>(<span class="vr">url</span>)
+      .<span class="fn">then</span>((<span class="vr">res</span>) =&gt; <span class="vr">res</span>.<span class="fn">json</span>())
+      .<span class="fn">then</span>(<span class="vr">setData</span>)
+      .<span class="fn">catch</span>(<span class="vr">setError</span>)
+      .<span class="fn">finally</span>(() =&gt; <span class="fn">setLoading</span>(<span class="kw">false</span>));
+  }, [<span class="vr">url</span>]);
+
+  <span class="kw">return</span> { <span class="vr">data</span>, <span class="vr">loading</span>, <span class="vr">error</span> };
+}
+
+<span class="cm">// Dùng ở bất kỳ component nào:</span>
+<span class="kw">function</span> <span class="fn">PostList</span>() {
+  <span class="kw">const</span> { <span class="vr">data</span>: <span class="vr">posts</span>, <span class="vr">loading</span> } = <span class="fn">useFetch</span>(<span class="st-s">"/api/posts"</span>);
+  <span class="kw">if</span> (<span class="vr">loading</span>) <span class="kw">return</span> <span class="an">&lt;p&gt;</span>Đang tải...<span class="an">&lt;/p&gt;</span>;
+  <span class="kw">return</span> <span class="an">&lt;ul&gt;</span>{<span class="vr">posts</span>.<span class="fn">map</span>((<span class="vr">p</span>) =&gt; <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">p</span>.<span class="vr">id</span>}<span class="an">&gt;</span>{<span class="vr">p</span>.<span class="vr">title</span>}<span class="an">&lt;/li&gt;</span>)}<span class="an">&lt;/ul&gt;</span>;
+}</pre></div>
+    </div>
+    <ul>
+      <li>Custom hook <strong>bắt buộc đặt tên bắt đầu bằng <code>use</code></strong> để React nhận diện đúng quy tắc Hooks.</li>
+      <li>Bên trong có thể gọi các hook khác (<code>useState</code>, <code>useEffect</code>...) — đó là lý do gọi là "hook".</li>
+      <li>Giúp tách logic khỏi UI, test độc lập, và dùng lại ở nhiều component khác nhau.</li>
+    </ul>
+  </div>
+  <div class="info i-err">
+    <span class="info-ico">🚫</span>
+    <div><strong style="color:var(--text)">2 quy tắc bắt buộc của Hooks (Rules of Hooks):</strong> (1) Chỉ gọi hook ở top-level component/hook — không gọi trong <code>if</code>, vòng lặp, hàm lồng. (2) Chỉ gọi hook trong function component hoặc custom hook — không gọi trong hàm JS thường.</div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — LIFECYCLE ════ -->
+<div class="cat-banner cb-sk">
+  <div class="cb-icon">🌱</div>
+  <div>
+    <div class="cb-badge">LIFECYCLE</div>
+    <div class="cb-title">Phần 3 — Vòng đời Component</div>
+    <div class="cb-sub">Mount · Update · Unmount · So sánh Class Component vs Hooks</div>
+  </div>
+</div>
+
+<!-- ════ S9 — VÒNG ĐỜI COMPONENT ════ -->
+<div class="section" id="s9">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">LIFECYCLE</span>
+    <div><h2 class="sec-title">Vòng đời Component — 3 giai đoạn</h2>
+    <p class="sec-sub">Mount → Update → Unmount, và useEffect ánh xạ vào từng giai đoạn thế nào</p></div>
+  </div>
+  <div class="sub">
+    <div class="steps">
+      <div class="step">
+        <div class="step-L"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-B"><h4 style="color:var(--sk)">Mount — component được tạo &amp; gắn vào DOM lần đầu</h4>
+        <p>React gọi hàm component, tính toán JSX, chèn vào DOM thật. Đây là lúc thích hợp để: fetch dữ liệu ban đầu, đăng ký event listener, khởi tạo timer. Tương ứng <code>useEffect(fn, [])</code>.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-B"><h4 style="color:var(--sk)">Update — render lại khi props/state đổi</h4>
+        <p>Mỗi khi state cha/con hoặc props thay đổi, React render lại, diff Virtual DOM, và chỉ cập nhật phần DOM thật cần thiết. Tương ứng <code>useEffect(fn, [dep])</code> khi <code>dep</code> đổi giá trị.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">3</div></div>
+        <div class="step-B"><h4 style="color:var(--sk)">Unmount — component bị gỡ khỏi DOM</h4>
+        <p>Khi component không còn render nữa (điều kiện đổi, chuyển trang...). Đây là lúc dọn dẹp: huỷ subscription, clear timer/interval, abort request đang chạy — làm trong hàm <strong>cleanup</strong> mà <code>useEffect</code> trả về.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Minh hoạ đầy đủ 3 giai đoạn trong một component</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Timer.jsx — mount / update / unmount</span><span class="cb-tag ct-sk">LIFECYCLE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useState</span>, <span class="vr">useEffect</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">function</span> <span class="fn">Timer</span>() {
+  <span class="kw">const</span> [<span class="vr">seconds</span>, <span class="vr">setSeconds</span>] = <span class="fn">useState</span>(<span class="nm">0</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="st-s">"🌱 MOUNT — bắt đầu đếm"</span>);
+    <span class="kw">const</span> <span class="vr">id</span> = <span class="fn">setInterval</span>(() =&gt; <span class="fn">setSeconds</span>((<span class="vr">s</span>) =&gt; <span class="vr">s</span> + <span class="nm">1</span>), <span class="nm">1000</span>);
+
+    <span class="kw">return</span> () =&gt; {
+      <span class="fn">console</span>.<span class="fn">log</span>(<span class="st-s">"🍂 UNMOUNT — dọn dẹp interval"</span>);
+      <span class="fn">clearInterval</span>(<span class="vr">id</span>);
+    };
+  }, []); <span class="cm">// [] → chỉ setup 1 lần lúc mount, cleanup lúc unmount</span>
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="st-s">"🔄 UPDATE — seconds đổi thành "</span> + <span class="vr">seconds</span>);
+  }, [<span class="vr">seconds</span>]); <span class="cm">// chạy mỗi khi seconds thay đổi (bao gồm cả lần mount đầu)</span>
+
+  <span class="kw">return</span> <span class="an">&lt;p&gt;</span>Đã trôi qua: {<span class="vr">seconds</span>}s<span class="an">&lt;/p&gt;</span>;
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S10 — CLASS VS HOOKS ════ -->
+<div class="section" id="s10">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">LIFECYCLE</span>
+    <div><h2 class="sec-title">Class Component Lifecycle vs Hooks</h2>
+    <p class="sec-sub">Nếu bạn gặp code cũ dùng Class — đây là bảng đối chiếu sang Hooks</p></div>
+  </div>
+  <div class="sub">
+    <table class="tbl">
+      <thead><tr><th>Class lifecycle method</th><th>Tương đương bằng Hooks</th><th>Ý nghĩa</th></tr></thead>
+      <tbody>
+        <tr><td><code>constructor()</code></td><td><code>useState(initial)</code></td><td>Khởi tạo state ban đầu</td></tr>
+        <tr><td><code>componentDidMount()</code></td><td><code>useEffect(fn, [])</code></td><td>Chạy 1 lần sau khi render lần đầu</td></tr>
+        <tr><td><code>componentDidUpdate()</code></td><td><code>useEffect(fn, [dep])</code></td><td>Chạy khi dependency cụ thể thay đổi</td></tr>
+        <tr><td><code>componentWillUnmount()</code></td><td><code>return () =&gt; {...}</code> trong <code>useEffect</code></td><td>Dọn dẹp trước khi component bị gỡ</td></tr>
+        <tr><td><code>shouldComponentUpdate()</code></td><td><code>React.memo()</code></td><td>Ngăn re-render không cần thiết</td></tr>
+        <tr><td><code>this.state</code> / <code>this.setState()</code></td><td><code>useState()</code> / <code>useReducer()</code></td><td>Đọc/ghi state</td></tr>
+      </tbody>
+    </table>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">So sánh trực tiếp — cùng một component</span><span class="cb-tag ct-sk">COMPARE</span></div>
+      <div class="cb-body"><pre><span class="cm">// ── Class Component (cách cũ) ──</span>
+<span class="kw">class</span> <span class="cl">Profile</span> <span class="kw">extends</span> <span class="vr">React</span>.<span class="vr">Component</span> {
+  <span class="fn">constructor</span>(<span class="vr">props</span>) {
+    <span class="kw">super</span>(<span class="vr">props</span>);
+    <span class="kw">this</span>.<span class="vr">state</span> = { <span class="vr">user</span>: <span class="kw">null</span> };
+  }
+  <span class="fn">componentDidMount</span>() {
+    <span class="fn">fetch</span>(<span class="st-s">"/api/me"</span>).<span class="fn">then</span>((<span class="vr">r</span>) =&gt; <span class="vr">r</span>.<span class="fn">json</span>()).<span class="fn">then</span>((<span class="vr">u</span>) =&gt; <span class="kw">this</span>.<span class="fn">setState</span>({ <span class="vr">user</span>: <span class="vr">u</span> }));
+  }
+  <span class="fn">render</span>() {
+    <span class="kw">return</span> <span class="an">&lt;h2&gt;</span>{<span class="kw">this</span>.<span class="vr">state</span>.<span class="vr">user</span>?.<span class="vr">name</span>}<span class="an">&lt;/h2&gt;</span>;
+  }
+}
+
+<span class="cm">// ── Function Component + Hooks (cách hiện đại) ──</span>
+<span class="kw">function</span> <span class="fn">Profile</span>() {
+  <span class="kw">const</span> [<span class="vr">user</span>, <span class="vr">setUser</span>] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="fn">fetch</span>(<span class="st-s">"/api/me"</span>).<span class="fn">then</span>((<span class="vr">r</span>) =&gt; <span class="vr">r</span>.<span class="fn">json</span>()).<span class="fn">then</span>(<span class="vr">setUser</span>);
+  }, []);
+  <span class="kw">return</span> <span class="an">&lt;h2&gt;</span>{<span class="vr">user</span>?.<span class="vr">name</span>}<span class="an">&lt;/h2&gt;</span>;
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div>Từ React 16.8 (2019), <strong>Hooks là cách viết chuẩn</strong>. Class component vẫn hoạt động nhưng gần như không còn được dùng cho code mới — toàn bộ tài liệu chính thức của React hiện dạy Hooks trước tiên.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — NEXT.JS ════ -->
+<div class="cat-banner cb-au">
+  <div class="cb-icon">🗂️</div>
+  <div>
+    <div class="cb-badge">NEXT.JS</div>
+    <div class="cb-title">Phần 4 — Next.js App Router</div>
+    <div class="cb-sub">Cấu trúc thư mục · Server/Client Components · Data Fetching · Routing động</div>
+  </div>
+</div>
+
+<!-- ════ S11 — APP ROUTER ════ -->
+<div class="section" id="s11">
+  <div class="sec-head">
+    <span class="sec-tag st-au">NEXT.JS</span>
+    <div><h2 class="sec-title">App Router &amp; cấu trúc thư mục</h2>
+    <p class="sec-sub">File-based routing — tên file/thư mục quyết định route</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Cấu trúc thư mục app/ chuẩn</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/ — quy ước file đặc biệt</span><span class="cb-tag ct-y">STRUCTURE</span></div>
+      <div class="cb-body"><pre><span class="c-t">app/</span>
+├── <span class="c-y">layout.js</span>          <span class="cm"># Layout bọc toàn bộ app (giữ nguyên khi chuyển trang)</span>
+├── <span class="c-y">page.js</span>            <span class="cm"># Trang chủ → route "/"</span>
+├── <span class="c-g">loading.js</span>         <span class="cm"># UI loading tự động khi trang đang tải</span>
+├── <span class="c-g">error.js</span>           <span class="cm"># UI lỗi tự động khi có exception</span>
+├── <span class="c-t">about/</span>
+│   └── <span class="c-y">page.js</span>        <span class="cm"># → route "/about"</span>
+├── <span class="c-t">blog/</span>
+│   ├── <span class="c-y">page.js</span>        <span class="cm"># → route "/blog"</span>
+│   └── <span class="c-t">[slug]/</span>
+│       └── <span class="c-y">page.js</span>    <span class="cm"># → route động "/blog/:slug"</span>
+└── <span class="c-t">api/</span>
+    └── <span class="c-t">users/</span>
+        └── <span class="c-y">route.js</span>    <span class="cm"># → API endpoint "/api/users"</span></pre></div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Tên file</th><th>Vai trò</th></tr></thead>
+      <tbody>
+        <tr><td><code>page.js</code></td><td>Định nghĩa 1 trang, gắn với route theo đường dẫn thư mục</td></tr>
+        <tr><td><code>layout.js</code></td><td>Bọc quanh page, giữ state khi điều hướng giữa các trang con</td></tr>
+        <tr><td><code>loading.js</code></td><td>Fallback UI tự động hiện khi page đang fetch dữ liệu (Suspense)</td></tr>
+        <tr><td><code>error.js</code></td><td>Error boundary tự động cho route đó</td></tr>
+        <tr><td><code>route.js</code></td><td>Định nghĩa API endpoint (thay cho page.js) trong thư mục <code>api/</code></td></tr>
+        <tr><td><code>[slug]</code></td><td>Thư mục ngoặc vuông = route động, giá trị đọc qua tham số <code>params</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ S12 — SERVER VS CLIENT COMPONENTS ════ -->
+<div class="section" id="s12">
+  <div class="sec-head">
+    <span class="sec-tag st-au">NEXT.JS</span>
+    <div><h2 class="sec-title">Server Components vs Client Components</h2>
+    <p class="sec-sub">Mặc định server, chỉ dùng "use client" khi thật sự cần tương tác</p></div>
+  </div>
+  <div class="sub">
+    <table class="tbl">
+      <thead><tr><th></th><th>Server Component (mặc định)</th><th>Client Component ("use client")</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Chạy ở đâu</strong></td><td>Chỉ trên server, không gửi JS xuống trình duyệt</td><td>Trên trình duyệt (và render lần đầu ở server)</td></tr>
+        <tr><td><strong>Dùng Hooks (useState...)</strong></td><td>❌ Không dùng được</td><td>✅ Dùng đầy đủ mọi hook</td></tr>
+        <tr><td><strong>Sự kiện (onClick...)</strong></td><td>❌ Không gắn được</td><td>✅ Gắn được bình thường</td></tr>
+        <tr><td><strong>Truy cập trực tiếp DB/file</strong></td><td>✅ An toàn, code không lộ ra client</td><td>❌ Phải gọi qua API</td></tr>
+        <tr><td><strong>Bundle size gửi xuống</strong></td><td>0 KB JS</td><td>Tính vào bundle JS của trang</td></tr>
+      </tbody>
+    </table>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/dashboard/page.js — kết hợp cả hai</span><span class="cb-tag ct-au">SERVER + CLIENT</span></div>
+      <div class="cb-body"><pre><span class="cm">// app/dashboard/page.js — SERVER COMPONENT (mặc định, không có "use client")</span>
+<span class="kw">import</span> <span class="vr">LikeButton</span> <span class="kw">from</span> <span class="st-s">"./LikeButton"</span>;
+
+<span class="kw">export default async function</span> <span class="fn">Dashboard</span>() {
+  <span class="kw">const</span> <span class="vr">stats</span> = <span class="kw">await</span> <span class="fn">getStatsFromDB</span>(); <span class="cm">// gọi thẳng DB, an toàn trên server</span>
+  <span class="kw">return</span> (
+    <span class="an">&lt;div&gt;</span>
+      <span class="an">&lt;h1&gt;</span>Có {<span class="vr">stats</span>.<span class="vr">total</span>} lượt xem<span class="an">&lt;/h1&gt;</span>
+      <span class="an">&lt;LikeButton</span> <span class="an">/&gt;</span> <span class="cm">{/* component con này mới cần tương tác */}</span>
+    <span class="an">&lt;/div&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/dashboard/LikeButton.js — CLIENT COMPONENT</span><span class="cb-tag ct-ins">"use client"</span></div>
+      <div class="cb-body"><pre><span class="st-s">"use client"</span>; <span class="cm">// bắt buộc khai báo ở đầu file khi cần useState/onClick</span>
+
+<span class="kw">import</span> { <span class="vr">useState</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">export default function</span> <span class="fn">LikeButton</span>() {
+  <span class="kw">const</span> [<span class="vr">liked</span>, <span class="vr">setLiked</span>] = <span class="fn">useState</span>(<span class="kw">false</span>);
+  <span class="kw">return</span> (
+    <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">setLiked</span>(!<span class="vr">liked</span>)}<span class="an">&gt;</span>
+      {<span class="vr">liked</span> ? <span class="st-s">"❤️ Đã thích"</span> : <span class="st-s">"🤍 Thích"</span>}
+    <span class="an">&lt;/button&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Nguyên tắc:</strong> Giữ <code>"use client"</code> ở component <strong>càng nhỏ, càng gần lá cây</strong> càng tốt — chỉ những phần thật sự cần state/sự kiện. Phần còn lại để Server Component render sẵn, giảm JS gửi xuống trình duyệt.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S13 — DATA FETCHING & SERVER ACTIONS ════ -->
+<div class="section" id="s13">
+  <div class="sec-head">
+    <span class="sec-tag st-au">NEXT.JS</span>
+    <div><h2 class="sec-title">Data Fetching &amp; Server Actions</h2>
+    <p class="sec-sub">fetch() có cache tích hợp, API Routes, và Server Actions để xử lý form</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">fetch() trong Server Component — có cache sẵn</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/blog/page.js</span><span class="cb-tag ct-au">FETCH</span></div>
+      <div class="cb-body"><pre><span class="kw">export default async function</span> <span class="fn">BlogPage</span>() {
+  <span class="kw">const</span> <span class="vr">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st-s">"https://api.example.com/posts"</span>, {
+    <span class="vr">next</span>: { <span class="vr">revalidate</span>: <span class="nm">3600</span> } <span class="cm">// ISR: cache 1 tiếng rồi tự làm mới (Incremental Static Regeneration)</span>
+  });
+  <span class="kw">const</span> <span class="vr">posts</span> = <span class="kw">await</span> <span class="vr">res</span>.<span class="fn">json</span>();
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;ul&gt;</span>
+      {<span class="vr">posts</span>.<span class="fn">map</span>((<span class="vr">p</span>) =&gt; <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">p</span>.<span class="vr">id</span>}<span class="an">&gt;</span>{<span class="vr">p</span>.<span class="vr">title</span>}<span class="an">&lt;/li&gt;</span>)}
+    <span class="an">&lt;/ul&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Chiến lược cache</th><th>Cấu hình</th><th>Khi nào dùng</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Static (SSG)</strong></td><td>mặc định, không có option</td><td>Dữ liệu gần như không đổi (trang giới thiệu)</td></tr>
+        <tr><td><strong>ISR</strong></td><td><code>{'{ next: { revalidate: 3600 } }'}</code></td><td>Dữ liệu đổi định kỳ (blog, sản phẩm)</td></tr>
+        <tr><td><strong>Dynamic (SSR)</strong></td><td><code>{'{ cache: "no-store" }'}</code></td><td>Dữ liệu real-time, theo từng request (giỏ hàng, dashboard)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Server Actions — xử lý form không cần viết API riêng</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/contact/page.js — Server Action</span><span class="cb-tag ct-ch">SERVER ACTION</span></div>
+      <div class="cb-body"><pre><span class="kw">export default function</span> <span class="fn">ContactForm</span>() {
+  <span class="kw">async function</span> <span class="fn">submitForm</span>(<span class="vr">formData</span>) {
+    <span class="st-s">"use server"</span>; <span class="cm">// hàm này chạy trên server, gọi trực tiếp DB an toàn</span>
+    <span class="kw">const</span> <span class="vr">email</span> = <span class="vr">formData</span>.<span class="fn">get</span>(<span class="st-s">"email"</span>);
+    <span class="kw">await</span> <span class="fn">saveToDatabase</span>({ <span class="vr">email</span> });
+  }
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;form</span> <span class="pr">action</span>={<span class="vr">submitForm</span>}<span class="an">&gt;</span>
+      <span class="an">&lt;input</span> <span class="pr">name</span>=<span class="st-s">"email"</span> <span class="pr">type</span>=<span class="st-s">"email"</span> <span class="an">/&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">type</span>=<span class="st-s">"submit"</span><span class="an">&gt;</span>Gửi<span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/form&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div>Server Actions hoạt động ngay cả khi <strong>JavaScript chưa load xong</strong> ở client (progressive enhancement), và tránh việc phải tự dựng API route + fetch chỉ để xử lý 1 form đơn giản.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S14 — ROUTING ĐỘNG, LAYOUT, METADATA ════ -->
+<div class="section" id="s14">
+  <div class="sec-head">
+    <span class="sec-tag st-au">NEXT.JS</span>
+    <div><h2 class="sec-title">Routing động, Layout &amp; Metadata</h2>
+    <p class="sec-sub">Route param, Link điều hướng, tối ưu SEO</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Route động — đọc tham số [slug]</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/blog/[slug]/page.js</span><span class="cb-tag ct-au">DYNAMIC ROUTE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">notFound</span> } <span class="kw">from</span> <span class="st-s">"next/navigation"</span>;
+
+<span class="kw">export async function</span> <span class="fn">generateMetadata</span>({ <span class="vr">params</span> }) {
+  <span class="kw">const</span> <span class="vr">post</span> = <span class="kw">await</span> <span class="fn">getPost</span>(<span class="vr">params</span>.<span class="vr">slug</span>);
+  <span class="kw">return</span> { <span class="vr">title</span>: <span class="vr">post</span>.<span class="vr">title</span>, <span class="vr">description</span>: <span class="vr">post</span>.<span class="vr">excerpt</span> }; <span class="cm">// SEO tự động</span>
+}
+
+<span class="kw">export default async function</span> <span class="fn">PostPage</span>({ <span class="vr">params</span> }) {
+  <span class="kw">const</span> <span class="vr">post</span> = <span class="kw">await</span> <span class="fn">getPost</span>(<span class="vr">params</span>.<span class="vr">slug</span>); <span class="cm">// params.slug lấy từ tên thư mục [slug]</span>
+  <span class="kw">if</span> (!<span class="vr">post</span>) <span class="fn">notFound</span>(); <span class="cm">// tự chuyển sang trang 404</span>
+
+  <span class="kw">return</span> <span class="an">&lt;article&gt;</span><span class="an">&lt;h1&gt;</span>{<span class="vr">post</span>.<span class="vr">title</span>}<span class="an">&lt;/h1&gt;</span><span class="an">&lt;/article&gt;</span>;
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Điều hướng với Link — không reload trang</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">components/Nav.js</span><span class="cb-tag ct-ins">LINK</span></div>
+      <div class="cb-body"><pre><span class="st-s">"use client"</span>;
+<span class="kw">import</span> <span class="vr">Link</span> <span class="kw">from</span> <span class="st-s">"next/link"</span>;
+<span class="kw">import</span> { <span class="vr">useRouter</span> } <span class="kw">from</span> <span class="st-s">"next/navigation"</span>;
+
+<span class="kw">export default function</span> <span class="fn">Nav</span>() {
+  <span class="kw">const</span> <span class="vr">router</span> = <span class="fn">useRouter</span>(); <span class="cm">// điều hướng bằng code (sau khi submit form...)</span>
+  <span class="kw">return</span> (
+    <span class="an">&lt;nav&gt;</span>
+      <span class="an">&lt;Link</span> <span class="pr">href</span>=<span class="st-s">"/"</span><span class="an">&gt;</span>Trang chủ<span class="an">&lt;/Link&gt;</span>
+      <span class="an">&lt;Link</span> <span class="pr">href</span>=<span class="st-s">"/blog"</span><span class="an">&gt;</span>Blog<span class="an">&lt;/Link&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="vr">router</span>.<span class="fn">push</span>(<span class="st-s">"/dashboard"</span>)}<span class="an">&gt;</span>Vào Dashboard<span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/nav&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div>Luôn dùng <code>&lt;Link&gt;</code> của Next.js thay vì thẻ <code>&lt;a&gt;</code> thường cho điều hướng nội bộ — nó preload trang đích và chuyển trang không reload toàn bộ (giữ trải nghiệm SPA).</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — VÍ DỤ THỰC CHIẾN ════ -->
+<div class="cat-banner cb-oc">
+  <div class="cb-icon">✅</div>
+  <div>
+    <div class="cb-badge">VÍ DỤ THỰC CHIẾN</div>
+    <div class="cb-title">Phần 5 — Ứng dụng hoàn chỉnh</div>
+    <div class="cb-sub">Todo App dùng đủ Hooks · Next.js Blog với data fetching thật</div>
+  </div>
+</div>
+
+<!-- ════ S15 — TODO APP ════ -->
+<div class="section" id="s15">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">VÍ DỤ</span>
+    <div><h2 class="sec-title">Ví dụ: Todo App hoàn chỉnh</h2>
+    <p class="sec-sub">Kết hợp useState, useEffect, useMemo trong một component thật</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">TodoApp.jsx</span><span class="cb-tag ct-oc">FULL EXAMPLE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useState</span>, <span class="vr">useEffect</span>, <span class="vr">useMemo</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">function</span> <span class="fn">TodoApp</span>() {
+  <span class="kw">const</span> [<span class="vr">todos</span>, <span class="vr">setTodos</span>] = <span class="fn">useState</span>(() =&gt; {
+    <span class="kw">const</span> <span class="vr">saved</span> = <span class="vr">localStorage</span>.<span class="fn">getItem</span>(<span class="st-s">"todos"</span>);
+    <span class="kw">return</span> <span class="vr">saved</span> ? <span class="vr">JSON</span>.<span class="fn">parse</span>(<span class="vr">saved</span>) : [];
+  });
+  <span class="kw">const</span> [<span class="vr">text</span>, <span class="vr">setText</span>] = <span class="fn">useState</span>(<span class="st-s">""</span>);
+  <span class="kw">const</span> [<span class="vr">filter</span>, <span class="vr">setFilter</span>] = <span class="fn">useState</span>(<span class="st-s">"all"</span>); <span class="cm">// all | active | done</span>
+
+  <span class="cm">// Đồng bộ localStorage mỗi khi todos đổi</span>
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="vr">localStorage</span>.<span class="fn">setItem</span>(<span class="st-s">"todos"</span>, <span class="vr">JSON</span>.<span class="fn">stringify</span>(<span class="vr">todos</span>));
+  }, [<span class="vr">todos</span>]);
+
+  <span class="kw">function</span> <span class="fn">addTodo</span>() {
+    <span class="kw">if</span> (!<span class="vr">text</span>.<span class="fn">trim</span>()) <span class="kw">return</span>;
+    <span class="fn">setTodos</span>((<span class="vr">prev</span>) =&gt; [...<span class="vr">prev</span>, { <span class="vr">id</span>: <span class="vr">Date</span>.<span class="fn">now</span>(), <span class="vr">text</span>, <span class="vr">done</span>: <span class="kw">false</span> }]);
+    <span class="fn">setText</span>(<span class="st-s">""</span>);
+  }
+
+  <span class="kw">function</span> <span class="fn">toggleTodo</span>(<span class="vr">id</span>) {
+    <span class="fn">setTodos</span>((<span class="vr">prev</span>) =&gt; <span class="vr">prev</span>.<span class="fn">map</span>((<span class="vr">t</span>) =&gt; (<span class="vr">t</span>.<span class="vr">id</span> === <span class="vr">id</span> ? { ...<span class="vr">t</span>, <span class="vr">done</span>: !<span class="vr">t</span>.<span class="vr">done</span> } : <span class="vr">t</span>)));
+  }
+
+  <span class="cm">// Lọc danh sách — chỉ tính lại khi todos hoặc filter đổi</span>
+  <span class="kw">const</span> <span class="vr">visibleTodos</span> = <span class="fn">useMemo</span>(() =&gt; {
+    <span class="kw">if</span> (<span class="vr">filter</span> === <span class="st-s">"active"</span>) <span class="kw">return</span> <span class="vr">todos</span>.<span class="fn">filter</span>((<span class="vr">t</span>) =&gt; !<span class="vr">t</span>.<span class="vr">done</span>);
+    <span class="kw">if</span> (<span class="vr">filter</span> === <span class="st-s">"done"</span>) <span class="kw">return</span> <span class="vr">todos</span>.<span class="fn">filter</span>((<span class="vr">t</span>) =&gt; <span class="vr">t</span>.<span class="vr">done</span>);
+    <span class="kw">return</span> <span class="vr">todos</span>;
+  }, [<span class="vr">todos</span>, <span class="vr">filter</span>]);
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;div&gt;</span>
+      <span class="an">&lt;input</span> <span class="pr">value</span>={<span class="vr">text</span>} <span class="pr">onChange</span>={(<span class="vr">e</span>) =&gt; <span class="fn">setText</span>(<span class="vr">e</span>.<span class="vr">target</span>.<span class="vr">value</span>)}
+        <span class="pr">onKeyDown</span>={(<span class="vr">e</span>) =&gt; <span class="vr">e</span>.<span class="vr">key</span> === <span class="st-s">"Enter"</span> &amp;&amp; <span class="fn">addTodo</span>()} <span class="an">/&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">onClick</span>={<span class="vr">addTodo</span>}<span class="an">&gt;</span>Thêm<span class="an">&lt;/button&gt;</span>
+
+      <span class="an">&lt;div&gt;</span>
+        {[<span class="st-s">"all"</span>, <span class="st-s">"active"</span>, <span class="st-s">"done"</span>].<span class="fn">map</span>((<span class="vr">f</span>) =&gt; (
+          <span class="an">&lt;button</span> <span class="pr">key</span>={<span class="vr">f</span>} <span class="pr">onClick</span>={() =&gt; <span class="fn">setFilter</span>(<span class="vr">f</span>)}<span class="an">&gt;</span>{<span class="vr">f</span>}<span class="an">&lt;/button&gt;</span>
+        ))}
+      <span class="an">&lt;/div&gt;</span>
+
+      <span class="an">&lt;ul&gt;</span>
+        {<span class="vr">visibleTodos</span>.<span class="fn">map</span>((<span class="vr">t</span>) =&gt; (
+          <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">t</span>.<span class="vr">id</span>}
+            <span class="pr">style</span>={{ <span class="vr">textDecoration</span>: <span class="vr">t</span>.<span class="vr">done</span> ? <span class="st-s">"line-through"</span> : <span class="st-s">"none"</span> }}
+            <span class="pr">onClick</span>={() =&gt; <span class="fn">toggleTodo</span>(<span class="vr">t</span>.<span class="vr">id</span>)}<span class="an">&gt;</span>
+            {<span class="vr">t</span>.<span class="vr">text</span>}
+          <span class="an">&lt;/li&gt;</span>
+        ))}
+      <span class="an">&lt;/ul&gt;</span>
+    <span class="an">&lt;/div&gt;</span>
+  );
+}
+
+<span class="kw">export default</span> <span class="vr">TodoApp</span>;</pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">📝</span>
+      <div><strong style="color:var(--text)">Điểm học được:</strong> khởi tạo state "lười" bằng hàm (<code>useState(() =&gt; ...)</code>) để chỉ đọc localStorage 1 lần, functional update (<code>prev =&gt;</code>) khi state mới phụ thuộc state cũ, và <code>useMemo</code> để tránh lọc lại danh sách mỗi lần gõ phím vào ô input.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S16 — NEXT.JS BLOG ════ -->
+<div class="section" id="s16">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">VÍ DỤ</span>
+    <div><h2 class="sec-title">Ví dụ: Next.js Blog + API Route</h2>
+    <p class="sec-sub">Server Component fetch dữ liệu, API Route trả JSON, Client Component tương tác</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">1. API Route trả danh sách bài viết</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/api/posts/route.js</span><span class="cb-tag ct-au">API ROUTE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">NextResponse</span> } <span class="kw">from</span> <span class="st-s">"next/server"</span>;
+
+<span class="kw">const</span> <span class="vr">posts</span> = [
+  { <span class="vr">id</span>: <span class="nm">1</span>, <span class="vr">title</span>: <span class="st-s">"Học React từ đầu"</span>, <span class="vr">views</span>: <span class="nm">120</span> },
+  { <span class="vr">id</span>: <span class="nm">2</span>, <span class="vr">title</span>: <span class="st-s">"Next.js App Router"</span>, <span class="vr">views</span>: <span class="nm">86</span> },
+];
+
+<span class="kw">export async function</span> <span class="fn">GET</span>() {
+  <span class="kw">return</span> <span class="vr">NextResponse</span>.<span class="fn">json</span>(<span class="vr">posts</span>);
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">2. Server Component render danh sách (không JS gửi xuống client)</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/blog/page.js</span><span class="cb-tag ct-ins">SERVER</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> <span class="vr">ViewCounter</span> <span class="kw">from</span> <span class="st-s">"./ViewCounter"</span>;
+
+<span class="kw">export default async function</span> <span class="fn">BlogPage</span>() {
+  <span class="kw">const</span> <span class="vr">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st-s">"http://localhost:3000/api/posts"</span>, { <span class="vr">cache</span>: <span class="st-s">"no-store"</span> });
+  <span class="kw">const</span> <span class="vr">posts</span> = <span class="kw">await</span> <span class="vr">res</span>.<span class="fn">json</span>();
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;ul&gt;</span>
+      {<span class="vr">posts</span>.<span class="fn">map</span>((<span class="vr">p</span>) =&gt; (
+        <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">p</span>.<span class="vr">id</span>}<span class="an">&gt;</span>
+          {<span class="vr">p</span>.<span class="vr">title</span>} <span class="an">&lt;ViewCounter</span> <span class="pr">initial</span>={<span class="vr">p</span>.<span class="vr">views</span>} <span class="an">/&gt;</span>
+        <span class="an">&lt;/li&gt;</span>
+      ))}
+    <span class="an">&lt;/ul&gt;</span>
+  );
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">3. Client Component nhỏ xử lý tương tác (bấm xem)</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/blog/ViewCounter.js</span><span class="cb-tag ct-ch">CLIENT</span></div>
+      <div class="cb-body"><pre><span class="st-s">"use client"</span>;
+<span class="kw">import</span> { <span class="vr">useState</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="kw">export default function</span> <span class="fn">ViewCounter</span>({ <span class="vr">initial</span> }) {
+  <span class="kw">const</span> [<span class="vr">views</span>, <span class="vr">setViews</span>] = <span class="fn">useState</span>(<span class="vr">initial</span>);
+  <span class="kw">return</span> (
+    <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">setViews</span>((<span class="vr">v</span>) =&gt; <span class="vr">v</span> + <span class="nm">1</span>)}<span class="an">&gt;</span>
+      👁️ {<span class="vr">views</span>}
+    <span class="an">&lt;/button&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div>Mô hình chuẩn của Next.js: <strong>Server Component fetch &amp; render danh sách</strong> (nhanh, SEO tốt, 0 KB JS), chỉ nút bấm nhỏ <code>ViewCounter</code> là Client Component — đúng nguyên tắc "đẩy use client xuống lá cây" đã nói ở phần trước.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ S17 — CHEAT SHEET ════ -->
+<div class="section" id="s17">
+  <div class="sec-head">
+    <span class="sec-tag st-y">CHEAT SHEET</span>
+    <div><h2 class="sec-title">Tổng hợp nhanh — React &amp; Next.js</h2>
+    <p class="sec-sub">Tra cứu nhanh Hooks, quy ước Next.js, lệnh CLI</p></div>
+  </div>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4 class="h4-ch">🟢 Hooks cơ bản</h4>
+      <div class="cheat-row"><span class="ck">State đơn giản</span><span class="cv">useState(initial)</span></div>
+      <div class="cheat-row"><span class="ck">Side effect</span><span class="cv">useEffect(fn, deps)</span></div>
+      <div class="cheat-row"><span class="ck">Context</span><span class="cv">useContext(Ctx)</span></div>
+      <div class="cheat-row"><span class="ck">Tham chiếu DOM</span><span class="cv">useRef(null)</span></div>
+      <div class="cheat-row"><span class="ck">State phức tạp</span><span class="cv">useReducer(fn, init)</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-au">🟡 Hooks tối ưu</h4>
+      <div class="cheat-row"><span class="ck">Cache giá trị</span><span class="cv">useMemo(fn, deps)</span></div>
+      <div class="cheat-row"><span class="ck">Cache hàm</span><span class="cv">useCallback(fn, deps)</span></div>
+      <div class="cheat-row"><span class="ck">Bỏ qua render con</span><span class="cv">React.memo(Comp)</span></div>
+      <div class="cheat-row"><span class="ck">ID duy nhất</span><span class="cv">useId()</span></div>
+      <div class="cheat-row"><span class="ck">Chuyển layout mượt</span><span class="cv">useLayoutEffect</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-sk">🟣 Vòng đời</h4>
+      <div class="cheat-row"><span class="ck">Mount</span><span class="cv">useEffect(fn, [])</span></div>
+      <div class="cheat-row"><span class="ck">Update theo dep</span><span class="cv">useEffect(fn, [dep])</span></div>
+      <div class="cheat-row"><span class="ck">Unmount cleanup</span><span class="cv">return () =&gt; {}</span></div>
+      <div class="cheat-row"><span class="ck">Mỗi render</span><span class="cv">useEffect(fn)</span></div>
+      <div class="cheat-row"><span class="ck">Điều kiện render</span><span class="cv">shouldComponentUpdate</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ins">🔵 Sự kiện JSX</h4>
+      <div class="cheat-row"><span class="ck">Click</span><span class="cv">onClick={fn}</span></div>
+      <div class="cheat-row"><span class="ck">Nhập liệu</span><span class="cv">onChange={fn}</span></div>
+      <div class="cheat-row"><span class="ck">Submit form</span><span class="cv">onSubmit={fn}</span></div>
+      <div class="cheat-row"><span class="ck">Phím bấm</span><span class="cv">onKeyDown={fn}</span></div>
+      <div class="cheat-row"><span class="ck">List cần key</span><span class="cv">key={item.id}</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-au">🗂️ Next.js — file quy ước</h4>
+      <div class="cheat-row"><span class="ck">Trang</span><span class="cv">page.js</span></div>
+      <div class="cheat-row"><span class="ck">Layout dùng chung</span><span class="cv">layout.js</span></div>
+      <div class="cheat-row"><span class="ck">Loading UI</span><span class="cv">loading.js</span></div>
+      <div class="cheat-row"><span class="ck">Error boundary</span><span class="cv">error.js</span></div>
+      <div class="cheat-row"><span class="ck">API endpoint</span><span class="cv">route.js</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-oc">⚛️ Next.js — Rendering</h4>
+      <div class="cheat-row"><span class="ck">Static (SSG)</span><span class="cv">fetch(url)</span></div>
+      <div class="cheat-row"><span class="ck">ISR</span><span class="cv">next:{revalidate:N}</span></div>
+      <div class="cheat-row"><span class="ck">Dynamic (SSR)</span><span class="cv">cache:"no-store"</span></div>
+      <div class="cheat-row"><span class="ck">Client component</span><span class="cv">"use client"</span></div>
+      <div class="cheat-row"><span class="ck">Server action</span><span class="cv">"use server"</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ch">🟢 Next.js — Navigation</h4>
+      <div class="cheat-row"><span class="ck">Link (SPA)</span><span class="cv">next/link</span></div>
+      <div class="cheat-row"><span class="ck">Điều hướng code</span><span class="cv">useRouter().push()</span></div>
+      <div class="cheat-row"><span class="ck">Tham số route</span><span class="cv">params.slug</span></div>
+      <div class="cheat-row"><span class="ck">Query string</span><span class="cv">useSearchParams()</span></div>
+      <div class="cheat-row"><span class="ck">404 thủ công</span><span class="cv">notFound()</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-sk">🟣 CLI thường dùng</h4>
+      <div class="cheat-row"><span class="ck">Tạo dự án React</span><span class="cv">npm create vite@latest</span></div>
+      <div class="cheat-row"><span class="ck">Tạo dự án Next.js</span><span class="cv">npx create-next-app@latest</span></div>
+      <div class="cheat-row"><span class="ck">Chạy dev server</span><span class="cv">npm run dev</span></div>
+      <div class="cheat-row"><span class="ck">Build production</span><span class="cv">npm run build</span></div>
+      <div class="cheat-row"><span class="ck">Chạy bản build</span><span class="cv">npm start</span></div>
+    </div>
+  </div>
+
+  <div class="info i-ok" style="margin-top:22px">
+    <span class="info-ico">🔗</span>
+    <div style="font-size:13.5px">
+      <strong style="color:var(--text)">Tài nguyên chính thức:</strong><br>
+      <span style="color:var(--muted)">
+        <a href="https://react.dev" style="color:var(--acc)">react.dev</a> — Tài liệu chính thức React &nbsp;·&nbsp;
+        <a href="https://nextjs.org/docs" style="color:var(--acc)">nextjs.org/docs</a> — Tài liệu chính thức Next.js &nbsp;·&nbsp;
+        <a href="https://react.dev/reference/react" style="color:var(--acc)">react.dev/reference</a> — API Hooks đầy đủ &nbsp;·&nbsp;
+        <a href="https://nextjs.org/learn" style="color:var(--acc)">nextjs.org/learn</a> — Khoá học tương tác miễn phí
+      </span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  <span>⚛️ React &amp; Next.js · Hướng dẫn toàn tập · Hooks &amp; Lifecycle · 2026</span>
+  <span style="margin-left:auto;color:var(--faint)">React cơ bản ×3 · Hooks ×5 · Lifecycle ×2 · Next.js ×4 · Ví dụ ×2</span>
+</div>
+</div><!-- /main -->
+
+<script>
+window.addEventListener('scroll',()=>{
+  const el=document.documentElement;
+  document.getElementById('pbar').style.width=(el.scrollTop/(el.scrollHeight-el.clientHeight)*100)+'%';
+});
+const sections=document.querySelectorAll('.section[id]');
+const links=document.querySelectorAll('.nav-link');
+sections.forEach(s=>new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if(a)a.classList.add('active');
+    }
+  });
+},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
