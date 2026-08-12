@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript 🟨 &amp; ReactJS ⚛️ — Hướng dẫn chi tiết, Mẹo &amp; Tối ưu</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080810;--s1:#0e0e1c;--s2:#131326;--s3:#18182e;--s4:#1e1e38;
+  --border:#222240;--border2:#2c2c50;--text:#e6e6f2;--muted:#666698;--faint:#363660;
+  --acc:#ffd060;--acc-d:#f0b400;--acc-dim:rgba(255,208,96,.11);--acc-glow:rgba(255,208,96,.24);
+  --green:#40d88e;--green-dim:rgba(64,216,142,.10);
+  --blue:#5ba8ff;--blue-dim:rgba(91,168,255,.10);
+  --purple:#a07af4;--purple-dim:rgba(160,122,244,.10);
+  --yellow:#ffd060;--yellow-dim:rgba(255,208,96,.10);
+  --teal:#30d8c0;--teal-dim:rgba(48,216,192,.10);
+  --orange:#ff8c50;--orange-dim:rgba(255,140,80,.10);
+  --pink:#ff6584;--pink-dim:rgba(255,101,132,.11);--pink-glow:rgba(255,101,132,.22);
+  --sky:#38bdf8;--sky-dim:rgba(56,189,248,.10);
+  /* JS + React brand: yellow -> cyan */
+  --oc:#61dafb;--oc-dim:rgba(97,218,251,.14);--oc-glow:rgba(97,218,251,.32);
+  --oc2:#ffd060;--oc2-dim:rgba(255,208,96,.12);
+  /* sections */
+  --ins:#5ba8ff;--ins-dim:rgba(91,168,255,.12);--ins-glow:rgba(91,168,255,.28);
+  --ch:#40d88e;--ch-dim:rgba(64,216,142,.12);--ch-glow:rgba(64,216,142,.28);
+  --sk:#a07af4;--sk-dim:rgba(160,122,244,.12);--sk-glow:rgba(160,122,244,.28);
+  --au:#ffd060;--au-dim:rgba(255,208,96,.12);--au-glow:rgba(255,208,96,.28);
+  --code-bg:#05050e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:15px;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* PAGE NAV */
+.page-nav{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.pn-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:1;padding:10px 6px;text-decoration:none;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.2px;border-bottom:2px solid transparent;transition:all .15s;background:transparent;line-height:1.3;text-align:center}
+.pn-tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.pn-tab.pn-active{color:var(--acc);border-bottom-color:var(--acc);background:var(--acc-dim)}
+.pn-icon{font-size:16px;line-height:1}
+.pn-label{font-size:9.5px}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:0;width:268px;height:100vh;background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;z-index:400;display:flex;flex-direction:column}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-brand{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.logo-icon{width:44px;height:44px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,var(--oc2),var(--oc));display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 26px var(--oc-glow)}
+.logo-text h2{font-size:15px;font-weight:800;letter-spacing:-.4px}
+.logo-text p{font-size:10.5px;color:var(--muted);margin-top:2px}
+.prog-wrap{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--oc2),var(--ins),var(--ch),var(--sk),var(--au));width:0%;transition:width .4s;border-radius:2px}
+.nav-section{padding:8px 0 4px}
+.nav-sect-label{padding:8px 18px 3px;font-size:9.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--faint)}
+.nav-group-hdr{display:flex;align-items:center;gap:7px;margin:6px 12px 3px;padding:6px 10px;border-radius:7px;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.ngh-oc{background:var(--oc-dim);color:var(--oc)}
+.ngh-ins{background:var(--ins-dim);color:var(--ins)}
+.ngh-ch{background:var(--ch-dim);color:var(--ch)}
+.ngh-sk{background:var(--sk-dim);color:var(--sk)}
+.ngh-au{background:var(--au-dim);color:var(--au)}
+.ngh-other{background:rgba(255,255,255,.05);color:var(--muted)}
+.nav-link{display:flex;align-items:center;gap:9px;padding:6px 18px;color:var(--muted);text-decoration:none;font-size:12.5px;font-weight:600;border-left:2px solid transparent;transition:all .14s}
+.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,208,96,.08);border-left-color:var(--acc)}
+.nav-link .ico{font-size:13px;flex-shrink:0;width:16px;text-align:center}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;background:var(--acc-dim);color:var(--acc)}
+
+/* MAIN */
+.main{margin-left:268px;min-height:100vh}
+.hero{padding:80px 64px 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);
+  background:radial-gradient(ellipse 65% 55% at 75% 22%,rgba(97,218,251,.16) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 55% at 10% 82%,rgba(255,208,96,.08) 0%,transparent 55%),
+             radial-gradient(ellipse 40% 50% at 50% 50%,rgba(64,216,142,.04) 0%,transparent 60%),var(--bg)}
+.hero-dots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.028) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.hero-glow{position:absolute;right:-90px;top:-90px;width:520px;height:520px;background:radial-gradient(circle,rgba(97,218,251,.14) 0%,transparent 65%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--oc-dim);border:1px solid rgba(97,218,251,.4);color:var(--oc);padding:5px 16px;border-radius:100px;font-size:11.5px;font-weight:700;margin-bottom:26px;letter-spacing:.3px}
+.hero-eyebrow .pulse{width:6px;height:6px;border-radius:50%;background:var(--oc);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero h1{font-size:52px;font-weight:900;letter-spacing:-2.5px;line-height:1.04;margin-bottom:18px}
+.h-oc{color:var(--oc)}.h-ins{color:var(--ins)}.h-ch{color:var(--ch)}.h-sk{color:var(--sk)}.h-au{color:var(--au)}.h-acc{color:var(--acc)}
+.h-grad{background:linear-gradient(135deg,var(--oc2) 0%,var(--acc) 50%,var(--oc) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:16px;color:var(--muted);max-width:580px;line-height:1.72;margin-bottom:30px}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:5px 14px;border-radius:7px;font-size:12px;font-weight:700}
+.chip-oc{background:var(--oc-dim);color:var(--oc)}.chip-ins{background:var(--ins-dim);color:var(--ins)}
+.chip-ch{background:var(--ch-dim);color:var(--ch)}.chip-sk{background:var(--sk-dim);color:var(--sk)}
+.chip-au{background:var(--au-dim);color:var(--au)}.chip-t{background:var(--teal-dim);color:var(--teal)}
+.chip-p{background:var(--pink-dim);color:var(--pink)}.chip-s{background:var(--sky-dim);color:var(--sky)}
+
+/* CAT BANNERS */
+.cat-banner{display:flex;align-items:center;gap:16px;padding:20px 24px;border-radius:14px;margin-bottom:44px;position:relative;overflow:hidden}
+.cat-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cb-oc{background:var(--oc-dim);border:1px solid rgba(97,218,251,.32)}.cb-oc::before{background:linear-gradient(90deg,var(--oc),var(--oc2))}
+.cb-ins{background:var(--ins-dim);border:1px solid rgba(91,168,255,.30)}.cb-ins::before{background:linear-gradient(90deg,var(--ins),var(--sky))}
+.cb-ch{background:var(--ch-dim);border:1px solid rgba(64,216,142,.30)}.cb-ch::before{background:linear-gradient(90deg,var(--ch),var(--teal))}
+.cb-sk{background:var(--sk-dim);border:1px solid rgba(160,122,244,.30)}.cb-sk::before{background:linear-gradient(90deg,var(--sk),var(--pink))}
+.cb-au{background:var(--au-dim);border:1px solid rgba(255,208,96,.30)}.cb-au::before{background:linear-gradient(90deg,var(--au),var(--orange))}
+.cb-icon{font-size:38px;flex-shrink:0}
+.cb-badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;display:inline-block;margin-bottom:5px}
+.cb-oc .cb-badge{background:var(--oc-dim);color:var(--oc)}
+.cb-ins .cb-badge{background:var(--ins-dim);color:var(--ins)}
+.cb-ch .cb-badge{background:var(--ch-dim);color:var(--ch)}
+.cb-sk .cb-badge{background:var(--sk-dim);color:var(--sk)}
+.cb-au .cb-badge{background:var(--au-dim);color:var(--au)}
+.cb-title{font-size:20px;font-weight:800;letter-spacing:-.5px}.cb-sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+
+/* CONTENT */
+.content{padding:56px 64px;max-width:1020px}
+.section{margin-bottom:72px}
+.sec-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:30px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.sec-tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 10px;border-radius:5px;margin-top:5px;flex-shrink:0;letter-spacing:.5px}
+.st-oc{color:var(--oc);background:var(--oc-dim);border:1px solid var(--oc-glow)}
+.st-ins{color:var(--ins);background:var(--ins-dim);border:1px solid var(--ins-glow)}
+.st-ch{color:var(--ch);background:var(--ch-dim);border:1px solid var(--ch-glow)}
+.st-sk{color:var(--sk);background:var(--sk-dim);border:1px solid var(--sk-glow)}
+.st-au{color:var(--au);background:var(--au-dim);border:1px solid var(--au-glow)}
+.st-y{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(255,208,96,.24)}
+.sec-title{font-size:23px;font-weight:800;letter-spacing:-.6px;margin-bottom:5px}
+.sec-sub{font-size:13px;color:var(--muted)}
+.sub{margin-bottom:38px}
+.sub-title{font-size:14.5px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:10px}
+.sub-title::before{content:'';display:inline-block;width:14px;height:3px;background:var(--acc);border-radius:2px;flex-shrink:0}
+.sub p,.sub ul,.sub ol{color:var(--muted);font-size:13.5px;margin-bottom:11px;line-height:1.75}
+.sub ul,.sub ol{padding-left:22px}.sub li{margin-bottom:5px}.sub strong{color:var(--text)}
+
+/* GRIDS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:11px;padding:16px;transition:all .2s;cursor:default}
+.card:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.38)}
+.card-icon{font-size:24px;margin-bottom:8px}.card-title{font-size:13px;font-weight:700;margin-bottom:4px}.card-desc{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* CODE BLOCKS */
+.cblock{background:var(--code-bg);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin:13px 0}
+.cb-head{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--s2);border-bottom:1px solid var(--border)}
+.cb-dots{display:flex;gap:5px}.cbd{width:10px;height:10px;border-radius:50%}
+.cbd.r{background:#ff5f56}.cbd.y{background:#ffbd2e}.cbd.g{background:#27c93f}
+.cb-name{font-size:11.5px;font-weight:700;color:var(--muted);font-family:'JetBrains Mono',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cb-tag{margin-left:auto;font-size:9px;font-weight:700;padding:2px 9px;border-radius:100px;flex-shrink:0}
+.ct-oc{background:var(--oc-dim);color:var(--oc)}.ct-ins{background:var(--ins-dim);color:var(--ins)}
+.ct-ch{background:var(--ch-dim);color:var(--ch)}.ct-sk{background:var(--sk-dim);color:var(--sk)}
+.ct-au{background:var(--au-dim);color:var(--au)}.ct-y{background:var(--yellow-dim);color:var(--yellow)}
+.ct-g{background:var(--green-dim);color:var(--green)}.ct-t{background:var(--teal-dim);color:var(--teal)}
+.cb-body{padding:18px 20px;overflow-x:auto}
+.cb-body pre{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.72;white-space:pre;color:#8899bb}
+/* syntax */
+.kw{color:#c792ea}.tp{color:#ffcb6b}.fn{color:#82aaff}.st-s{color:#c3e88d}
+.cm{color:#546e7a;font-style:italic}.nm{color:#f78c6c}.an{color:#ff6584}
+.pr{color:#89ddff}.vr{color:#eeffff}.cl{color:#ffcb6b}
+.c-r{color:#ff6584}.c-b{color:#5ba8ff}.c-g{color:#40d88e}
+.c-t{color:#30d8c0}.c-y{color:#ffd060}.c-o{color:#ff8c50}.c-p{color:#a07af4}.c-s{color:#38bdf8}
+/* shell prompt */
+.sh-prompt{color:var(--ch);font-weight:700;user-select:none}
+.sh-cmd{color:var(--text)}
+.sh-arg{color:var(--sky)}
+.sh-str{color:var(--green)}
+.sh-flag{color:var(--au)}
+.sh-cmt{color:#546e7a;font-style:italic}
+
+/* INFO BOXES */
+.info{display:flex;gap:12px;padding:14px 16px;border-radius:9px;margin:13px 0;font-size:13px;line-height:1.6}
+.info-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.i-ok{background:var(--green-dim);border:1px solid rgba(64,216,142,.2);color:#30a870}
+.i-warn{background:var(--yellow-dim);border:1px solid rgba(255,208,96,.2);color:#b09030}
+.i-tip{background:var(--blue-dim);border:1px solid rgba(91,168,255,.2);color:#3878d0}
+.i-note{background:var(--purple-dim);border:1px solid rgba(160,122,244,.2);color:#8060d0}
+.i-err{background:var(--pink-dim);border:1px solid rgba(255,101,132,.2);color:#cc3355}
+
+/* RW BOX */
+.rw-box{background:var(--s1);border:1px solid var(--border2);border-radius:12px;padding:18px 20px;margin:14px 0;position:relative;overflow:hidden}
+.rw-box::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.rw-oc::before{background:var(--oc)}.rw-ins::before{background:var(--ins)}
+.rw-ch::before{background:var(--ch)}.rw-sk::before{background:var(--sk)}
+.rw-au::before{background:var(--au)}.rw-y::before{background:var(--yellow)}
+.rw-label{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.rw-oc .rw-label{color:var(--oc)}.rw-ins .rw-label{color:var(--ins)}
+.rw-ch .rw-label{color:var(--ch)}.rw-sk .rw-label{color:var(--sk)}
+.rw-au .rw-label{color:var(--au)}.rw-y .rw-label{color:var(--yellow)}
+.rw-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.rw-body{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:13px 0;border-radius:11px;overflow:hidden}
+.tbl th{background:var(--s3);padding:10px 14px;text-align:left;font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-bottom:1px solid var(--border2)}
+.tbl td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted);vertical-align:top}
+.tbl tr:hover td{background:rgba(255,255,255,.025)}
+.tbl code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--code-bg);padding:2px 7px;border-radius:4px;color:var(--teal)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;margin:14px 0}
+.step{display:flex;gap:16px}
+.step-L{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
+.step-num{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--acc);background:var(--acc-dim);border:2px solid var(--acc-glow)}
+.step-line{width:2px;flex:1;background:var(--border);margin:5px 0;min-height:14px}
+.step-B{padding:3px 0 26px}.step-B h4{font-size:14px;font-weight:700;margin-bottom:5px}
+.step-B p{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* CHEAT SHEET */
+.cheat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.cheat-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:15px}
+.cheat-card h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:11px}
+.h4-oc{color:var(--oc)}.h4-ins{color:var(--ins)}.h4-ch{color:var(--ch)}.h4-sk{color:var(--sk)}.h4-au{color:var(--au)}
+.cheat-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.cheat-row:last-child{border-bottom:none}.ck{color:var(--muted)}.cv{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--teal)}
+
+/* ARCH DIAGRAM */
+.arch{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:0;margin:18px 0}
+.arch-box{background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;text-align:center}
+.arch-title{font-size:12px;font-weight:700;margin-bottom:3px}
+.arch-desc{font-size:11px;color:var(--muted)}
+.arch-arrow{text-align:center;color:var(--muted);font-size:20px;padding:0 8px}
+
+p code,li code,td code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(255,208,96,.12);color:var(--acc);padding:2px 6px;border-radius:4px}
+hr.dv{border:none;border-top:1px solid var(--border);margin:58px 0}
+.footer{border-top:1px solid var(--border);padding:28px 64px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+@media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.hero,.content,.footer{padding-left:22px;padding-right:22px}.hero h1{font-size:32px}.grid-2,.grid-3,.grid-4,.cheat-grid{grid-template-columns:1fr}.arch{grid-template-columns:1fr;gap:8px}.arch-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="page-nav">
+    <a href="js-reactjs-guide.html" class="pn-tab pn-active">
+      <span class="pn-icon">🟨</span>
+      <span class="pn-label">JS &amp; React</span>
+    </a>
+    <a href="react-nextjs-guide.html" class="pn-tab">
+      <span class="pn-icon">⚛️</span>
+      <span class="pn-label">React &amp; Next.js</span>
+    </a>
+    <a href="redux-rtk-query-guide.html" class="pn-tab">
+      <span class="pn-icon">🔄</span>
+      <span class="pn-label">Redux &amp; RTK</span>
+    </a>
+  </div>
+  <div class="sb-logo">
+    <div class="sb-brand">
+      <div class="logo-icon">🟨</div>
+      <div class="logo-text"><h2>JavaScript</h2><p>cho ReactJS · Mẹo &amp; Tối ưu</p></div>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar" id="pbar"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-sect-label">Tổng quan</div>
+    <a href="#s0" class="nav-link active"><span class="ico">🗺️</span> JS &amp; React liên hệ thế nào? <span class="nav-badge">START</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ins">🔵 Nền tảng JS hiện đại — 4 sections</div>
+    <a href="#s1" class="nav-link"><span class="ico">📦</span> Destructuring, Spread &amp; Rest</a>
+    <a href="#s2" class="nav-link"><span class="ico">🧮</span> Array methods thiết yếu</a>
+    <a href="#s3" class="nav-link"><span class="ico">🔗</span> Optional chaining &amp; Nullish</a>
+    <a href="#s4" class="nav-link"><span class="ico">⏳</span> Async/Await &amp; Fetch API</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ch">🟢 JS Patterns trong React — 4 sections</div>
+    <a href="#s5" class="nav-link"><span class="ico">🧠</span> Closures, this &amp; Event handlers</a>
+    <a href="#s6" class="nav-link"><span class="ico">🔄</span> useEffect &amp; Dependency array</a>
+    <a href="#s7" class="nav-link"><span class="ico">⚡</span> useMemo &amp; useCallback</a>
+    <a href="#s8" class="nav-link"><span class="ico">🪝</span> Custom Hooks bằng JS thuần</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-sk">🟣 Mẹo hay dùng — 4 sections</div>
+    <a href="#s9" class="nav-link"><span class="ico">🎭</span> Conditional rendering gọn gàng</a>
+    <a href="#s10" class="nav-link"><span class="ico">🧊</span> Cập nhật state immutable đúng cách</a>
+    <a href="#s11" class="nav-link"><span class="ico">⏱️</span> Debounce &amp; Throttle</a>
+    <a href="#s12" class="nav-link"><span class="ico">🗂️</span> LocalStorage, JSON &amp; try/catch</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-au">🟡 Tối ưu hiệu năng — 4 sections</div>
+    <a href="#s13" class="nav-link"><span class="ico">🔥</span> Vì sao component re-render</a>
+    <a href="#s14" class="nav-link"><span class="ico">🧬</span> React.memo &amp; memo hoá nâng cao</a>
+    <a href="#s15" class="nav-link"><span class="ico">📦</span> Code Splitting &amp; Lazy loading</a>
+    <a href="#s16" class="nav-link"><span class="ico">📜</span> Virtualization danh sách dài</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-oc">🔄 Ví dụ thực chiến — 2 sections</div>
+    <a href="#s17" class="nav-link"><span class="ico">🔍</span> Search box debounce + Abort</a>
+    <a href="#s18" class="nav-link"><span class="ico">🌀</span> Infinite scroll với Observer</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-other">📋 Tham khảo nhanh</div>
+    <a href="#s19" class="nav-link"><span class="ico">📋</span> Cheat Sheet</a>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-dots"></div><div class="hero-glow"></div>
+  <div class="hero-eyebrow"><span class="pulse"></span> JavaScript · ReactJS · Mẹo &amp; Tối ưu hiệu năng · 2026</div>
+  <h1><span class="h-grad">JavaScript</span> 🟨<br><span class="h-acc">cho ReactJS</span> ⚛️<br><span class="h-ins">Chi tiết &amp; Tối ưu</span></h1>
+  <p class="hero-desc">Hướng dẫn đầy đủ những kiến thức JavaScript hiện đại cần nắm khi làm việc với ReactJS — từ cú pháp nền tảng, các pattern JS thường gặp trong component, đến mẹo viết code gọn và kỹ thuật tối ưu hiệu năng thực chiến.</p>
+  <div class="hero-chips">
+    <span class="chip chip-oc">🟨 ES6+ Modern JS</span>
+    <span class="chip chip-ins">📦 Destructuring &amp; Spread</span>
+    <span class="chip chip-ch">🔄 Hooks Patterns</span>
+    <span class="chip chip-sk">⏱️ Debounce/Throttle</span>
+    <span class="chip chip-au">⚡ Re-render Optimization</span>
+    <span class="chip chip-t">📦 Code Splitting</span>
+    <span class="chip chip-p">📜 Virtualization</span>
+    <span class="chip chip-s">✅ Ví dụ thực tế</span>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ════ S0 — OVERVIEW ════ -->
+<div class="section" id="s0">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">OVERVIEW</span>
+    <div><h2 class="sec-title">JavaScript &amp; React liên hệ với nhau thế nào?</h2>
+    <p class="sec-sub">React chỉ là một thư viện JS — hiểu sâu JS giúp viết React tốt hơn rất nhiều</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">React không có "cú pháp riêng" — tất cả đều là JS</div>
+    <p>Nhiều người mới học React nghĩ JSX, hooks, props... là những "khái niệm React" tách biệt. Thực ra <strong>React được xây trên JavaScript thuần</strong>: JSX chỉ là cú pháp gọi <code>createElement()</code>, một component chỉ là <strong>một hàm JS trả về giá trị</strong>, và hooks chỉ là các hàm JS tuân theo quy tắc gọi hàm nhất định. Càng giỏi JS hiện đại (ES6+), bạn càng viết React sạch, ít bug và dễ tối ưu hơn.</p>
+    <div class="grid-3">
+      <div class="card"><div class="card-icon">🟨</div><div class="card-title" style="color:var(--ins)">JS nền tảng</div><div class="card-desc">Destructuring, spread/rest, array methods, optional chaining, async/await — dùng liên tục trong mọi component.</div></div>
+      <div class="card"><div class="card-icon">⚛️</div><div class="card-title" style="color:var(--ch)">JS trong Hooks</div><div class="card-desc">useEffect, useMemo, useCallback... đều dựa trên closure và so sánh tham chiếu (reference equality) của JS.</div></div>
+      <div class="card"><div class="card-icon">⚡</div><div class="card-title" style="color:var(--sk)">JS để tối ưu</div><div class="card-desc">Hiểu re-render, memoization, debounce/throttle bằng JS thuần giúp app mượt hơn mà không cần thư viện ngoài.</div></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Luồng suy nghĩ khi tối ưu một component React</div>
+    <div class="arch">
+      <div class="arch-box" style="border-color:rgba(91,168,255,.3)">
+        <div class="arch-title" style="color:var(--ins)">🧠 Hiểu JS</div>
+        <div class="arch-desc">Closure, reference<br>equality, event loop</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(64,216,142,.3)">
+        <div class="arch-title" style="color:var(--ch)">🔍 Tìm nguyên nhân</div>
+        <div class="arch-desc">Re-render thừa?<br>Tính toán lặp lại?</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(255,208,96,.3)">
+        <div class="arch-title" style="color:var(--au)">⚡ Áp dụng kỹ thuật</div>
+        <div class="arch-desc">memo, useMemo,<br>debounce, lazy...</div>
+      </div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Nguyên tắc cốt lõi:</strong> Trước khi "tối ưu" bằng React.memo hay useMemo, hãy tự hỏi: vấn đề có phải do <strong>JavaScript tạo ra giá trị/hàm mới mỗi lần render</strong> không? Phần lớn bug hiệu năng React thực chất là bug về cách JS so sánh tham chiếu object/array/function.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — NỀN TẢNG JS ════ -->
+<div class="cat-banner cb-ins">
+  <div class="cb-icon">🔵</div>
+  <div>
+    <div class="cb-badge">NỀN TẢNG</div>
+    <div class="cb-title">Phần 1 — Nền tảng JavaScript hiện đại</div>
+    <div class="cb-sub">Destructuring · Array methods · Optional chaining · Async/Await</div>
+  </div>
+</div>
+
+<!-- ════ S1 — DESTRUCTURING ════ -->
+<div class="section" id="s1">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">NỀN TẢNG</span>
+    <div><h2 class="sec-title">Destructuring, Spread &amp; Rest</h2>
+    <p class="sec-sub">3 cú pháp xuất hiện trong gần như mọi component React</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Destructuring props &amp; state</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">UserCard.jsx — destructure props trực tiếp</span><span class="cb-tag ct-ins">DESTRUCTURE</span></div>
+      <div class="cb-body"><pre><span class="cm">// Thay vì props.name, props.age — destructure ngay trong tham số hàm</span>
+<span class="kw">function</span> <span class="fn">UserCard</span>({ <span class="vr">name</span>, <span class="vr">age</span>, <span class="vr">avatar</span> = <span class="st-s">"/default.png"</span> }) {
+  <span class="kw">return</span> (
+    <span class="an">&lt;div&gt;</span>
+      <span class="an">&lt;img</span> <span class="pr">src</span>={<span class="vr">avatar</span>} <span class="pr">alt</span>={<span class="vr">name</span>} <span class="an">/&gt;</span>
+      <span class="an">&lt;h3&gt;</span>{<span class="vr">name</span>}<span class="an">&lt;/h3&gt;</span>
+      <span class="an">&lt;p&gt;</span>{<span class="vr">age</span>} <span class="st-s">tuổi</span><span class="an">&lt;/p&gt;</span>
+    <span class="an">&lt;/div&gt;</span>
+  );
+}
+
+<span class="cm">// Destructuring state từ useState trả về mảng [value, setter]</span>
+<span class="kw">const</span> [<span class="vr">count</span>, <span class="vr">setCount</span>] = <span class="fn">useState</span>(<span class="nm">0</span>);
+
+<span class="cm">// Destructuring lồng nhau + đổi tên biến</span>
+<span class="kw">const</span> { <span class="vr">user</span>: { <span class="vr">email</span>, <span class="vr">role</span> } } = <span class="vr">response</span>.<span class="vr">data</span>;
+<span class="kw">const</span> { <span class="vr">id</span>: <span class="vr">userId</span>, ...<span class="vr">rest</span> } = <span class="vr">user</span>; <span class="cm">// đổi tên id -> userId, gom phần còn lại</span></pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Spread &amp; Rest — cập nhật object/array không mutate</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">spread-rest.js</span><span class="cb-tag ct-y">SPREAD</span></div>
+      <div class="cb-body"><pre><span class="cm">// Spread object — tạo bản sao mới kèm field được ghi đè</span>
+<span class="kw">const</span> <span class="vr">updatedUser</span> = { ...<span class="vr">user</span>, <span class="vr">age</span>: <span class="vr">user</span>.<span class="vr">age</span> + <span class="nm">1</span> };
+
+<span class="cm">// Spread array — nối, chèn, sao chép mà không mutate mảng gốc</span>
+<span class="kw">const</span> <span class="vr">newTodos</span> = [...<span class="vr">todos</span>, <span class="vr">newTodo</span>];        <span class="cm">// thêm cuối</span>
+<span class="kw">const</span> <span class="vr">withFirst</span> = [<span class="vr">newTodo</span>, ...<span class="vr">todos</span>];      <span class="cm">// thêm đầu</span>
+
+<span class="cm">// Rest params — gom nhiều props/args còn lại thành 1 object/array</span>
+<span class="kw">function</span> <span class="fn">Button</span>({ <span class="vr">children</span>, ...<span class="vr">htmlProps</span> }) {
+  <span class="kw">return</span> <span class="an">&lt;button</span> {...<span class="vr">htmlProps</span>}<span class="an">&gt;</span>{<span class="vr">children</span>}<span class="an">&lt;/button&gt;</span>;
+}
+<span class="cm">// -&gt; &lt;Button onClick={...} disabled className="x"&gt; tự động truyền hết vào &lt;button&gt;</span></pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Lưu ý:</strong> Spread chỉ tạo <strong>bản sao nông (shallow copy)</strong>. Nếu object có thuộc tính lồng nhau (nested object), spread chỉ copy tầng ngoài — tầng trong vẫn trỏ chung tham chiếu. Muốn sửa field lồng sâu, phải spread từng cấp: <code>{ ...state, user: { ...state.user, name: "x" } }</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S2 — ARRAY METHODS ════ -->
+<div class="section" id="s2">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">NỀN TẢNG</span>
+    <div><h2 class="sec-title">Array methods thiết yếu khi render danh sách</h2>
+    <p class="sec-sub">map, filter, reduce, find, some/every — trái tim của render động trong JSX</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">TodoList.jsx — map, filter, reduce trong JSX</span><span class="cb-tag ct-ch">ARRAY</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">TodoList</span>({ <span class="vr">todos</span> }) {
+  <span class="cm">// filter -&gt; lọc danh sách con trước khi map</span>
+  <span class="kw">const</span> <span class="vr">activeTodos</span> = <span class="vr">todos</span>.<span class="fn">filter</span>((<span class="vr">t</span>) =&gt; !<span class="vr">t</span>.<span class="vr">done</span>);
+
+  <span class="cm">// reduce -&gt; tính tổng/đếm từ mảng</span>
+  <span class="kw">const</span> <span class="vr">doneCount</span> = <span class="vr">todos</span>.<span class="fn">reduce</span>((<span class="vr">sum</span>, <span class="vr">t</span>) =&gt; <span class="vr">t</span>.<span class="vr">done</span> ? <span class="vr">sum</span> + <span class="nm">1</span> : <span class="vr">sum</span>, <span class="nm">0</span>);
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;&gt;</span>
+      <span class="an">&lt;p&gt;</span>Hoàn thành: {<span class="vr">doneCount</span>}/{<span class="vr">todos</span>.<span class="vr">length</span>}<span class="an">&lt;/p&gt;</span>
+      <span class="an">&lt;ul&gt;</span>
+        {<span class="cm">/* map -&gt; render mảng thành JSX, luôn kèm key ổn định */</span>}
+        {<span class="vr">activeTodos</span>.<span class="fn">map</span>((<span class="vr">todo</span>) =&gt; (
+          <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">todo</span>.<span class="vr">id</span>}<span class="an">&gt;</span>{<span class="vr">todo</span>.<span class="vr">title</span>}<span class="an">&lt;/li&gt;</span>
+        ))}
+      <span class="an">&lt;/ul&gt;</span>
+    <span class="an">&lt;/&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Method</th><th>Dùng để</th><th>Ví dụ trong React</th></tr></thead>
+      <tbody>
+        <tr><td><code>map()</code></td><td>Biến mảng data thành mảng JSX</td><td>Render danh sách card, item</td></tr>
+        <tr><td><code>filter()</code></td><td>Lọc bớt phần tử theo điều kiện</td><td>Tìm kiếm, tab "chưa xong/đã xong"</td></tr>
+        <tr><td><code>reduce()</code></td><td>Gộp mảng thành 1 giá trị</td><td>Tính tổng giỏ hàng, đếm, group by</td></tr>
+        <tr><td><code>find()</code></td><td>Lấy 1 phần tử đầu tiên khớp</td><td>Tìm user theo id</td></tr>
+        <tr><td><code>some()</code> / <code>every()</code></td><td>Kiểm tra điều kiện boolean</td><td>Disable nút submit khi form chưa hợp lệ</td></tr>
+      </tbody>
+    </table>
+    <div class="info i-err">
+      <span class="info-ico">🚫</span>
+      <div><strong style="color:var(--text)">Lỗi kinh điển:</strong> Dùng <code>index</code> làm <code>key</code> khi danh sách có thể thêm/xoá/sắp xếp lại — React sẽ so khớp sai phần tử, gây render nhầm state (đặc biệt với input, checkbox). Luôn dùng <strong>id ổn định</strong> từ dữ liệu làm key.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S3 — OPTIONAL CHAINING ════ -->
+<div class="section" id="s3">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">NỀN TẢNG</span>
+    <div><h2 class="sec-title">Optional Chaining, Nullish Coalescing &amp; Template Literals</h2>
+    <p class="sec-sub">Tránh crash "Cannot read property of undefined" — lỗi runtime phổ biến nhất trong React</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">safe-access.jsx</span><span class="cb-tag ct-sk">SAFE ACCESS</span></div>
+      <div class="cb-body"><pre><span class="cm">// ?. — truy cập an toàn, trả undefined thay vì throw lỗi nếu null/undefined</span>
+<span class="kw">const</span> <span class="vr">city</span> = <span class="vr">user</span>?.<span class="vr">address</span>?.<span class="vr">city</span>;
+<span class="kw">const</span> <span class="vr">firstItem</span> = <span class="vr">list</span>?.[<span class="nm">0</span>];
+<span class="vr">onSave</span>?.(<span class="vr">formData</span>);           <span class="cm">// gọi hàm chỉ khi onSave tồn tại</span>
+
+<span class="cm">// ?? — chỉ fallback khi null/undefined (khác || fallback cả 0, "", false)</span>
+<span class="kw">const</span> <span class="vr">quantity</span> = <span class="vr">product</span>.<span class="vr">stock</span> ?? <span class="nm">0</span>;     <span class="cm">// stock = 0 vẫn giữ 0, không bị ép thành fallback</span>
+<span class="kw">const</span> <span class="vr">title</span> = <span class="vr">post</span>.<span class="vr">title</span> || <span class="st-s">"Không có tiêu đề"</span>; <span class="cm">// || sẽ fallback nhầm khi title = ""</span>
+
+<span class="cm">// Template literal — nối chuỗi + class động, rõ ràng hơn concat</span>
+<span class="kw">const</span> <span class="vr">className</span> = <span class="cl">`btn <span class="pr">${</span><span class="vr">isActive</span> ? <span class="st-s">"btn-active"</span> : <span class="st-s">""</span><span class="pr">}</span> <span class="pr">${</span><span class="vr">size</span><span class="pr">}</span>`</span>;
+<span class="kw">const</span> <span class="vr">greeting</span> = <span class="cl">`Xin chào, <span class="pr">${</span><span class="vr">user</span>?.<span class="vr">name</span> ?? <span class="st-s">"bạn"</span><span class="pr">}</span>!`</span>;</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Phân biệt <code>||</code> và <code>??</code>:</strong> <code>||</code> coi <code>0</code>, <code>""</code>, <code>false</code> đều là "falsy" nên sẽ fallback nhầm. <code>??</code> chỉ fallback khi giá trị là <code>null</code> hoặc <code>undefined</code> — an toàn hơn khi xử lý số lượng, giá tiền, chuỗi rỗng hợp lệ.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S4 — ASYNC/AWAIT ════ -->
+<div class="section" id="s4">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">NỀN TẢNG</span>
+    <div><h2 class="sec-title">Async/Await, Promise &amp; Fetch API</h2>
+    <p class="sec-sub">Gọi API trong useEffect và event handler đúng cách</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useUserData.js — async trong useEffect</span><span class="cb-tag ct-ins">ASYNC</span></div>
+      <div class="cb-body"><pre><span class="fn">useEffect</span>(() =&gt; {
+  <span class="cm">// useEffect không cho callback là async trực tiếp -&gt; khai báo hàm async bên trong</span>
+  <span class="kw">async function</span> <span class="fn">loadUser</span>() {
+    <span class="kw">try</span> {
+      <span class="vr">setLoading</span>(<span class="kw">true</span>);
+      <span class="kw">const</span> <span class="vr">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="cl">`/api/users/<span class="pr">${</span><span class="vr">userId</span><span class="pr">}</span>`</span>);
+      <span class="kw">if</span> (!<span class="vr">res</span>.<span class="vr">ok</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="st-s">"Không tải được user"</span>);
+      <span class="kw">const</span> <span class="vr">data</span> = <span class="kw">await</span> <span class="vr">res</span>.<span class="fn">json</span>();
+      <span class="vr">setUser</span>(<span class="vr">data</span>);
+    } <span class="kw">catch</span> (<span class="vr">err</span>) {
+      <span class="vr">setError</span>(<span class="vr">err</span>.<span class="vr">message</span>);
+    } <span class="kw">finally</span> {
+      <span class="vr">setLoading</span>(<span class="kw">false</span>);
+    }
+  }
+  <span class="fn">loadUser</span>();
+}, [<span class="vr">userId</span>]);</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">handleSubmit.js — async trong event handler</span><span class="cb-tag ct-ch">EVENT</span></div>
+      <div class="cb-body"><pre><span class="kw">const</span> <span class="vr">handleSubmit</span> = <span class="kw">async</span> (<span class="vr">e</span>) =&gt; {
+  <span class="vr">e</span>.<span class="fn">preventDefault</span>();
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="vr">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st-s">"/api/todos"</span>, {
+      <span class="vr">method</span>: <span class="st-s">"POST"</span>,
+      <span class="vr">headers</span>: { <span class="st-s">"Content-Type"</span>: <span class="st-s">"application/json"</span> },
+      <span class="vr">body</span>: <span class="vr">JSON</span>.<span class="fn">stringify</span>(<span class="vr">formData</span>),
+    });
+    <span class="kw">const</span> <span class="vr">created</span> = <span class="kw">await</span> <span class="vr">res</span>.<span class="fn">json</span>();
+    <span class="vr">setTodos</span>((<span class="vr">prev</span>) =&gt; [...<span class="vr">prev</span>, <span class="vr">created</span>]); <span class="cm">// dùng callback form để tránh state cũ</span>
+  } <span class="kw">catch</span> (<span class="vr">err</span>) {
+    <span class="fn">console</span>.<span class="fn">error</span>(<span class="vr">err</span>);
+  }
+};</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">useEffect không nhận async callback trực tiếp</strong> vì hàm async luôn trả về Promise, còn cleanup function của useEffect phải là hàm đồng bộ (hoặc undefined). Cách đúng: khai báo hàm async <em>bên trong</em> effect rồi gọi nó ngay.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — JS PATTERNS ════ -->
+<div class="cat-banner cb-ch">
+  <div class="cb-icon">🟢</div>
+  <div>
+    <div class="cb-badge">PATTERNS</div>
+    <div class="cb-title">Phần 2 — JS Patterns thường gặp trong React</div>
+    <div class="cb-sub">Closures · useEffect · useMemo/useCallback · Custom Hooks</div>
+  </div>
+</div>
+
+<!-- ════ S5 — CLOSURES ════ -->
+<div class="section" id="s5">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">PATTERNS</span>
+    <div><h2 class="sec-title">Closures, <code>this</code> &amp; Event Handlers</h2>
+    <p class="sec-sub">Vì sao mỗi lần render, component "chụp" lại một bản state riêng</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Closure — nguồn gốc của bug "stale state" kinh điển</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">stale-closure.jsx — bug &amp; cách sửa</span><span class="cb-tag ct-y">CLOSURE</span></div>
+      <div class="cb-body"><pre><span class="cm">// ❌ SAI — setTimeout "chụp" count tại thời điểm render, luôn cộng từ giá trị cũ</span>
+<span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> [<span class="vr">count</span>, <span class="vr">setCount</span>] = <span class="fn">useState</span>(<span class="nm">0</span>);
+
+  <span class="kw">const</span> <span class="vr">handleDelayedAdd</span> = () =&gt; {
+    <span class="fn">setTimeout</span>(() =&gt; {
+      <span class="vr">setCount</span>(<span class="vr">count</span> + <span class="nm">1</span>); <span class="cm">// count ở đây là giá trị "đóng băng" lúc closure tạo ra</span>
+    }, <span class="nm">1000</span>);
+  };
+
+  <span class="cm">// ✅ ĐÚNG — dùng functional update, luôn nhận state mới nhất</span>
+  <span class="kw">const</span> <span class="vr">handleDelayedAddFixed</span> = () =&gt; {
+    <span class="fn">setTimeout</span>(() =&gt; {
+      <span class="vr">setCount</span>((<span class="vr">prev</span>) =&gt; <span class="vr">prev</span> + <span class="nm">1</span>); <span class="cm">// React truyền state mới nhất vào prev</span>
+    }, <span class="nm">1000</span>);
+  };
+}</pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">🧠</span>
+      <div><strong style="color:var(--text)">Bản chất:</strong> Mỗi lần component render, một hàm mới được tạo ra và "đóng gói" (close over) các biến state tại thời điểm đó. Nếu callback được gọi <strong>sau</strong> (setTimeout, event listener, promise callback), nó vẫn dùng bản state cũ chứ không tự "thấy" state mới — trừ khi dùng functional update hoặc ref.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Arrow function &amp; <code>this</code> trong JSX</div>
+    <p>Trong component hàm (function component), gần như không cần lo về <code>this</code> — arrow function không có <code>this</code> riêng, nó dùng <code>this</code> của scope bao ngoài, nên tránh được lỗi mất ngữ cảnh thường gặp ở class component thời trước.</p>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">event-handler-patterns.jsx</span><span class="cb-tag ct-t">HANDLER</span></div>
+      <div class="cb-body"><pre><span class="cm">// Truyền tham số vào handler — dùng arrow function inline</span>
+<span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">handleDelete</span>(<span class="vr">todo</span>.<span class="vr">id</span>)}<span class="an">&gt;</span>Xoá<span class="an">&lt;/button&gt;</span>
+
+<span class="cm">// Lấy value từ event object</span>
+<span class="an">&lt;input</span> <span class="pr">value</span>={<span class="vr">query</span>} <span class="pr">onChange</span>={(<span class="vr">e</span>) =&gt; <span class="vr">setQuery</span>(<span class="vr">e</span>.<span class="vr">target</span>.<span class="vr">value</span>)} <span class="an">/&gt;</span>
+
+<span class="cm">// Currying — hàm trả về hàm, tránh lặp code khi có nhiều field</span>
+<span class="kw">const</span> <span class="vr">handleFieldChange</span> = (<span class="vr">field</span>) =&gt; (<span class="vr">e</span>) =&gt;
+  <span class="vr">setForm</span>((<span class="vr">prev</span>) =&gt; ({ ...<span class="vr">prev</span>, [<span class="vr">field</span>]: <span class="vr">e</span>.<span class="vr">target</span>.<span class="vr">value</span> }));
+
+<span class="an">&lt;input</span> <span class="pr">onChange</span>={<span class="fn">handleFieldChange</span>(<span class="st-s">"email"</span>)} <span class="an">/&gt;</span></pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S6 — USEEFFECT ════ -->
+<div class="section" id="s6">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">PATTERNS</span>
+    <div><h2 class="sec-title">useEffect, Cleanup &amp; Dependency Array</h2>
+    <p class="sec-sub">Về bản chất chỉ là JS: side-effect, cleanup function, và so sánh mảng dependency</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">effect-cleanup.jsx</span><span class="cb-tag ct-ch">EFFECT</span></div>
+      <div class="cb-body"><pre><span class="fn">useEffect</span>(() =&gt; {
+  <span class="kw">const</span> <span class="vr">controller</span> = <span class="kw">new</span> <span class="fn">AbortController</span>();
+
+  <span class="fn">fetch</span>(<span class="cl">`/api/search?q=<span class="pr">${</span><span class="vr">query</span><span class="pr">}</span>`</span>, { <span class="vr">signal</span>: <span class="vr">controller</span>.<span class="vr">signal</span> })
+    .<span class="fn">then</span>((<span class="vr">res</span>) =&gt; <span class="vr">res</span>.<span class="fn">json</span>())
+    .<span class="fn">then</span>(<span class="vr">setResults</span>)
+    .<span class="fn">catch</span>((<span class="vr">err</span>) =&gt; {
+      <span class="kw">if</span> (<span class="vr">err</span>.<span class="vr">name</span> !== <span class="st-s">"AbortError"</span>) <span class="fn">console</span>.<span class="fn">error</span>(<span class="vr">err</span>);
+    });
+
+  <span class="cm">// cleanup — chạy trước lần effect kế tiếp &amp; khi component unmount</span>
+  <span class="kw">return</span> () =&gt; <span class="vr">controller</span>.<span class="fn">abort</span>();
+}, [<span class="vr">query</span>]); <span class="cm">// chỉ chạy lại khi query đổi giá trị</span></pre></div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Dependency array</th><th>Effect chạy khi nào</th></tr></thead>
+      <tbody>
+        <tr><td><code>useEffect(fn)</code> — không có mảng</td><td>Sau <strong>mọi</strong> lần render — hiếm khi cần</td></tr>
+        <tr><td><code>useEffect(fn, [])</code></td><td>Chỉ <strong>1 lần</strong> sau khi mount</td></tr>
+        <tr><td><code>useEffect(fn, [query])</code></td><td>Sau mount và mỗi khi <code>query</code> đổi giá trị (so sánh <code>Object.is</code>)</td></tr>
+        <tr><td>Cleanup function (<code>return () =&gt; {}</code>)</td><td>Trước effect kế tiếp chạy, và khi unmount</td></tr>
+      </tbody>
+    </table>
+    <div class="info i-err">
+      <span class="info-ico">🚫</span>
+      <div><strong style="color:var(--text)">Bẫy thường gặp:</strong> Đưa <strong>object hoặc array literal</strong> tạo mới mỗi render vào dependency array (<code>[{ id }]</code>, <code>[options]</code>) sẽ khiến effect chạy lại vô hạn vì JS so sánh object theo tham chiếu, không theo giá trị. Hãy tách thành các giá trị nguyên thủy (<code>[id, page]</code>) hoặc bọc bằng <code>useMemo</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S7 — USEMEMO/USECALLBACK ════ -->
+<div class="section" id="s7">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">PATTERNS</span>
+    <div><h2 class="sec-title">useMemo &amp; useCallback — khi nào thực sự cần</h2>
+    <p class="sec-sub">Ghi nhớ giá trị/hàm dựa trên nguyên lý cache theo dependency của JS</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">memo-hooks.jsx</span><span class="cb-tag ct-sk">MEMO</span></div>
+      <div class="cb-body"><pre><span class="cm">// useMemo — cache KẾT QUẢ tính toán, chỉ tính lại khi dependency đổi</span>
+<span class="kw">const</span> <span class="vr">sortedList</span> = <span class="fn">useMemo</span>(
+  () =&gt; [...<span class="vr">items</span>].<span class="fn">sort</span>((<span class="vr">a</span>, <span class="vr">b</span>) =&gt; <span class="vr">a</span>.<span class="vr">price</span> - <span class="vr">b</span>.<span class="vr">price</span>),
+  [<span class="vr">items</span>] <span class="cm">// chỉ sort lại khi items đổi, không phải mỗi lần cha render</span>
+);
+
+<span class="cm">// useCallback — cache CHÍNH hàm đó (tránh tạo hàm mới mỗi render)</span>
+<span class="kw">const</span> <span class="vr">handleSelect</span> = <span class="fn">useCallback</span>(
+  (<span class="vr">id</span>) =&gt; <span class="vr">setSelectedId</span>(<span class="vr">id</span>),
+  [] <span class="cm">// hàm không phụ thuộc biến ngoài -&gt; giữ nguyên tham chiếu mãi mãi</span>
+);
+
+<span class="cm">// Quan trọng khi truyền xuống component đã bọc React.memo</span>
+<span class="an">&lt;ItemRow</span> <span class="pr">onSelect</span>={<span class="vr">handleSelect</span>} <span class="an">/&gt;</span> <span class="cm">// nếu không useCallback, ItemRow luôn re-render</span></pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Đừng lạm dụng:</strong> <code>useMemo</code>/<code>useCallback</code> tự nó cũng tốn chi phí (lưu cache, so sánh dependency). Chỉ nên dùng khi: (1) tính toán thực sự nặng, hoặc (2) giá trị/hàm được truyền xuống component con đã bọc <code>React.memo</code> và việc tạo mới mỗi render gây re-render thừa có thể đo lường được.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S8 — CUSTOM HOOKS ════ -->
+<div class="section" id="s8">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">PATTERNS</span>
+    <div><h2 class="sec-title">Custom Hooks — tái sử dụng logic JS</h2>
+    <p class="sec-sub">Một custom hook chỉ là hàm JS thường bắt đầu bằng "use" và gọi hook khác bên trong</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useDebouncedValue.js — custom hook tái sử dụng</span><span class="cb-tag ct-ch">HOOK</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">useDebouncedValue</span>(<span class="vr">value</span>, <span class="vr">delay</span> = <span class="nm">400</span>) {
+  <span class="kw">const</span> [<span class="vr">debounced</span>, <span class="vr">setDebounced</span>] = <span class="fn">useState</span>(<span class="vr">value</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> <span class="vr">timer</span> = <span class="fn">setTimeout</span>(() =&gt; <span class="vr">setDebounced</span>(<span class="vr">value</span>), <span class="vr">delay</span>);
+    <span class="kw">return</span> () =&gt; <span class="fn">clearTimeout</span>(<span class="vr">timer</span>); <span class="cm">// huỷ timer cũ mỗi khi value đổi trước khi hết delay</span>
+  }, [<span class="vr">value</span>, <span class="vr">delay</span>]);
+
+  <span class="kw">return</span> <span class="vr">debounced</span>;
+}
+
+<span class="cm">// Dùng lại ở bất kỳ component nào cần debounce</span>
+<span class="kw">function</span> <span class="fn">SearchBox</span>() {
+  <span class="kw">const</span> [<span class="vr">query</span>, <span class="vr">setQuery</span>] = <span class="fn">useState</span>(<span class="st-s">""</span>);
+  <span class="kw">const</span> <span class="vr">debouncedQuery</span> = <span class="fn">useDebouncedValue</span>(<span class="vr">query</span>, <span class="nm">300</span>);
+  <span class="cm">// gọi API bằng debouncedQuery trong useEffect khác</span>
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Quy tắc đặt tên:</strong> Custom hook luôn bắt đầu bằng <code>use</code> để React (và ESLint plugin) nhận diện được rằng nó phải tuân theo <strong>Rules of Hooks</strong> — chỉ gọi ở top-level, không gọi trong điều kiện/vòng lặp.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — MẸO HAY ════ -->
+<div class="cat-banner cb-sk">
+  <div class="cb-icon">🟣</div>
+  <div>
+    <div class="cb-badge">MẸO HAY</div>
+    <div class="cb-title">Phần 3 — Mẹo JS hay dùng trong React</div>
+    <div class="cb-sub">Conditional rendering · Immutable update · Debounce/Throttle · Error handling</div>
+  </div>
+</div>
+
+<!-- ════ S9 — CONDITIONAL RENDERING ════ -->
+<div class="section" id="s9">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">MẸO HAY</span>
+    <div><h2 class="sec-title">Conditional Rendering gọn gàng</h2>
+    <p class="sec-sub">Toán tử JS quen thuộc (&amp;&amp;, ternary, object map) thay cho if/else dài dòng trong JSX</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">conditional-tricks.jsx</span><span class="cb-tag ct-sk">TIPS</span></div>
+      <div class="cb-body"><pre><span class="cm">// && — chỉ render khi điều kiện đúng (cẩn thận với số 0)</span>
+{<span class="vr">isLoading</span> &amp;&amp; <span class="an">&lt;Spinner</span> <span class="an">/&gt;</span>}
+{<span class="vr">items</span>.<span class="vr">length</span> &gt; <span class="nm">0</span> &amp;&amp; <span class="an">&lt;ItemList</span> <span class="pr">items</span>={<span class="vr">items</span>} <span class="an">/&gt;</span>} <span class="cm">// không dùng items.length && ... trực tiếp</span>
+
+<span class="cm">// Ternary — chọn 1 trong 2 nhánh JSX</span>
+{<span class="vr">isLoggedIn</span> ? <span class="an">&lt;Dashboard</span> <span class="an">/&gt;</span> : <span class="an">&lt;LoginForm</span> <span class="an">/&gt;</span>}
+
+<span class="cm">// Object map — thay chuỗi if/else if dài khi có nhiều trạng thái</span>
+<span class="kw">const</span> <span class="vr">STATUS_LABEL</span> = {
+  <span class="vr">pending</span>: { <span class="vr">text</span>: <span class="st-s">"Đang xử lý"</span>, <span class="vr">color</span>: <span class="st-s">"yellow"</span> },
+  <span class="vr">done</span>: { <span class="vr">text</span>: <span class="st-s">"Hoàn thành"</span>, <span class="vr">color</span>: <span class="st-s">"green"</span> },
+  <span class="vr">failed</span>: { <span class="vr">text</span>: <span class="st-s">"Thất bại"</span>, <span class="vr">color</span>: <span class="st-s">"red"</span> },
+};
+<span class="kw">const</span> { <span class="vr">text</span>, <span class="vr">color</span> } = <span class="vr">STATUS_LABEL</span>[<span class="vr">order</span>.<span class="vr">status</span>] ?? <span class="vr">STATUS_LABEL</span>.<span class="vr">pending</span>;
+<span class="kw">return</span> <span class="an">&lt;Badge</span> <span class="pr">color</span>={<span class="vr">color</span>}<span class="an">&gt;</span>{<span class="vr">text</span>}<span class="an">&lt;/Badge&gt;</span>;</pre></div>
+    </div>
+    <div class="info i-err">
+      <span class="info-ico">🚫</span>
+      <div><strong style="color:var(--text)">Bug quen thuộc:</strong> <code>{'{'}items.length &amp;&amp; &lt;List /&gt;{'}'}</code> — khi <code>length</code> là <code>0</code>, JS trả về chính số <code>0</code> chứ không phải <code>false</code>, và React sẽ render chữ "0" thừa ra màn hình. Luôn ép kiểu boolean rõ ràng: <code>items.length &gt; 0 &amp;&amp; ...</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S10 — IMMUTABLE UPDATE ════ -->
+<div class="section" id="s10">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">MẸO HAY</span>
+    <div><h2 class="sec-title">Cập nhật object/array Immutable đúng cách</h2>
+    <p class="sec-sub">React phát hiện thay đổi bằng so sánh tham chiếu — mutate trực tiếp sẽ khiến UI "đứng hình"</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">immutable-update.js</span><span class="cb-tag ct-y">IMMUTABLE</span></div>
+      <div class="cb-body"><pre><span class="cm">// ❌ Mutate trực tiếp — cùng tham chiếu, React không nhận ra state đã đổi</span>
+<span class="vr">todos</span>.<span class="fn">push</span>(<span class="vr">newTodo</span>);
+<span class="vr">setTodos</span>(<span class="vr">todos</span>);
+
+<span class="cm">// ✅ Thêm phần tử — tạo mảng mới</span>
+<span class="vr">setTodos</span>((<span class="vr">prev</span>) =&gt; [...<span class="vr">prev</span>, <span class="vr">newTodo</span>]);
+
+<span class="cm">// ✅ Sửa 1 phần tử theo id — map tạo mảng mới, chỉ đổi phần tử khớp</span>
+<span class="vr">setTodos</span>((<span class="vr">prev</span>) =&gt;
+  <span class="vr">prev</span>.<span class="fn">map</span>((<span class="vr">t</span>) =&gt; (<span class="vr">t</span>.<span class="vr">id</span> === <span class="vr">id</span> ? { ...<span class="vr">t</span>, <span class="vr">done</span>: <span class="kw">true</span> } : <span class="vr">t</span>))
+);
+
+<span class="cm">// ✅ Xoá phần tử — filter loại bỏ, trả mảng mới</span>
+<span class="vr">setTodos</span>((<span class="vr">prev</span>) =&gt; <span class="vr">prev</span>.<span class="fn">filter</span>((<span class="vr">t</span>) =&gt; <span class="vr">t</span>.<span class="vr">id</span> !== <span class="vr">id</span>));
+
+<span class="cm">// ✅ Sửa object lồng nhau — spread từng cấp</span>
+<span class="vr">setForm</span>((<span class="vr">prev</span>) =&gt; ({
+  ...<span class="vr">prev</span>,
+  <span class="vr">address</span>: { ...<span class="vr">prev</span>.<span class="vr">address</span>, <span class="vr">city</span>: <span class="st-s">"Hà Nội"</span> },
+}));</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S11 — DEBOUNCE/THROTTLE ════ -->
+<div class="section" id="s11">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">MẸO HAY</span>
+    <div><h2 class="sec-title">Debounce &amp; Throttle bằng JS thuần</h2>
+    <p class="sec-sub">Giảm số lần gọi hàm khi user gõ nhanh, cuộn trang, resize cửa sổ</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">debounce-throttle.js</span><span class="cb-tag ct-sk">UTILS</span></div>
+      <div class="cb-body"><pre><span class="cm">// debounce — chỉ chạy sau khi ngừng gọi trong "delay" ms (search box, input validate)</span>
+<span class="kw">function</span> <span class="fn">debounce</span>(<span class="vr">fn</span>, <span class="vr">delay</span> = <span class="nm">300</span>) {
+  <span class="kw">let</span> <span class="vr">timer</span>;
+  <span class="kw">return</span> (...<span class="vr">args</span>) =&gt; {
+    <span class="fn">clearTimeout</span>(<span class="vr">timer</span>);
+    <span class="vr">timer</span> = <span class="fn">setTimeout</span>(() =&gt; <span class="vr">fn</span>(...<span class="vr">args</span>), <span class="vr">delay</span>);
+  };
+}
+
+<span class="cm">// throttle — chạy tối đa 1 lần mỗi "limit" ms (scroll, resize, mousemove)</span>
+<span class="kw">function</span> <span class="fn">throttle</span>(<span class="vr">fn</span>, <span class="vr">limit</span> = <span class="nm">200</span>) {
+  <span class="kw">let</span> <span class="vr">inThrottle</span> = <span class="kw">false</span>;
+  <span class="kw">return</span> (...<span class="vr">args</span>) =&gt; {
+    <span class="kw">if</span> (!<span class="vr">inThrottle</span>) {
+      <span class="vr">fn</span>(...<span class="vr">args</span>);
+      <span class="vr">inThrottle</span> = <span class="kw">true</span>;
+      <span class="fn">setTimeout</span>(() =&gt; (<span class="vr">inThrottle</span> = <span class="kw">false</span>), <span class="vr">limit</span>);
+    }
+  };
+}</pre></div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th></th><th>Debounce</th><th>Throttle</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hành vi</strong></td><td>Đợi im lặng rồi mới chạy 1 lần cuối</td><td>Chạy đều đặn theo chu kỳ, không đợi im lặng</td></tr>
+        <tr><td><strong>Ví dụ dùng</strong></td><td>Ô tìm kiếm, validate form khi gõ</td><td>Scroll infinite, theo dõi vị trí chuột</td></tr>
+        <tr><td><strong>Cảm giác UX</strong></td><td>"Đợi bạn gõ xong rồi phản hồi"</td><td>"Phản hồi liên tục nhưng không dồn dập"</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ S12 — LOCALSTORAGE/JSON ════ -->
+<div class="section" id="s12">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">MẸO HAY</span>
+    <div><h2 class="sec-title">LocalStorage, JSON &amp; Error Handling gọn</h2>
+    <p class="sec-sub">Lưu state đơn giản phía client và xử lý lỗi không làm crash cả app</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useLocalStorage.js</span><span class="cb-tag ct-au">STORAGE</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">useLocalStorage</span>(<span class="vr">key</span>, <span class="vr">initialValue</span>) {
+  <span class="kw">const</span> [<span class="vr">value</span>, <span class="vr">setValue</span>] = <span class="fn">useState</span>(() =&gt; {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> <span class="vr">saved</span> = <span class="vr">localStorage</span>.<span class="fn">getItem</span>(<span class="vr">key</span>);
+      <span class="kw">return</span> <span class="vr">saved</span> ? <span class="vr">JSON</span>.<span class="fn">parse</span>(<span class="vr">saved</span>) : <span class="vr">initialValue</span>;
+    } <span class="kw">catch</span> {
+      <span class="kw">return</span> <span class="vr">initialValue</span>; <span class="cm">// JSON hỏng hoặc localStorage bị chặn -&gt; fallback an toàn</span>
+    }
+  });
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="vr">localStorage</span>.<span class="fn">setItem</span>(<span class="vr">key</span>, <span class="vr">JSON</span>.<span class="fn">stringify</span>(<span class="vr">value</span>));
+  }, [<span class="vr">key</span>, <span class="vr">value</span>]);
+
+  <span class="kw">return</span> [<span class="vr">value</span>, <span class="vr">setValue</span>];
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Mẹo Error Boundary:</strong> <code>try/catch</code> chỉ bắt lỗi trong hàm đồng bộ/async gọi trực tiếp — nó <strong>không</strong> bắt được lỗi xảy ra khi render JSX. Muốn chặn lỗi render làm sập cả app, cần dùng <strong>Error Boundary</strong> (class component với <code>componentDidCatch</code> hoặc thư viện như <code>react-error-boundary</code>).</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — TỐI ƯU ════ -->
+<div class="cat-banner cb-au">
+  <div class="cb-icon">🟡</div>
+  <div>
+    <div class="cb-badge">TỐI ƯU</div>
+    <div class="cb-title">Phần 4 — Tối ưu hiệu năng bằng JS</div>
+    <div class="cb-sub">Re-render · React.memo · Code Splitting · Virtualization</div>
+  </div>
+</div>
+
+<!-- ════ S13 — VÌ SAO RE-RENDER ════ -->
+<div class="section" id="s13">
+  <div class="sec-head">
+    <span class="sec-tag st-au">TỐI ƯU</span>
+    <div><h2 class="sec-title">Vì sao component re-render &amp; cách tránh</h2>
+    <p class="sec-sub">Hiểu gốc rễ bằng JS trước khi vội thêm memo khắp nơi</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">3 nguyên nhân khiến component render lại</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-L"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-B"><h4>State của chính nó đổi</h4><p>Gọi <code>setState</code> với giá trị khác giá trị hiện tại (so sánh <code>Object.is</code>) sẽ luôn kích hoạt render lại — đây là hành vi mong muốn.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-B"><h4>Component cha render lại</h4><p>Mặc định, khi cha render, <strong>mọi component con đều render theo</strong> — kể cả khi props không đổi. Đây là nguyên nhân re-render thừa phổ biến nhất.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">3</div></div>
+        <div class="step-B"><h4>Context Provider đổi giá trị</h4><p>Mọi component đang <code>useContext</code> của Provider đó đều render lại, kể cả khi chỉ dùng 1 phần nhỏ trong value.</p></div>
+      </div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">object-identity.js — tại sao props "giống hệt" vẫn khiến memo fail</span><span class="cb-tag ct-au">IDENTITY</span></div>
+      <div class="cb-body"><pre><span class="cm">// Mỗi lần Parent render, object/array/function này đều là GIÁ TRỊ MỚI trong bộ nhớ</span>
+<span class="kw">function</span> <span class="fn">Parent</span>() {
+  <span class="kw">return</span> (
+    <span class="an">&lt;Child</span>
+      <span class="pr">style</span>={{ <span class="vr">color</span>: <span class="st-s">"red"</span> }}        <span class="cm">// object literal mới mỗi render</span>
+      <span class="pr">items</span>={[<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>]}         <span class="cm">// array literal mới mỗi render</span>
+      <span class="pr">onClick</span>={() =&gt; <span class="fn">doSomething</span>()} <span class="cm">// function mới mỗi render</span>
+    <span class="an">/&gt;</span>
+  );
+}
+<span class="cm">// -&gt; dù "giống hệt về giá trị", React.memo(Child) vẫn thấy props !== props cũ -&gt; vẫn render lại</span></pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S14 — REACT.MEMO NÂNG CAO ════ -->
+<div class="section" id="s14">
+  <div class="sec-head">
+    <span class="sec-tag st-au">TỐI ƯU</span>
+    <div><h2 class="sec-title">React.memo &amp; kết hợp memo hoá nâng cao</h2>
+    <p class="sec-sub">Chặn re-render thừa đúng chỗ, không phải mọi component đều cần memo</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">memo-combo.jsx — memo + useMemo + useCallback đi cùng nhau</span><span class="cb-tag ct-au">COMBO</span></div>
+      <div class="cb-body"><pre><span class="cm">// Child chỉ render lại khi props thực sự đổi giá trị (shallow compare)</span>
+<span class="kw">const</span> <span class="vr">ItemRow</span> = <span class="vr">React</span>.<span class="fn">memo</span>(<span class="kw">function</span> <span class="fn">ItemRow</span>({ <span class="vr">item</span>, <span class="vr">onSelect</span> }) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="st-s">"render row"</span>, <span class="vr">item</span>.<span class="vr">id</span>);
+  <span class="kw">return</span> <span class="an">&lt;li</span> <span class="pr">onClick</span>={() =&gt; <span class="vr">onSelect</span>(<span class="vr">item</span>.<span class="vr">id</span>)}<span class="an">&gt;</span>{<span class="vr">item</span>.<span class="vr">name</span>}<span class="an">&lt;/li&gt;</span>;
+});
+
+<span class="kw">function</span> <span class="fn">ItemList</span>({ <span class="vr">items</span> }) {
+  <span class="cm">// Bắt buộc bọc useCallback — nếu không, ItemRow luôn nhận onSelect mới -&gt; memo vô nghĩa</span>
+  <span class="kw">const</span> <span class="vr">handleSelect</span> = <span class="fn">useCallback</span>((<span class="vr">id</span>) =&gt; <span class="vr">setSelectedId</span>(<span class="vr">id</span>), []);
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;ul&gt;</span>
+      {<span class="vr">items</span>.<span class="fn">map</span>((<span class="vr">item</span>) =&gt; (
+        <span class="an">&lt;ItemRow</span> <span class="pr">key</span>={<span class="vr">item</span>.<span class="vr">id</span>} <span class="pr">item</span>={<span class="vr">item</span>} <span class="pr">onSelect</span>={<span class="vr">handleSelect</span>} <span class="an">/&gt;</span>
+      ))}
+    <span class="an">&lt;/ul&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Đo trước khi tối ưu:</strong> Dùng React DevTools Profiler để xác định component nào thực sự render tốn thời gian trước khi thêm <code>memo</code>/<code>useMemo</code>/<code>useCallback</code> — thêm memo tràn lan làm code khó đọc hơn mà đôi khi không cải thiện gì vì bản thân việc so sánh props cũng có chi phí.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S15 — CODE SPLITTING ════ -->
+<div class="section" id="s15">
+  <div class="sec-head">
+    <span class="sec-tag st-au">TỐI ƯU</span>
+    <div><h2 class="sec-title">Code Splitting &amp; Lazy Loading</h2>
+    <p class="sec-sub">Dùng dynamic import() của JS để chia nhỏ bundle, tải khi cần</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">lazy-route.jsx</span><span class="cb-tag ct-g">LAZY</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">lazy</span>, <span class="vr">Suspense</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="cm">// dynamic import() — tính năng gốc của JS, tách file riêng, chỉ tải khi route được vào</span>
+<span class="kw">const</span> <span class="vr">SettingsPage</span> = <span class="fn">lazy</span>(() =&gt; <span class="fn">import</span>(<span class="st-s">"./pages/SettingsPage"</span>));
+<span class="kw">const</span> <span class="vr">ChartLibrary</span> = <span class="fn">lazy</span>(() =&gt; <span class="fn">import</span>(<span class="st-s">"./components/HeavyChart"</span>));
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    <span class="an">&lt;Suspense</span> <span class="pr">fallback</span>={<span class="an">&lt;Spinner</span> <span class="an">/&gt;</span>}<span class="an">&gt;</span>
+      <span class="an">&lt;SettingsPage</span> <span class="an">/&gt;</span>
+    <span class="an">&lt;/Suspense&gt;</span>
+  );
+}
+
+<span class="cm">// Import động khi user click, không cần điều kiện route</span>
+<span class="vr">button</span>.<span class="fn">addEventListener</span>(<span class="st-s">"click"</span>, <span class="kw">async</span> () =&gt; {
+  <span class="kw">const</span> { <span class="vr">exportToPDF</span> } = <span class="kw">await</span> <span class="fn">import</span>(<span class="st-s">"./utils/pdfExporter"</span>);
+  <span class="fn">exportToPDF</span>(<span class="vr">data</span>);
+});</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Ưu tiên chia nhỏ:</strong> Trang ít vào (settings, admin), thư viện nặng (chart, PDF, editor rich-text), hoặc modal/dialog hiếm khi mở. Giữ trang đầu (landing/home) trong bundle chính để tải nhanh lần đầu.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S16 — VIRTUALIZATION ════ -->
+<div class="section" id="s16">
+  <div class="sec-head">
+    <span class="sec-tag st-au">TỐI ƯU</span>
+    <div><h2 class="sec-title">Virtualization cho danh sách dài</h2>
+    <p class="sec-sub">Chỉ render các phần tử đang hiển thị trong viewport bằng cách tính toán JS</p></div>
+  </div>
+  <div class="sub">
+    <p>Khi danh sách có hàng nghìn phần tử (bảng dữ liệu, feed, chat log), render toàn bộ DOM node cùng lúc sẽ làm trình duyệt ì. <strong>Virtualization</strong> tính toán bằng JS xem phần tử nào đang nằm trong vùng nhìn thấy (dựa trên <code>scrollTop</code> và chiều cao mỗi item), chỉ render đúng số đó — phần còn lại được thay bằng khoảng trống (padding) để giữ đúng chiều cao scrollbar.</p>
+    <div class="grid-3">
+      <div class="card"><div class="card-icon">📜</div><div class="card-title" style="color:var(--ins)">react-window</div><div class="card-desc">Thư viện nhẹ, phổ biến nhất để virtualize list/grid trong React.</div></div>
+      <div class="card"><div class="card-icon">🧮</div><div class="card-title" style="color:var(--ch)">@tanstack/react-virtual</div><div class="card-desc">Headless, linh hoạt cao, hỗ trợ cả kích thước item động.</div></div>
+      <div class="card"><div class="card-icon">👁️</div><div class="card-title" style="color:var(--sk)">IntersectionObserver</div><div class="card-desc">API JS gốc, dùng cho infinite scroll và lazy-load ảnh không cần thư viện.</div></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Quy tắc chọn:</strong> Danh sách dưới vài trăm phần tử thường không cần virtualization — hãy đo hiệu năng thật (frame drop khi scroll) trước khi thêm thư viện, vì nó cũng làm tăng độ phức tạp code (item cần chiều cao cố định hoặc đo được).</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — VÍ DỤ THỰC CHIẾN ════ -->
+<div class="cat-banner cb-oc">
+  <div class="cb-icon">🔄</div>
+  <div>
+    <div class="cb-badge">VÍ DỤ</div>
+    <div class="cb-title">Phần 5 — Ví dụ thực chiến</div>
+    <div class="cb-sub">Kết hợp JS + React trong 2 tình huống thường gặp nhất</div>
+  </div>
+</div>
+
+<!-- ════ S17 — SEARCH DEBOUNCE ════ -->
+<div class="section" id="s17">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">VÍ DỤ</span>
+    <div><h2 class="sec-title">Search box: debounce + AbortController</h2>
+    <p class="sec-sub">Gộp tất cả kỹ thuật đã học vào 1 component thực tế</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">SearchBox.jsx</span><span class="cb-tag ct-oc">FULL EXAMPLE</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">SearchBox</span>() {
+  <span class="kw">const</span> [<span class="vr">query</span>, <span class="vr">setQuery</span>] = <span class="fn">useState</span>(<span class="st-s">""</span>);
+  <span class="kw">const</span> [<span class="vr">results</span>, <span class="vr">setResults</span>] = <span class="fn">useState</span>([]);
+  <span class="kw">const</span> [<span class="vr">loading</span>, <span class="vr">setLoading</span>] = <span class="fn">useState</span>(<span class="kw">false</span>);
+  <span class="kw">const</span> <span class="vr">debouncedQuery</span> = <span class="fn">useDebouncedValue</span>(<span class="vr">query</span>, <span class="nm">350</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">if</span> (!<span class="vr">debouncedQuery</span>.<span class="vr">trim</span>()) {
+      <span class="vr">setResults</span>([]);
+      <span class="kw">return</span>;
+    }
+    <span class="kw">const</span> <span class="vr">controller</span> = <span class="kw">new</span> <span class="fn">AbortController</span>();
+
+    (<span class="kw">async</span> () =&gt; {
+      <span class="kw">try</span> {
+        <span class="vr">setLoading</span>(<span class="kw">true</span>);
+        <span class="kw">const</span> <span class="vr">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(
+          <span class="cl">`/api/search?q=<span class="pr">${</span><span class="fn">encodeURIComponent</span>(<span class="vr">debouncedQuery</span>)<span class="pr">}</span>`</span>,
+          { <span class="vr">signal</span>: <span class="vr">controller</span>.<span class="vr">signal</span> }
+        );
+        <span class="kw">const</span> <span class="vr">data</span> = <span class="kw">await</span> <span class="vr">res</span>.<span class="fn">json</span>();
+        <span class="vr">setResults</span>(<span class="vr">data</span>);
+      } <span class="kw">catch</span> (<span class="vr">err</span>) {
+        <span class="kw">if</span> (<span class="vr">err</span>.<span class="vr">name</span> !== <span class="st-s">"AbortError"</span>) <span class="fn">console</span>.<span class="fn">error</span>(<span class="vr">err</span>);
+      } <span class="kw">finally</span> {
+        <span class="vr">setLoading</span>(<span class="kw">false</span>);
+      }
+    })();
+
+    <span class="kw">return</span> () =&gt; <span class="vr">controller</span>.<span class="fn">abort</span>(); <span class="cm">// huỷ request cũ nếu query đổi trước khi kịp trả về</span>
+  }, [<span class="vr">debouncedQuery</span>]);
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;div&gt;</span>
+      <span class="an">&lt;input</span> <span class="pr">value</span>={<span class="vr">query</span>} <span class="pr">onChange</span>={(<span class="vr">e</span>) =&gt; <span class="vr">setQuery</span>(<span class="vr">e</span>.<span class="vr">target</span>.<span class="vr">value</span>)} <span class="an">/&gt;</span>
+      {<span class="vr">loading</span> &amp;&amp; <span class="an">&lt;Spinner</span> <span class="an">/&gt;</span>}
+      <span class="an">&lt;ul&gt;</span>
+        {<span class="vr">results</span>.<span class="fn">map</span>((<span class="vr">r</span>) =&gt; <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">r</span>.<span class="vr">id</span>}<span class="an">&gt;</span>{<span class="vr">r</span>.<span class="vr">title</span>}<span class="an">&lt;/li&gt;</span>)}
+      <span class="an">&lt;/ul&gt;</span>
+    <span class="an">&lt;/div&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div>Component này kết hợp: <strong>debounce</strong> (giảm số request khi gõ nhanh), <strong>AbortController</strong> (huỷ request cũ tránh race condition — kết quả cũ trả về sau đè lên kết quả mới), và <strong>try/catch/finally</strong> để quản lý trạng thái loading rõ ràng.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S18 — INFINITE SCROLL ════ -->
+<div class="section" id="s18">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">VÍ DỤ</span>
+    <div><h2 class="sec-title">Infinite scroll với IntersectionObserver</h2>
+    <p class="sec-sub">API JS gốc của trình duyệt, không cần lắng nghe sự kiện scroll thủ công</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useInfiniteScroll.js</span><span class="cb-tag ct-p">OBSERVER</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">useInfiniteScroll</span>(<span class="vr">onLoadMore</span>) {
+  <span class="kw">const</span> <span class="vr">sentinelRef</span> = <span class="fn">useRef</span>(<span class="kw">null</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> <span class="vr">node</span> = <span class="vr">sentinelRef</span>.<span class="vr">current</span>;
+    <span class="kw">if</span> (!<span class="vr">node</span>) <span class="kw">return</span>;
+
+    <span class="kw">const</span> <span class="vr">observer</span> = <span class="kw">new</span> <span class="fn">IntersectionObserver</span>(
+      ([<span class="vr">entry</span>]) =&gt; {
+        <span class="kw">if</span> (<span class="vr">entry</span>.<span class="vr">isIntersecting</span>) <span class="vr">onLoadMore</span>(); <span class="cm">// sentinel lọt vào viewport -&gt; tải thêm trang</span>
+      },
+      { <span class="vr">rootMargin</span>: <span class="st-s">"200px"</span> } <span class="cm">// tải sớm trước khi chạm đáy 200px</span>
+    );
+
+    <span class="vr">observer</span>.<span class="fn">observe</span>(<span class="vr">node</span>);
+    <span class="kw">return</span> () =&gt; <span class="vr">observer</span>.<span class="fn">disconnect</span>(); <span class="cm">// cleanup — tránh leak observer khi unmount</span>
+  }, [<span class="vr">onLoadMore</span>]);
+
+  <span class="kw">return</span> <span class="vr">sentinelRef</span>;
+}
+
+<span class="cm">// Sử dụng trong danh sách feed</span>
+<span class="kw">function</span> <span class="fn">Feed</span>() {
+  <span class="kw">const</span> [<span class="vr">posts</span>, <span class="vr">setPosts</span>] = <span class="fn">useState</span>([]);
+  <span class="kw">const</span> <span class="vr">loadMore</span> = <span class="fn">useCallback</span>(() =&gt; <span class="fn">fetchNextPage</span>().<span class="fn">then</span>((<span class="vr">p</span>) =&gt; <span class="vr">setPosts</span>((<span class="vr">prev</span>) =&gt; [...<span class="vr">prev</span>, ...<span class="vr">p</span>])), []);
+  <span class="kw">const</span> <span class="vr">sentinelRef</span> = <span class="fn">useInfiniteScroll</span>(<span class="vr">loadMore</span>);
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;&gt;</span>
+      {<span class="vr">posts</span>.<span class="fn">map</span>((<span class="vr">p</span>) =&gt; <span class="an">&lt;PostCard</span> <span class="pr">key</span>={<span class="vr">p</span>.<span class="vr">id</span>} <span class="pr">post</span>={<span class="vr">p</span>} <span class="an">/&gt;</span>)}
+      <span class="an">&lt;div</span> <span class="pr">ref</span>={<span class="vr">sentinelRef</span>} <span class="an">/&gt;</span> <span class="cm">{/* phần tử "cảm biến" vô hình để theo dõi */}</span>
+    <span class="an">&lt;/&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Vì sao tốt hơn <code>onScroll</code>:</strong> <code>IntersectionObserver</code> chạy bất đồng bộ trên luồng riêng của trình duyệt, không kích hoạt liên tục hàng chục lần mỗi giây như sự kiện <code>scroll</code> — nhẹ hơn nhiều và không cần tự viết throttle.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ S19 — CHEAT SHEET ════ -->
+<div class="section" id="s19">
+  <div class="sec-head">
+    <span class="sec-tag st-y">THAM KHẢO</span>
+    <div><h2 class="sec-title">Cheat Sheet</h2>
+    <p class="sec-sub">Tra cứu nhanh cú pháp &amp; kỹ thuật đã học</p></div>
+  </div>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4 class="h4-ins">🔵 JS nền tảng</h4>
+      <div class="cheat-row"><span class="ck">Truy cập an toàn</span><span class="cv">obj?.a?.b</span></div>
+      <div class="cheat-row"><span class="ck">Fallback đúng</span><span class="cv">val ?? default</span></div>
+      <div class="cheat-row"><span class="ck">Sao chép object</span><span class="cv">{'{'}...obj{'}'}</span></div>
+      <div class="cheat-row"><span class="ck">Sao chép array</span><span class="cv">[...arr]</span></div>
+      <div class="cheat-row"><span class="ck">Chuỗi động</span><span class="cv">`text ${'{'}var{'}'}`</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ch">🟢 Array methods</h4>
+      <div class="cheat-row"><span class="ck">Render danh sách</span><span class="cv">arr.map()</span></div>
+      <div class="cheat-row"><span class="ck">Lọc phần tử</span><span class="cv">arr.filter()</span></div>
+      <div class="cheat-row"><span class="ck">Gộp giá trị</span><span class="cv">arr.reduce()</span></div>
+      <div class="cheat-row"><span class="ck">Tìm 1 phần tử</span><span class="cv">arr.find()</span></div>
+      <div class="cheat-row"><span class="ck">Kiểm tra điều kiện</span><span class="cv">some() / every()</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-sk">🟣 Hooks liên quan JS</h4>
+      <div class="cheat-row"><span class="ck">Side effect</span><span class="cv">useEffect(fn, deps)</span></div>
+      <div class="cheat-row"><span class="ck">Cache giá trị</span><span class="cv">useMemo(fn, deps)</span></div>
+      <div class="cheat-row"><span class="ck">Cache hàm</span><span class="cv">useCallback(fn, deps)</span></div>
+      <div class="cheat-row"><span class="ck">Tham chiếu bền</span><span class="cv">useRef(initial)</span></div>
+      <div class="cheat-row"><span class="ck">State update an toàn</span><span class="cv">setX(prev =&gt; ...)</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-au">🟡 Tối ưu hiệu năng</h4>
+      <div class="cheat-row"><span class="ck">Chặn re-render con</span><span class="cv">React.memo(Comp)</span></div>
+      <div class="cheat-row"><span class="ck">Tải theo nhu cầu</span><span class="cv">lazy(() =&gt; import())</span></div>
+      <div class="cheat-row"><span class="ck">Fallback khi tải</span><span class="cv">&lt;Suspense fallback&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Giảm số lần gọi</span><span class="cv">debounce() / throttle()</span></div>
+      <div class="cheat-row"><span class="ck">Theo dõi viewport</span><span class="cv">IntersectionObserver</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-oc">🔄 Async &amp; API</h4>
+      <div class="cheat-row"><span class="ck">Gọi API</span><span class="cv">await fetch(url)</span></div>
+      <div class="cheat-row"><span class="ck">Parse JSON</span><span class="cv">res.json()</span></div>
+      <div class="cheat-row"><span class="ck">Huỷ request</span><span class="cv">AbortController</span></div>
+      <div class="cheat-row"><span class="ck">Bắt lỗi</span><span class="cv">try/catch/finally</span></div>
+      <div class="cheat-row"><span class="ck">Chạy song song</span><span class="cv">Promise.all([...])</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ins">🔵 Lỗi hay gặp</h4>
+      <div class="cheat-row"><span class="ck">Index làm key</span><span class="cv">Tránh khi list đổi thứ tự</span></div>
+      <div class="cheat-row"><span class="ck">Mutate state trực tiếp</span><span class="cv">arr.push() thay vì [...arr]</span></div>
+      <div class="cheat-row"><span class="ck">length && JSX</span><span class="cv">Dùng length &gt; 0 &amp;&amp;</span></div>
+      <div class="cheat-row"><span class="ck">Object trong deps</span><span class="cv">Gây effect chạy vô hạn</span></div>
+      <div class="cheat-row"><span class="ck">Stale closure</span><span class="cv">Dùng functional update</span></div>
+    </div>
+  </div>
+
+  <div class="info i-ok" style="margin-top:22px">
+    <span class="info-ico">🔗</span>
+    <div style="font-size:13.5px">
+      <strong style="color:var(--text)">Tài nguyên chính thức:</strong><br>
+      <span style="color:var(--muted)">
+        <a href="https://react.dev" style="color:var(--acc)">react.dev</a> — Tài liệu chính thức React &nbsp;·&nbsp;
+        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" style="color:var(--acc)">MDN Web Docs</a> — Tham khảo JavaScript đầy đủ &nbsp;·&nbsp;
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver" style="color:var(--acc)">IntersectionObserver API</a> — MDN &nbsp;·&nbsp;
+        <a href="https://tanstack.com/virtual/latest" style="color:var(--acc)">tanstack.com/virtual</a> — Virtualization
+      </span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  <span>🟨 JavaScript &amp; ReactJS · Hướng dẫn chi tiết, Mẹo &amp; Tối ưu · 2026</span>
+  <span style="margin-left:auto;color:var(--faint)">Nền tảng ×4 · Patterns ×4 · Mẹo hay ×4 · Tối ưu ×4 · Ví dụ ×2</span>
+</div>
+</div><!-- /main -->
+
+<script>
+window.addEventListener('scroll',()=>{
+  const el=document.documentElement;
+  document.getElementById('pbar').style.width=(el.scrollTop/(el.scrollHeight-el.clientHeight)*100)+'%';
+});
+const sections=document.querySelectorAll('.section[id]');
+const links=document.querySelectorAll('.nav-link');
+sections.forEach(s=>new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if(a)a.classList.add('active');
+    }
+  });
+},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
