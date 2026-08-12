@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redux Toolkit 🔄 &amp; RTK Query — Hướng dẫn toàn tập · React &amp; Next.js</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080810;--s1:#0e0e1c;--s2:#131326;--s3:#18182e;--s4:#1e1e38;
+  --border:#222240;--border2:#2c2c50;--text:#e6e6f2;--muted:#666698;--faint:#363660;
+  --acc:#a394f0;--acc-d:#764abc;--acc-dim:rgba(163,148,240,.11);--acc-glow:rgba(163,148,240,.24);
+  --green:#40d88e;--green-dim:rgba(64,216,142,.10);
+  --blue:#5ba8ff;--blue-dim:rgba(91,168,255,.10);
+  --purple:#a07af4;--purple-dim:rgba(160,122,244,.10);
+  --yellow:#ffd060;--yellow-dim:rgba(255,208,96,.10);
+  --teal:#30d8c0;--teal-dim:rgba(48,216,192,.10);
+  --orange:#ff8c50;--orange-dim:rgba(255,140,80,.10);
+  --pink:#ff6584;--pink-dim:rgba(255,101,132,.11);--pink-glow:rgba(255,101,132,.22);
+  --sky:#38bdf8;--sky-dim:rgba(56,189,248,.10);
+  /* Redux brand: violet */
+  --oc:#764abc;--oc-dim:rgba(118,74,188,.16);--oc-glow:rgba(118,74,188,.34);
+  --oc2:#a394f0;--oc2-dim:rgba(163,148,240,.12);
+  /* sections */
+  --ins:#5ba8ff;--ins-dim:rgba(91,168,255,.12);--ins-glow:rgba(91,168,255,.28);
+  --ch:#40d88e;--ch-dim:rgba(64,216,142,.12);--ch-glow:rgba(64,216,142,.28);
+  --sk:#a07af4;--sk-dim:rgba(160,122,244,.12);--sk-glow:rgba(160,122,244,.28);
+  --au:#ffd060;--au-dim:rgba(255,208,96,.12);--au-glow:rgba(255,208,96,.28);
+  --code-bg:#05050e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:15px;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* PAGE NAV */
+.page-nav{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.pn-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:1;padding:10px 6px;text-decoration:none;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.2px;border-bottom:2px solid transparent;transition:all .15s;background:transparent;line-height:1.3;text-align:center}
+.pn-tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.pn-tab.pn-active{color:var(--acc);border-bottom-color:var(--acc);background:var(--acc-dim)}
+.pn-icon{font-size:16px;line-height:1}
+.pn-label{font-size:9.5px}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:0;width:268px;height:100vh;background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;z-index:400;display:flex;flex-direction:column}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-brand{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.logo-icon{width:44px;height:44px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,var(--oc),var(--oc2));display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 26px var(--oc-glow)}
+.logo-text h2{font-size:15px;font-weight:800;letter-spacing:-.4px}
+.logo-text p{font-size:10.5px;color:var(--muted);margin-top:2px}
+.prog-wrap{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--oc),var(--ins),var(--ch),var(--sk),var(--au));width:0%;transition:width .4s;border-radius:2px}
+.nav-section{padding:8px 0 4px}
+.nav-sect-label{padding:8px 18px 3px;font-size:9.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--faint)}
+.nav-group-hdr{display:flex;align-items:center;gap:7px;margin:6px 12px 3px;padding:6px 10px;border-radius:7px;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.ngh-oc{background:var(--oc-dim);color:var(--oc2)}
+.ngh-ins{background:var(--ins-dim);color:var(--ins)}
+.ngh-ch{background:var(--ch-dim);color:var(--ch)}
+.ngh-sk{background:var(--sk-dim);color:var(--sk)}
+.ngh-au{background:var(--au-dim);color:var(--au)}
+.ngh-other{background:rgba(255,255,255,.05);color:var(--muted)}
+.nav-link{display:flex;align-items:center;gap:9px;padding:6px 18px;color:var(--muted);text-decoration:none;font-size:12.5px;font-weight:600;border-left:2px solid transparent;transition:all .14s}
+.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(163,148,240,.08);border-left-color:var(--acc)}
+.nav-link .ico{font-size:13px;flex-shrink:0;width:16px;text-align:center}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;background:var(--acc-dim);color:var(--acc)}
+
+/* MAIN */
+.main{margin-left:268px;min-height:100vh}
+.hero{padding:80px 64px 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);
+  background:radial-gradient(ellipse 65% 55% at 75% 22%,rgba(118,74,188,.16) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 55% at 10% 82%,rgba(91,168,255,.07) 0%,transparent 55%),
+             radial-gradient(ellipse 40% 50% at 50% 50%,rgba(64,216,142,.04) 0%,transparent 60%),var(--bg)}
+.hero-dots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.028) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.hero-glow{position:absolute;right:-90px;top:-90px;width:520px;height:520px;background:radial-gradient(circle,rgba(118,74,188,.14) 0%,transparent 65%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--oc-dim);border:1px solid rgba(163,148,240,.4);color:var(--oc2);padding:5px 16px;border-radius:100px;font-size:11.5px;font-weight:700;margin-bottom:26px;letter-spacing:.3px}
+.hero-eyebrow .pulse{width:6px;height:6px;border-radius:50%;background:var(--oc2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero h1{font-size:52px;font-weight:900;letter-spacing:-2.5px;line-height:1.04;margin-bottom:18px}
+.h-oc{color:var(--oc2)}.h-ins{color:var(--ins)}.h-ch{color:var(--ch)}.h-sk{color:var(--sk)}.h-au{color:var(--au)}.h-acc{color:var(--acc)}
+.h-grad{background:linear-gradient(135deg,var(--oc) 0%,var(--oc2) 50%,var(--ins) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:16px;color:var(--muted);max-width:580px;line-height:1.72;margin-bottom:30px}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:5px 14px;border-radius:7px;font-size:12px;font-weight:700}
+.chip-oc{background:var(--oc-dim);color:var(--oc2)}.chip-ins{background:var(--ins-dim);color:var(--ins)}
+.chip-ch{background:var(--ch-dim);color:var(--ch)}.chip-sk{background:var(--sk-dim);color:var(--sk)}
+.chip-au{background:var(--au-dim);color:var(--au)}.chip-t{background:var(--teal-dim);color:var(--teal)}
+.chip-p{background:var(--pink-dim);color:var(--pink)}.chip-s{background:var(--sky-dim);color:var(--sky)}
+
+/* CAT BANNERS */
+.cat-banner{display:flex;align-items:center;gap:16px;padding:20px 24px;border-radius:14px;margin-bottom:44px;position:relative;overflow:hidden}
+.cat-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cb-oc{background:var(--oc-dim);border:1px solid rgba(163,148,240,.32)}.cb-oc::before{background:linear-gradient(90deg,var(--oc),var(--oc2))}
+.cb-ins{background:var(--ins-dim);border:1px solid rgba(91,168,255,.30)}.cb-ins::before{background:linear-gradient(90deg,var(--ins),var(--sky))}
+.cb-ch{background:var(--ch-dim);border:1px solid rgba(64,216,142,.30)}.cb-ch::before{background:linear-gradient(90deg,var(--ch),var(--teal))}
+.cb-sk{background:var(--sk-dim);border:1px solid rgba(160,122,244,.30)}.cb-sk::before{background:linear-gradient(90deg,var(--sk),var(--pink))}
+.cb-au{background:var(--au-dim);border:1px solid rgba(255,208,96,.30)}.cb-au::before{background:linear-gradient(90deg,var(--au),var(--orange))}
+.cb-icon{font-size:38px;flex-shrink:0}
+.cb-badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;display:inline-block;margin-bottom:5px}
+.cb-oc .cb-badge{background:var(--oc-dim);color:var(--oc2)}
+.cb-ins .cb-badge{background:var(--ins-dim);color:var(--ins)}
+.cb-ch .cb-badge{background:var(--ch-dim);color:var(--ch)}
+.cb-sk .cb-badge{background:var(--sk-dim);color:var(--sk)}
+.cb-au .cb-badge{background:var(--au-dim);color:var(--au)}
+.cb-title{font-size:20px;font-weight:800;letter-spacing:-.5px}.cb-sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+
+/* CONTENT */
+.content{padding:56px 64px;max-width:1020px}
+.section{margin-bottom:72px}
+.sec-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:30px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.sec-tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 10px;border-radius:5px;margin-top:5px;flex-shrink:0;letter-spacing:.5px}
+.st-oc{color:var(--oc2);background:var(--oc-dim);border:1px solid var(--oc-glow)}
+.st-ins{color:var(--ins);background:var(--ins-dim);border:1px solid var(--ins-glow)}
+.st-ch{color:var(--ch);background:var(--ch-dim);border:1px solid var(--ch-glow)}
+.st-sk{color:var(--sk);background:var(--sk-dim);border:1px solid var(--sk-glow)}
+.st-au{color:var(--au);background:var(--au-dim);border:1px solid var(--au-glow)}
+.st-y{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(255,208,96,.24)}
+.sec-title{font-size:23px;font-weight:800;letter-spacing:-.6px;margin-bottom:5px}
+.sec-sub{font-size:13px;color:var(--muted)}
+.sub{margin-bottom:38px}
+.sub-title{font-size:14.5px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:10px}
+.sub-title::before{content:'';display:inline-block;width:14px;height:3px;background:var(--acc);border-radius:2px;flex-shrink:0}
+.sub p,.sub ul,.sub ol{color:var(--muted);font-size:13.5px;margin-bottom:11px;line-height:1.75}
+.sub ul,.sub ol{padding-left:22px}.sub li{margin-bottom:5px}.sub strong{color:var(--text)}
+
+/* GRIDS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:11px;padding:16px;transition:all .2s;cursor:default}
+.card:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.38)}
+.card-icon{font-size:24px;margin-bottom:8px}.card-title{font-size:13px;font-weight:700;margin-bottom:4px}.card-desc{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* CODE BLOCKS */
+.cblock{background:var(--code-bg);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin:13px 0}
+.cb-head{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--s2);border-bottom:1px solid var(--border)}
+.cb-dots{display:flex;gap:5px}.cbd{width:10px;height:10px;border-radius:50%}
+.cbd.r{background:#ff5f56}.cbd.y{background:#ffbd2e}.cbd.g{background:#27c93f}
+.cb-name{font-size:11.5px;font-weight:700;color:var(--muted);font-family:'JetBrains Mono',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cb-tag{margin-left:auto;font-size:9px;font-weight:700;padding:2px 9px;border-radius:100px;flex-shrink:0}
+.ct-oc{background:var(--oc-dim);color:var(--oc2)}.ct-ins{background:var(--ins-dim);color:var(--ins)}
+.ct-ch{background:var(--ch-dim);color:var(--ch)}.ct-sk{background:var(--sk-dim);color:var(--sk)}
+.ct-au{background:var(--au-dim);color:var(--au)}.ct-y{background:var(--yellow-dim);color:var(--yellow)}
+.ct-g{background:var(--green-dim);color:var(--green)}.ct-t{background:var(--teal-dim);color:var(--teal)}
+.cb-body{padding:18px 20px;overflow-x:auto}
+.cb-body pre{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.72;white-space:pre;color:#8899bb}
+/* syntax */
+.kw{color:#c792ea}.tp{color:#ffcb6b}.fn{color:#82aaff}.st-s{color:#c3e88d}
+.cm{color:#546e7a;font-style:italic}.nm{color:#f78c6c}.an{color:#ff6584}
+.pr{color:#89ddff}.vr{color:#eeffff}.cl{color:#ffcb6b}
+.c-r{color:#ff6584}.c-b{color:#5ba8ff}.c-g{color:#40d88e}
+.c-t{color:#30d8c0}.c-y{color:#ffd060}.c-o{color:#ff8c50}.c-p{color:#a07af4}.c-s{color:#38bdf8}
+/* shell prompt */
+.sh-prompt{color:var(--ch);font-weight:700;user-select:none}
+.sh-cmd{color:var(--text)}
+.sh-arg{color:var(--sky)}
+.sh-str{color:var(--green)}
+.sh-flag{color:var(--au)}
+.sh-cmt{color:#546e7a;font-style:italic}
+
+/* INFO BOXES */
+.info{display:flex;gap:12px;padding:14px 16px;border-radius:9px;margin:13px 0;font-size:13px;line-height:1.6}
+.info-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.i-ok{background:var(--green-dim);border:1px solid rgba(64,216,142,.2);color:#30a870}
+.i-warn{background:var(--yellow-dim);border:1px solid rgba(255,208,96,.2);color:#b09030}
+.i-tip{background:var(--blue-dim);border:1px solid rgba(91,168,255,.2);color:#3878d0}
+.i-note{background:var(--purple-dim);border:1px solid rgba(160,122,244,.2);color:#8060d0}
+.i-err{background:var(--pink-dim);border:1px solid rgba(255,101,132,.2);color:#cc3355}
+
+/* RW BOX */
+.rw-box{background:var(--s1);border:1px solid var(--border2);border-radius:12px;padding:18px 20px;margin:14px 0;position:relative;overflow:hidden}
+.rw-box::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.rw-oc::before{background:var(--oc2)}.rw-ins::before{background:var(--ins)}
+.rw-ch::before{background:var(--ch)}.rw-sk::before{background:var(--sk)}
+.rw-au::before{background:var(--au)}.rw-y::before{background:var(--yellow)}
+.rw-label{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.rw-oc .rw-label{color:var(--oc2)}.rw-ins .rw-label{color:var(--ins)}
+.rw-ch .rw-label{color:var(--ch)}.rw-sk .rw-label{color:var(--sk)}
+.rw-au .rw-label{color:var(--au)}.rw-y .rw-label{color:var(--yellow)}
+.rw-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.rw-body{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:13px 0;border-radius:11px;overflow:hidden}
+.tbl th{background:var(--s3);padding:10px 14px;text-align:left;font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-bottom:1px solid var(--border2)}
+.tbl td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted);vertical-align:top}
+.tbl tr:hover td{background:rgba(255,255,255,.025)}
+.tbl code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--code-bg);padding:2px 7px;border-radius:4px;color:var(--teal)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;margin:14px 0}
+.step{display:flex;gap:16px}
+.step-L{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
+.step-num{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--acc);background:var(--acc-dim);border:2px solid var(--acc-glow)}
+.step-line{width:2px;flex:1;background:var(--border);margin:5px 0;min-height:14px}
+.step-B{padding:3px 0 26px}.step-B h4{font-size:14px;font-weight:700;margin-bottom:5px}
+.step-B p{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* CHEAT SHEET */
+.cheat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.cheat-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:15px}
+.cheat-card h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:11px}
+.h4-oc{color:var(--oc2)}.h4-ins{color:var(--ins)}.h4-ch{color:var(--ch)}.h4-sk{color:var(--sk)}.h4-au{color:var(--au)}
+.cheat-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.cheat-row:last-child{border-bottom:none}.ck{color:var(--muted)}.cv{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--teal)}
+
+/* ARCH DIAGRAM */
+.arch{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:0;margin:18px 0}
+.arch-box{background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;text-align:center}
+.arch-title{font-size:12px;font-weight:700;margin-bottom:3px}
+.arch-desc{font-size:11px;color:var(--muted)}
+.arch-arrow{text-align:center;color:var(--muted);font-size:20px;padding:0 8px}
+
+p code,li code,td code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(163,148,240,.12);color:var(--acc);padding:2px 6px;border-radius:4px}
+hr.dv{border:none;border-top:1px solid var(--border);margin:58px 0}
+.footer{border-top:1px solid var(--border);padding:28px 64px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+@media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.hero,.content,.footer{padding-left:22px;padding-right:22px}.hero h1{font-size:32px}.grid-2,.grid-3,.grid-4,.cheat-grid{grid-template-columns:1fr}.arch{grid-template-columns:1fr;gap:8px}.arch-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="page-nav">
+    <a href="react-nextjs-guide.html" class="pn-tab">
+      <span class="pn-icon">⚛️</span>
+      <span class="pn-label">React &amp; Next.js</span>
+    </a>
+    <a href="redux-rtk-query-guide.html" class="pn-tab pn-active">
+      <span class="pn-icon">🔄</span>
+      <span class="pn-label">Redux &amp; RTK Query</span>
+    </a>
+  </div>
+  <div class="sb-logo">
+    <div class="sb-brand">
+      <div class="logo-icon">🔄</div>
+      <div class="logo-text"><h2>Redux Toolkit</h2><p>&amp; RTK Query · React / Next.js</p></div>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar" id="pbar"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-sect-label">Tổng quan</div>
+    <a href="#s0" class="nav-link active"><span class="ico">🗺️</span> Redux &amp; RTK Query là gì? <span class="nav-badge">START</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ins">🔵 Cài đặt — 2 sections</div>
+    <a href="#s1" class="nav-link"><span class="ico">📦</span> Cài đặt &amp; cấu trúc dự án</a>
+    <a href="#s2" class="nav-link"><span class="ico">🏬</span> Tạo Store với configureStore</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ch">🟢 Redux Core — 3 sections</div>
+    <a href="#s3" class="nav-link"><span class="ico">🍰</span> createSlice — Actions &amp; Reducers</a>
+    <a href="#s4" class="nav-link"><span class="ico">🔗</span> useSelector &amp; useDispatch</a>
+    <a href="#s5" class="nav-link"><span class="ico">⏳</span> Async với createAsyncThunk</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-sk">🟣 RTK Query — 4 sections</div>
+    <a href="#s6" class="nav-link"><span class="ico">🛠️</span> createApi &amp; Endpoints</a>
+    <a href="#s7" class="nav-link"><span class="ico">🪝</span> Hooks tự sinh</a>
+    <a href="#s8" class="nav-link"><span class="ico">🏷️</span> Caching &amp; Tags</a>
+    <a href="#s9" class="nav-link"><span class="ico">⚡</span> Optimistic Updates</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-au">🟡 Next.js — 3 sections</div>
+    <a href="#s10" class="nav-link"><span class="ico">🌐</span> Provider trong App Router</a>
+    <a href="#s11" class="nav-link"><span class="ico">🖥️</span> Redux &amp; Server Components</a>
+    <a href="#s12" class="nav-link"><span class="ico">✅</span> Best Practices Next.js</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-oc">🔄 Ví dụ thực chiến — 2 sections</div>
+    <a href="#s13" class="nav-link"><span class="ico">✅</span> Todo App với Redux Toolkit</a>
+    <a href="#s14" class="nav-link"><span class="ico">📰</span> Next.js Blog với RTK Query</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-other">📋 Tham khảo nhanh</div>
+    <a href="#s15" class="nav-link"><span class="ico">📋</span> Cheat Sheet</a>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-dots"></div><div class="hero-glow"></div>
+  <div class="hero-eyebrow"><span class="pulse"></span> Redux Toolkit · RTK Query · React &amp; Next.js · 2026</div>
+  <h1><span class="h-grad">Redux Toolkit</span> 🔄<br><span class="h-acc">&amp; RTK Query</span><br><span class="h-ins">Toàn tập</span></h1>
+  <p class="hero-desc">Hướng dẫn chi tiết cách quản lý state toàn cục với Redux Toolkit và gọi API hiệu quả với RTK Query — kết hợp mượt mà trong cả dự án ReactJS thuần lẫn Next.js App Router, kèm ví dụ chạy được thực tế.</p>
+  <div class="hero-chips">
+    <span class="chip chip-oc">🔄 Redux Toolkit</span>
+    <span class="chip chip-ins">🏬 configureStore</span>
+    <span class="chip chip-ch">🍰 createSlice</span>
+    <span class="chip chip-sk">🛠️ RTK Query</span>
+    <span class="chip chip-au">🏷️ Cache &amp; Tags</span>
+    <span class="chip chip-t">⚡ Optimistic UI</span>
+    <span class="chip chip-p">🌐 App Router</span>
+    <span class="chip chip-s">✅ Ví dụ thực tế</span>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ════ S0 — OVERVIEW ════ -->
+<div class="section" id="s0">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">OVERVIEW</span>
+    <div><h2 class="sec-title">Redux, Redux Toolkit &amp; RTK Query là gì?</h2>
+    <p class="sec-sub">Khái niệm cốt lõi, vì sao cần state quản lý toàn cục, kiến trúc tổng thể</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Vấn đề Redux giải quyết</div>
+    <p>Khi ứng dụng lớn lên, nhiều component ở xa nhau cần <strong>chia sẻ cùng một state</strong> (giỏ hàng, user đăng nhập, theme...). Truyền props qua nhiều tầng ("prop drilling") trở nên cồng kềnh. Redux tạo ra <strong>một kho state duy nhất (store)</strong> mà mọi component đọc/ghi trực tiếp, không cần truyền qua props.</p>
+    <div class="grid-3">
+      <div class="card"><div class="card-icon">🏬</div><div class="card-title" style="color:var(--ins)">Store — 1 nguồn sự thật</div><div class="card-desc">Toàn bộ state của app nằm trong 1 object JS duy nhất, dễ debug, dễ theo dõi lịch sử thay đổi.</div></div>
+      <div class="card"><div class="card-icon">🍰</div><div class="card-title" style="color:var(--ch)">Redux Toolkit (RTK)</div><div class="card-desc">Bộ công cụ chính thức, viết Redux ít boilerplate hơn — <code>createSlice</code>, <code>configureStore</code> có sẵn.</div></div>
+      <div class="card"><div class="card-icon">🛠️</div><div class="card-title" style="color:var(--sk)">RTK Query</div><div class="card-desc">Lớp gọi API tích hợp sẵn trong RTK — tự sinh hook, tự cache, tự loading/error state.</div></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Luồng dữ liệu một chiều (Unidirectional Data Flow)</div>
+    <div class="arch">
+      <div class="arch-box" style="border-color:rgba(91,168,255,.3)">
+        <div class="arch-title" style="color:var(--ins)">🖱️ Component</div>
+        <div class="arch-desc">dispatch(action)<br>khi user thao tác</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(163,148,240,.35)">
+        <div class="arch-title" style="color:var(--oc2)">🍰 Reducer</div>
+        <div class="arch-desc">Nhận action<br>tính state mới</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(64,216,142,.3)">
+        <div class="arch-title" style="color:var(--ch)">🏬 Store</div>
+        <div class="arch-desc">Lưu state mới<br>báo component render lại</div>
+      </div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Nguyên tắc cốt lõi:</strong> Component không bao giờ sửa trực tiếp state. Muốn đổi state, component <strong>dispatch một action</strong> mô tả "chuyện gì xảy ra" — reducer nhận action đó và tính ra state mới. Dữ liệu luôn chảy một chiều, giúp app dễ debug hơn nhiều.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Khi nào dùng Redux, khi nào không cần?</div>
+    <table class="tbl">
+      <thead><tr><th></th><th>Dùng Redux/RTK</th><th>Chỉ cần useState/Context</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Quy mô state</strong></td><td>State toàn cục, dùng ở nhiều nơi xa nhau</td><td>State cục bộ trong 1-2 component</td></tr>
+        <tr><td><strong>Gọi API</strong></td><td>Nhiều API, cần cache, tránh gọi trùng lặp</td><td>1-2 API đơn giản, gọi 1 lần</td></tr>
+        <tr><td><strong>Debug</strong></td><td>Cần time-travel debug, log mọi thay đổi state</td><td>App nhỏ, không cần công cụ debug nâng cao</td></tr>
+        <tr><td><strong>Đội nhóm</strong></td><td>Team lớn, cần quy ước rõ ràng, dễ review</td><td>Dự án cá nhân/nhỏ, ít người maintain</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — CÀI ĐẶT ════ -->
+<div class="cat-banner cb-ins">
+  <div class="cb-icon">📦</div>
+  <div>
+    <div class="cb-badge">CÀI ĐẶT</div>
+    <div class="cb-title">Phần 1 — Cài đặt &amp; Khởi tạo Store</div>
+    <div class="cb-sub">Cài package · Cấu trúc thư mục chuẩn · configureStore</div>
+  </div>
+</div>
+
+<!-- ════ S1 — CÀI ĐẶT ════ -->
+<div class="section" id="s1">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">CÀI ĐẶT</span>
+    <div><h2 class="sec-title">Cài đặt &amp; cấu trúc dự án</h2>
+    <p class="sec-sub">Redux Toolkit đã bao gồm RTK Query — chỉ cần 1 package</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Cài package</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Terminal — cài Redux Toolkit &amp; React-Redux</span><span class="cb-tag ct-ins">INSTALL</span></div>
+      <div class="cb-body"><pre><span class="sh-cmt"># @reduxjs/toolkit đã bao gồm RTK Query, không cần cài thêm gì khác</span>
+<span class="sh-prompt">$</span> <span class="sh-cmd">npm install</span> <span class="sh-arg">@reduxjs/toolkit react-redux</span>
+
+<span class="sh-cmt"># hoặc với pnpm / yarn</span>
+<span class="sh-prompt">$</span> <span class="sh-cmd">pnpm add</span> <span class="sh-arg">@reduxjs/toolkit react-redux</span></pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Cấu trúc thư mục khuyến nghị — "feature folder"</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">src/ — tổ chức theo tính năng</span><span class="cb-tag ct-y">STRUCTURE</span></div>
+      <div class="cb-body"><pre><span class="c-t">src/</span>
+├── <span class="c-t">app/</span>
+│   ├── <span class="c-y">store.js</span>          <span class="cm"># configureStore — nơi gộp mọi slice + api</span>
+│   └── <span class="c-y">hooks.js</span>          <span class="cm"># useAppSelector / useAppDispatch có kiểu (TS)</span>
+├── <span class="c-t">features/</span>
+│   ├── <span class="c-t">todos/</span>
+│   │   └── <span class="c-y">todosSlice.js</span> <span class="cm"># createSlice — state + reducers của tính năng todos</span>
+│   └── <span class="c-t">auth/</span>
+│       └── <span class="c-y">authSlice.js</span>
+└── <span class="c-t">services/</span>
+    └── <span class="c-y">apiSlice.js</span>       <span class="cm"># createApi — RTK Query, gọi API backend</span></pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div>Redux Toolkit khuyến nghị pattern <strong>"Ducks" / feature folder</strong>: mỗi tính năng có 1 file slice riêng chứa cả state, reducers và action — thay vì tách 3 thư mục actions/reducers/types như Redux cổ điển.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S2 — CONFIGURESTORE ════ -->
+<div class="section" id="s2">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">CÀI ĐẶT</span>
+    <div><h2 class="sec-title">Tạo Store với configureStore</h2>
+    <p class="sec-sub">Gộp mọi slice + api middleware vào 1 store duy nhất</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/store.js</span><span class="cb-tag ct-ins">STORE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">configureStore</span> } <span class="kw">from</span> <span class="st-s">"@reduxjs/toolkit"</span>;
+<span class="kw">import</span> <span class="vr">todosReducer</span> <span class="kw">from</span> <span class="st-s">"../features/todos/todosSlice"</span>;
+<span class="kw">import</span> { <span class="vr">apiSlice</span> } <span class="kw">from</span> <span class="st-s">"../services/apiSlice"</span>;
+
+<span class="kw">export const</span> <span class="vr">store</span> = <span class="fn">configureStore</span>({
+  <span class="vr">reducer</span>: {
+    <span class="vr">todos</span>: <span class="vr">todosReducer</span>,                        <span class="cm">// state.todos</span>
+    [<span class="vr">apiSlice</span>.<span class="vr">reducerPath</span>]: <span class="vr">apiSlice</span>.<span class="vr">reducer</span>, <span class="cm">// state.api — cache của RTK Query</span>
+  },
+  <span class="vr">middleware</span>: (<span class="vr">getDefault</span>) =&gt;
+    <span class="fn">getDefault</span>().<span class="fn">concat</span>(<span class="vr">apiSlice</span>.<span class="vr">middleware</span>), <span class="cm">// bắt buộc — kích hoạt cache/refetch tự động</span>
+});</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">main.jsx — bọc app bằng Provider</span><span class="cb-tag ct-ins">PROVIDER</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">Provider</span> } <span class="kw">from</span> <span class="st-s">"react-redux"</span>;
+<span class="kw">import</span> { <span class="vr">store</span> } <span class="kw">from</span> <span class="st-s">"./app/store"</span>;
+<span class="kw">import</span> <span class="vr">App</span> <span class="kw">from</span> <span class="st-s">"./App"</span>;
+
+<span class="vr">ReactDOM</span>.<span class="fn">createRoot</span>(<span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="st-s">"root"</span>)).<span class="fn">render</span>(
+  <span class="an">&lt;Provider</span> <span class="pr">store</span>={<span class="vr">store</span>}<span class="an">&gt;</span>
+    <span class="an">&lt;App</span> <span class="an">/&gt;</span>
+  <span class="an">&lt;/Provider&gt;</span>
+);</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><code>&lt;Provider store={'{'}store{'}'}&gt;</code> phải bọc <strong>toàn bộ cây component</strong> gần gốc nhất — mọi component con bên trong mới dùng được <code>useSelector</code>/<code>useDispatch</code> và các hook RTK Query.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — REDUX CORE ════ -->
+<div class="cat-banner cb-ch">
+  <div class="cb-icon">🍰</div>
+  <div>
+    <div class="cb-badge">REDUX CORE</div>
+    <div class="cb-title">Phần 2 — createSlice, useSelector, useDispatch</div>
+    <div class="cb-sub">Định nghĩa state &amp; reducer · Đọc/ghi state từ component · Xử lý async</div>
+  </div>
+</div>
+
+<!-- ════ S3 — CREATESLICE ════ -->
+<div class="section" id="s3">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">REDUX CORE</span>
+    <div><h2 class="sec-title">createSlice — Actions &amp; Reducers</h2>
+    <p class="sec-sub">1 hàm định nghĩa cả state ban đầu, reducer, và tự sinh action creators</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">features/todos/todosSlice.js</span><span class="cb-tag ct-ch">SLICE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">createSlice</span>, <span class="vr">nanoid</span> } <span class="kw">from</span> <span class="st-s">"@reduxjs/toolkit"</span>;
+
+<span class="kw">const</span> <span class="vr">todosSlice</span> = <span class="fn">createSlice</span>({
+  <span class="vr">name</span>: <span class="st-s">"todos"</span>,
+  <span class="vr">initialState</span>: { <span class="vr">items</span>: [], <span class="vr">filter</span>: <span class="st-s">"all"</span> },
+  <span class="vr">reducers</span>: {
+    <span class="fn">todoAdded</span>: (<span class="vr">state</span>, <span class="vr">action</span>) =&gt; {
+      <span class="cm">// RTK dùng Immer bên trong — "mutate" trực tiếp vẫn AN TOÀN</span>
+      <span class="vr">state</span>.<span class="vr">items</span>.<span class="fn">push</span>({ <span class="vr">id</span>: <span class="fn">nanoid</span>(), <span class="vr">text</span>: <span class="vr">action</span>.<span class="vr">payload</span>, <span class="vr">done</span>: <span class="kw">false</span> });
+    },
+    <span class="fn">todoToggled</span>: (<span class="vr">state</span>, <span class="vr">action</span>) =&gt; {
+      <span class="kw">const</span> <span class="vr">todo</span> = <span class="vr">state</span>.<span class="vr">items</span>.<span class="fn">find</span>((<span class="vr">t</span>) =&gt; <span class="vr">t</span>.<span class="vr">id</span> === <span class="vr">action</span>.<span class="vr">payload</span>);
+      <span class="kw">if</span> (<span class="vr">todo</span>) <span class="vr">todo</span>.<span class="vr">done</span> = !<span class="vr">todo</span>.<span class="vr">done</span>;
+    },
+    <span class="fn">filterChanged</span>: (<span class="vr">state</span>, <span class="vr">action</span>) =&gt; {
+      <span class="vr">state</span>.<span class="vr">filter</span> = <span class="vr">action</span>.<span class="vr">payload</span>;
+    },
+  },
+});
+
+<span class="cm">// Action creators được TỰ SINH từ tên trong "reducers"</span>
+<span class="kw">export const</span> { <span class="vr">todoAdded</span>, <span class="vr">todoToggled</span>, <span class="vr">filterChanged</span> } = <span class="vr">todosSlice</span>.<span class="vr">actions</span>;
+<span class="kw">export default</span> <span class="vr">todosSlice</span>.<span class="vr">reducer</span>;</pre></div>
+    </div>
+    <ul>
+      <li><code>createSlice</code> tự sinh <strong>action creators</strong> và <strong>action types</strong> từ tên hàm trong <code>reducers</code> — không phải viết tay như Redux cổ điển.</li>
+      <li>Nhờ thư viện <strong>Immer</strong> tích hợp sẵn, bạn được phép viết code như đang mutate trực tiếp (<code>state.items.push(...)</code>) — RTK tự chuyển thành cập nhật immutable phía sau.</li>
+      <li><code>action.payload</code> là dữ liệu bạn truyền khi dispatch: <code>dispatch(todoAdded("Mua sữa"))</code> → <code>payload = "Mua sữa"</code>.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ════ S4 — USESELECTOR & USEDISPATCH ════ -->
+<div class="section" id="s4">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">REDUX CORE</span>
+    <div><h2 class="sec-title">useSelector &amp; useDispatch</h2>
+    <p class="sec-sub">2 hook chính để đọc và ghi state từ bất kỳ component nào</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">TodoList.jsx</span><span class="cb-tag ct-ch">HOOK</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useSelector</span>, <span class="vr">useDispatch</span> } <span class="kw">from</span> <span class="st-s">"react-redux"</span>;
+<span class="kw">import</span> { <span class="vr">todoToggled</span>, <span class="vr">filterChanged</span> } <span class="kw">from</span> <span class="st-s">"./todosSlice"</span>;
+
+<span class="kw">function</span> <span class="fn">TodoList</span>() {
+  <span class="kw">const</span> <span class="vr">dispatch</span> = <span class="fn">useDispatch</span>();
+
+  <span class="cm">// useSelector đọc 1 phần state — component chỉ render lại khi phần này đổi</span>
+  <span class="kw">const</span> <span class="vr">filter</span> = <span class="fn">useSelector</span>((<span class="vr">state</span>) =&gt; <span class="vr">state</span>.<span class="vr">todos</span>.<span class="vr">filter</span>);
+  <span class="kw">const</span> <span class="vr">items</span> = <span class="fn">useSelector</span>((<span class="vr">state</span>) =&gt; <span class="vr">state</span>.<span class="vr">todos</span>.<span class="vr">items</span>);
+
+  <span class="kw">const</span> <span class="vr">visible</span> = <span class="vr">items</span>.<span class="fn">filter</span>((<span class="vr">t</span>) =&gt;
+    <span class="vr">filter</span> === <span class="st-s">"all"</span> ? <span class="kw">true</span> : <span class="vr">filter</span> === <span class="st-s">"done"</span> ? <span class="vr">t</span>.<span class="vr">done</span> : !<span class="vr">t</span>.<span class="vr">done</span>
+  );
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;ul&gt;</span>
+      {<span class="vr">visible</span>.<span class="fn">map</span>((<span class="vr">t</span>) =&gt; (
+        <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">t</span>.<span class="vr">id</span>} <span class="pr">onClick</span>={() =&gt; <span class="fn">dispatch</span>(<span class="fn">todoToggled</span>(<span class="vr">t</span>.<span class="vr">id</span>))}<span class="an">&gt;</span>
+          {<span class="vr">t</span>.<span class="vr">done</span> ? <span class="st-s">"✅"</span> : <span class="st-s">"⬜"</span>} {<span class="vr">t</span>.<span class="vr">text</span>}
+        <span class="an">&lt;/li&gt;</span>
+      ))}
+    <span class="an">&lt;/ul&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Tối ưu re-render:</strong> Gọi nhiều <code>useSelector</code> nhỏ (mỗi cái chọn 1 field) thay vì 1 selector trả cả object lớn — <code>useSelector</code> chỉ render lại khi <strong>giá trị được chọn thực sự đổi</strong> (so sánh bằng <code>===</code>).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S5 — CREATEASYNCTHUNK ════ -->
+<div class="section" id="s5">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">REDUX CORE</span>
+    <div><h2 class="sec-title">Xử lý bất đồng bộ với createAsyncThunk</h2>
+    <p class="sec-sub">Cách gọi API "kiểu Redux cổ điển" — nên biết trước khi chuyển sang RTK Query</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">features/todos/todosSlice.js — thêm thunk</span><span class="cb-tag ct-ch">THUNK</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">createSlice</span>, <span class="vr">createAsyncThunk</span> } <span class="kw">from</span> <span class="st-s">"@reduxjs/toolkit"</span>;
+
+<span class="cm">// Thunk: hàm async, tự động dispatch pending/fulfilled/rejected</span>
+<span class="kw">export const</span> <span class="vr">fetchTodos</span> = <span class="fn">createAsyncThunk</span>(<span class="st-s">"todos/fetchTodos"</span>, <span class="kw">async</span> () =&gt; {
+  <span class="kw">const</span> <span class="vr">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st-s">"/api/todos"</span>);
+  <span class="kw">return</span> <span class="kw">await</span> <span class="vr">res</span>.<span class="fn">json</span>(); <span class="cm">// giá trị trả về → action.payload ở "fulfilled"</span>
+});
+
+<span class="kw">const</span> <span class="vr">todosSlice</span> = <span class="fn">createSlice</span>({
+  <span class="vr">name</span>: <span class="st-s">"todos"</span>,
+  <span class="vr">initialState</span>: { <span class="vr">items</span>: [], <span class="vr">status</span>: <span class="st-s">"idle"</span> },
+  <span class="vr">reducers</span>: {},
+  <span class="vr">extraReducers</span>: (<span class="vr">builder</span>) =&gt; {
+    <span class="vr">builder</span>
+      .<span class="fn">addCase</span>(<span class="vr">fetchTodos</span>.<span class="vr">pending</span>, (<span class="vr">state</span>) =&gt; { <span class="vr">state</span>.<span class="vr">status</span> = <span class="st-s">"loading"</span>; })
+      .<span class="fn">addCase</span>(<span class="vr">fetchTodos</span>.<span class="vr">fulfilled</span>, (<span class="vr">state</span>, <span class="vr">action</span>) =&gt; {
+        <span class="vr">state</span>.<span class="vr">status</span> = <span class="st-s">"succeeded"</span>;
+        <span class="vr">state</span>.<span class="vr">items</span> = <span class="vr">action</span>.<span class="vr">payload</span>;
+      })
+      .<span class="fn">addCase</span>(<span class="vr">fetchTodos</span>.<span class="vr">rejected</span>, (<span class="vr">state</span>) =&gt; { <span class="vr">state</span>.<span class="vr">status</span> = <span class="st-s">"failed"</span>; });
+  },
+});</pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">📝</span>
+      <div><code>createAsyncThunk</code> hoạt động tốt nhưng bạn phải <strong>tự viết loading/error state, tự cache, tự tránh gọi trùng lặp</strong>. Đây chính xác là lý do RTK Query ra đời — phần tiếp theo sẽ thay thế phần lớn code này bằng vài dòng khai báo.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — RTK QUERY ════ -->
+<div class="cat-banner cb-sk">
+  <div class="cb-icon">🛠️</div>
+  <div>
+    <div class="cb-badge">RTK QUERY</div>
+    <div class="cb-title">Phần 3 — RTK Query: gọi API không cần viết thunk tay</div>
+    <div class="cb-sub">createApi · Hooks tự sinh · Cache thông minh · Optimistic updates</div>
+  </div>
+</div>
+
+<!-- ════ S6 — CREATEAPI ════ -->
+<div class="section" id="s6">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">RTK QUERY</span>
+    <div><h2 class="sec-title">createApi &amp; Endpoints</h2>
+    <p class="sec-sub">Khai báo 1 lần — RTK Query tự lo cache, loading, refetch</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">services/apiSlice.js</span><span class="cb-tag ct-sk">API SLICE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">createApi</span>, <span class="vr">fetchBaseQuery</span> } <span class="kw">from</span> <span class="st-s">"@reduxjs/toolkit/query/react"</span>;
+
+<span class="kw">export const</span> <span class="vr">apiSlice</span> = <span class="fn">createApi</span>({
+  <span class="vr">reducerPath</span>: <span class="st-s">"api"</span>,
+  <span class="vr">baseQuery</span>: <span class="fn">fetchBaseQuery</span>({ <span class="vr">baseUrl</span>: <span class="st-s">"/api"</span> }),
+  <span class="vr">tagTypes</span>: [<span class="st-s">"Post"</span>], <span class="cm">// khai báo trước loại "thẻ" dùng để cache/invalidate</span>
+  <span class="vr">endpoints</span>: (<span class="vr">builder</span>) =&gt; ({
+    <span class="vr">getPosts</span>: <span class="vr">builder</span>.<span class="fn">query</span>({
+      <span class="vr">query</span>: () =&gt; <span class="st-s">"/posts"</span>,                     <span class="cm">// GET /api/posts</span>
+      <span class="vr">providesTags</span>: [<span class="st-s">"Post"</span>],
+    }),
+    <span class="vr">getPostById</span>: <span class="vr">builder</span>.<span class="fn">query</span>({
+      <span class="vr">query</span>: (<span class="vr">id</span>) =&gt; <span class="st-s">`/posts/`</span> + <span class="vr">id</span>,               <span class="cm">// GET /api/posts/:id</span>
+      <span class="vr">providesTags</span>: (<span class="vr">result</span>, <span class="vr">error</span>, <span class="vr">id</span>) =&gt; [{ <span class="vr">type</span>: <span class="st-s">"Post"</span>, <span class="vr">id</span> }],
+    }),
+    <span class="vr">addPost</span>: <span class="vr">builder</span>.<span class="fn">mutation</span>({
+      <span class="vr">query</span>: (<span class="vr">newPost</span>) =&gt; ({ <span class="vr">url</span>: <span class="st-s">"/posts"</span>, <span class="vr">method</span>: <span class="st-s">"POST"</span>, <span class="vr">body</span>: <span class="vr">newPost</span> }),
+      <span class="vr">invalidatesTags</span>: [<span class="st-s">"Post"</span>],          <span class="cm">// tự động refetch getPosts sau khi thêm</span>
+    }),
+  }),
+});
+
+<span class="cm">// RTK Query tự sinh hooks từ tên endpoint (getPosts → useGetPostsQuery)</span>
+<span class="kw">export const</span> { <span class="vr">useGetPostsQuery</span>, <span class="vr">useGetPostByIdQuery</span>, <span class="vr">useAddPostMutation</span> } = <span class="vr">apiSlice</span>;</pre></div>
+    </div>
+    <ul>
+      <li><code>builder.query</code> — dùng cho <strong>đọc dữ liệu</strong> (GET), tự cache theo tham số truyền vào.</li>
+      <li><code>builder.mutation</code> — dùng cho <strong>ghi dữ liệu</strong> (POST/PUT/DELETE), không tự cache.</li>
+      <li><code>providesTags</code>/<code>invalidatesTags</code> là cơ chế cache thông minh — chi tiết ở phần Caching &amp; Tags bên dưới.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ════ S7 — HOOKS TỰ SINH ════ -->
+<div class="section" id="s7">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">RTK QUERY</span>
+    <div><h2 class="sec-title">Hooks tự sinh — dùng trong component</h2>
+    <p class="sec-sub">Không cần useEffect, không cần useState riêng cho loading/error</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Query hook — đọc dữ liệu</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">PostList.jsx</span><span class="cb-tag ct-sk">QUERY HOOK</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useGetPostsQuery</span> } <span class="kw">from</span> <span class="st-s">"../services/apiSlice"</span>;
+
+<span class="kw">function</span> <span class="fn">PostList</span>() {
+  <span class="cm">// Chỉ 1 dòng thay cho: useState + useEffect + fetch + try/catch</span>
+  <span class="kw">const</span> {
+    <span class="vr">data</span>: <span class="vr">posts</span>,
+    <span class="vr">isLoading</span>,
+    <span class="vr">isError</span>,
+    <span class="vr">error</span>,
+    <span class="vr">refetch</span>,
+  } = <span class="fn">useGetPostsQuery</span>();
+
+  <span class="kw">if</span> (<span class="vr">isLoading</span>) <span class="kw">return</span> <span class="an">&lt;p&gt;</span>Đang tải...<span class="an">&lt;/p&gt;</span>;
+  <span class="kw">if</span> (<span class="vr">isError</span>) <span class="kw">return</span> <span class="an">&lt;p&gt;</span>Lỗi: {<span class="vr">error</span>.<span class="vr">message</span>} <span class="an">&lt;button</span> <span class="pr">onClick</span>={<span class="vr">refetch</span>}<span class="an">&gt;</span>Thử lại<span class="an">&lt;/button&gt;&lt;/p&gt;</span>;
+
+  <span class="kw">return</span> <span class="an">&lt;ul&gt;</span>{<span class="vr">posts</span>.<span class="fn">map</span>((<span class="vr">p</span>) =&gt; <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">p</span>.<span class="vr">id</span>}<span class="an">&gt;</span>{<span class="vr">p</span>.<span class="vr">title</span>}<span class="an">&lt;/li&gt;</span>)}<span class="an">&lt;/ul&gt;</span>;
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Mutation hook — ghi dữ liệu</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">AddPostForm.jsx</span><span class="cb-tag ct-sk">MUTATION HOOK</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useState</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+<span class="kw">import</span> { <span class="vr">useAddPostMutation</span> } <span class="kw">from</span> <span class="st-s">"../services/apiSlice"</span>;
+
+<span class="kw">function</span> <span class="fn">AddPostForm</span>() {
+  <span class="kw">const</span> [<span class="vr">title</span>, <span class="vr">setTitle</span>] = <span class="fn">useState</span>(<span class="st-s">""</span>);
+  <span class="cm">// mutation hook trả về [hàm trigger, trạng thái request]</span>
+  <span class="kw">const</span> [<span class="vr">addPost</span>, { <span class="vr">isLoading</span> }] = <span class="fn">useAddPostMutation</span>();
+
+  <span class="kw">async function</span> <span class="fn">handleSubmit</span>(<span class="vr">e</span>) {
+    <span class="vr">e</span>.<span class="fn">preventDefault</span>();
+    <span class="kw">await</span> <span class="fn">addPost</span>({ <span class="vr">title</span> }).<span class="fn">unwrap</span>(); <span class="cm">// unwrap() ném lỗi thật nếu request fail</span>
+    <span class="fn">setTitle</span>(<span class="st-s">""</span>);
+  }
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;form</span> <span class="pr">onSubmit</span>={<span class="vr">handleSubmit</span>}<span class="an">&gt;</span>
+      <span class="an">&lt;input</span> <span class="pr">value</span>={<span class="vr">title</span>} <span class="pr">onChange</span>={(<span class="vr">e</span>) =&gt; <span class="fn">setTitle</span>(<span class="vr">e</span>.<span class="vr">target</span>.<span class="vr">value</span>)} <span class="an">/&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">disabled</span>={<span class="vr">isLoading</span>}<span class="an">&gt;</span>{<span class="vr">isLoading</span> ? <span class="st-s">"Đang lưu..."</span> : <span class="st-s">"Đăng bài"</span>}<span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/form&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Field trả về</th><th>Ý nghĩa</th></tr></thead>
+      <tbody>
+        <tr><td><code>data</code></td><td>Dữ liệu trả về sau khi request thành công</td></tr>
+        <tr><td><code>isLoading</code></td><td>Đang gọi request lần đầu tiên (chưa có cache)</td></tr>
+        <tr><td><code>isFetching</code></td><td>Đang gọi lại request (kể cả khi đã có cache cũ để hiển thị)</td></tr>
+        <tr><td><code>isError</code> / <code>error</code></td><td>Request thất bại và thông tin lỗi</td></tr>
+        <tr><td><code>refetch()</code></td><td>Hàm chủ động gọi lại request</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ S8 — CACHING & TAGS ════ -->
+<div class="section" id="s8">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">RTK QUERY</span>
+    <div><h2 class="sec-title">Caching &amp; Tags — cơ chế "linh hồn" của RTK Query</h2>
+    <p class="sec-sub">providesTags / invalidatesTags giúp dữ liệu luôn tự đồng bộ</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Nguyên lý hoạt động</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-L"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-B"><h4 style="color:var(--sk)">Query gắn tag khi lấy dữ liệu</h4>
+        <p><code>getPosts</code> khai báo <code>providesTags: ["Post"]</code> — nghĩa là kết quả này "thuộc về" nhãn <code>Post</code>. RTK Query lưu cache và nhớ mối liên kết này.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-B"><h4 style="color:var(--sk)">Mutation khai báo tag nào bị "vô hiệu"</h4>
+        <p><code>addPost</code> khai báo <code>invalidatesTags: ["Post"]</code> — báo rằng sau khi mutation này chạy xong, mọi cache mang nhãn <code>Post</code> đã lỗi thời.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">3</div></div>
+        <div class="step-B"><h4 style="color:var(--sk)">RTK Query tự động refetch</h4>
+        <p>Bất kỳ component nào đang dùng <code>useGetPostsQuery()</code> sẽ <strong>tự động gọi lại API</strong> và cập nhật UI — bạn không cần tự gọi <code>refetch()</code> hay quản lý state đồng bộ thủ công.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Tag theo ID — invalidate chính xác, tránh refetch thừa</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">services/apiSlice.js — tag chi tiết theo id</span><span class="cb-tag ct-sk">TAGS</span></div>
+      <div class="cb-body"><pre><span class="vr">endpoints</span>: (<span class="vr">builder</span>) =&gt; ({
+  <span class="vr">getPosts</span>: <span class="vr">builder</span>.<span class="fn">query</span>({
+    <span class="vr">query</span>: () =&gt; <span class="st-s">"/posts"</span>,
+    <span class="cm">// mỗi post trong danh sách + 1 tag chung "LIST"</span>
+    <span class="vr">providesTags</span>: (<span class="vr">result</span> = []) =&gt; [
+      ...<span class="vr">result</span>.<span class="fn">map</span>(({ <span class="vr">id</span> }) =&gt; ({ <span class="vr">type</span>: <span class="st-s">"Post"</span>, <span class="vr">id</span> })),
+      { <span class="vr">type</span>: <span class="st-s">"Post"</span>, <span class="vr">id</span>: <span class="st-s">"LIST"</span> },
+    ],
+  }),
+  <span class="vr">updatePost</span>: <span class="vr">builder</span>.<span class="fn">mutation</span>({
+    <span class="vr">query</span>: ({ <span class="vr">id</span>, ...<span class="vr">patch</span> }) =&gt; ({ <span class="vr">url</span>: <span class="st-s">`/posts/`</span> + <span class="vr">id</span>, <span class="vr">method</span>: <span class="st-s">"PATCH"</span>, <span class="vr">body</span>: <span class="vr">patch</span> }),
+    <span class="cm">// chỉ invalidate ĐÚNG post vừa sửa — không refetch cả danh sách</span>
+    <span class="vr">invalidatesTags</span>: (<span class="vr">result</span>, <span class="vr">error</span>, { <span class="vr">id</span> }) =&gt; [{ <span class="vr">type</span>: <span class="st-s">"Post"</span>, <span class="vr">id</span> }],
+  }),
+}),</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div>Dùng tag theo <code>id</code> cụ thể thay vì 1 tag chung cho mọi thứ — giúp <strong>chỉ những component thật sự liên quan mới bị refetch</strong>, tránh gọi API thừa và giữ app mượt hơn khi dữ liệu lớn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S9 — OPTIMISTIC UPDATES ════ -->
+<div class="section" id="s9">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">RTK QUERY</span>
+    <div><h2 class="sec-title">Optimistic Updates</h2>
+    <p class="sec-sub">Cập nhật UI ngay lập tức, không đợi server phản hồi</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">services/apiSlice.js — onQueryStarted</span><span class="cb-tag ct-au">OPTIMISTIC</span></div>
+      <div class="cb-body"><pre><span class="vr">toggleTodo</span>: <span class="vr">builder</span>.<span class="fn">mutation</span>({
+  <span class="vr">query</span>: (<span class="vr">id</span>) =&gt; ({ <span class="vr">url</span>: <span class="st-s">`/todos/`</span> + <span class="vr">id</span> + <span class="st-s">`/toggle`</span>, <span class="vr">method</span>: <span class="st-s">"PATCH"</span> }),
+
+  <span class="kw">async</span> <span class="vr">onQueryStarted</span>(<span class="vr">id</span>, { <span class="vr">dispatch</span>, <span class="vr">queryFulfilled</span> }) {
+    <span class="cm">// 1. Cập nhật cache NGAY LẬP TỨC, trước khi server trả lời</span>
+    <span class="kw">const</span> <span class="vr">patch</span> = <span class="vr">dispatch</span>(
+      <span class="vr">apiSlice</span>.<span class="vr">util</span>.<span class="fn">updateQueryData</span>(<span class="st-s">"getTodos"</span>, <span class="kw">undefined</span>, (<span class="vr">draft</span>) =&gt; {
+        <span class="kw">const</span> <span class="vr">todo</span> = <span class="vr">draft</span>.<span class="fn">find</span>((<span class="vr">t</span>) =&gt; <span class="vr">t</span>.<span class="vr">id</span> === <span class="vr">id</span>);
+        <span class="kw">if</span> (<span class="vr">todo</span>) <span class="vr">todo</span>.<span class="vr">done</span> = !<span class="vr">todo</span>.<span class="vr">done</span>;
+      })
+    );
+    <span class="kw">try</span> {
+      <span class="kw">await</span> <span class="vr">queryFulfilled</span>; <span class="cm">// 2. Đợi server xác nhận thật sự</span>
+    } <span class="kw">catch</span> {
+      <span class="vr">patch</span>.<span class="fn">undo</span>(); <span class="cm">// 3. Nếu server lỗi → tự động rollback UI về trạng thái cũ</span>
+    }
+  },
+}),</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div>Optimistic update cho cảm giác app "phản hồi tức thì" (như tick checkbox, like bài viết) — RTK Query lo sẵn cơ chế rollback nếu request thất bại, bạn không cần tự viết logic phục hồi state.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — NEXT.JS ════ -->
+<div class="cat-banner cb-au">
+  <div class="cb-icon">🌐</div>
+  <div>
+    <div class="cb-badge">NEXT.JS</div>
+    <div class="cb-title">Phần 4 — Kết hợp Redux Toolkit với Next.js App Router</div>
+    <div class="cb-sub">Provider trong "use client" · Quan hệ với Server Components · Best practices</div>
+  </div>
+</div>
+
+<!-- ════ S10 — PROVIDER TRONG APP ROUTER ════ -->
+<div class="section" id="s10">
+  <div class="sec-head">
+    <span class="sec-tag st-au">NEXT.JS</span>
+    <div><h2 class="sec-title">Đặt Provider trong App Router</h2>
+    <p class="sec-sub">Redux store chỉ tồn tại phía client — cần "use client" đúng chỗ</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">1. Tạo Provider component riêng (bắt buộc "use client")</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/StoreProvider.js</span><span class="cb-tag ct-au">"use client"</span></div>
+      <div class="cb-body"><pre><span class="st-s">"use client"</span>;
+
+<span class="kw">import</span> { <span class="vr">useRef</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+<span class="kw">import</span> { <span class="vr">Provider</span> } <span class="kw">from</span> <span class="st-s">"react-redux"</span>;
+<span class="kw">import</span> { <span class="vr">makeStore</span> } <span class="kw">from</span> <span class="st-s">"./store"</span>;
+
+<span class="kw">export default function</span> <span class="fn">StoreProvider</span>({ <span class="vr">children</span> }) {
+  <span class="cm">// Mỗi request/tab tạo 1 store MỚI — tránh rò rỉ dữ liệu giữa các user (SSR)</span>
+  <span class="kw">const</span> <span class="vr">storeRef</span> = <span class="fn">useRef</span>();
+  <span class="kw">if</span> (!<span class="vr">storeRef</span>.<span class="vr">current</span>) {
+    <span class="vr">storeRef</span>.<span class="vr">current</span> = <span class="fn">makeStore</span>();
+  }
+  <span class="kw">return</span> <span class="an">&lt;Provider</span> <span class="pr">store</span>={<span class="vr">storeRef</span>.<span class="vr">current</span>}<span class="an">&gt;</span>{<span class="vr">children</span>}<span class="an">&lt;/Provider&gt;</span>;
+}</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/store.js — dùng factory function thay vì export trực tiếp</span><span class="cb-tag ct-au">STORE FACTORY</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">configureStore</span> } <span class="kw">from</span> <span class="st-s">"@reduxjs/toolkit"</span>;
+<span class="kw">import</span> <span class="vr">todosReducer</span> <span class="kw">from</span> <span class="st-s">"../features/todos/todosSlice"</span>;
+<span class="kw">import</span> { <span class="vr">apiSlice</span> } <span class="kw">from</span> <span class="st-s">"../services/apiSlice"</span>;
+
+<span class="cm">// Factory — mỗi lần gọi tạo 1 store mới, KHÔNG export singleton như React thuần</span>
+<span class="kw">export const</span> <span class="fn">makeStore</span> = () =&gt;
+  <span class="fn">configureStore</span>({
+    <span class="vr">reducer</span>: {
+      <span class="vr">todos</span>: <span class="vr">todosReducer</span>,
+      [<span class="vr">apiSlice</span>.<span class="vr">reducerPath</span>]: <span class="vr">apiSlice</span>.<span class="vr">reducer</span>,
+    },
+    <span class="vr">middleware</span>: (<span class="vr">getDefault</span>) =&gt; <span class="fn">getDefault</span>().<span class="fn">concat</span>(<span class="vr">apiSlice</span>.<span class="vr">middleware</span>),
+  });</pre></div>
+    </div>
+    <div class="sub-title" style="margin-top:22px">2. Gắn vào Root Layout</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/layout.js</span><span class="cb-tag ct-ins">LAYOUT</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> <span class="vr">StoreProvider</span> <span class="kw">from</span> <span class="st-s">"./StoreProvider"</span>;
+
+<span class="kw">export default function</span> <span class="fn">RootLayout</span>({ <span class="vr">children</span> }) {
+  <span class="kw">return</span> (
+    <span class="an">&lt;html</span> <span class="pr">lang</span>=<span class="st-s">"vi"</span><span class="an">&gt;</span>
+      <span class="an">&lt;body&gt;</span>
+        <span class="an">&lt;StoreProvider&gt;</span>{<span class="vr">children</span>}<span class="an">&lt;/StoreProvider&gt;</span>
+      <span class="an">&lt;/body&gt;</span>
+    <span class="an">&lt;/html&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-err">
+      <span class="info-ico">🚫</span>
+      <div><strong style="color:var(--text)">Sai lầm thường gặp:</strong> <code>export const store = configureStore(...)</code> theo kiểu singleton (như React thuần) sẽ <strong>chia sẻ 1 store giữa nhiều request server</strong> trong môi trường Next.js SSR — gây rò rỉ dữ liệu giữa các user. Luôn dùng factory function <code>makeStore()</code> + tạo mới trong <code>useRef</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S11 — REDUX & SERVER COMPONENTS ════ -->
+<div class="section" id="s11">
+  <div class="sec-head">
+    <span class="sec-tag st-au">NEXT.JS</span>
+    <div><h2 class="sec-title">Redux &amp; Server Components — ranh giới rõ ràng</h2>
+    <p class="sec-sub">Redux/RTK Query chỉ chạy được ở Client Component</p></div>
+  </div>
+  <div class="sub">
+    <table class="tbl">
+      <thead><tr><th></th><th>Server Component</th><th>Client Component</th></tr></thead>
+      <tbody>
+        <tr><td><strong>useSelector / useDispatch</strong></td><td>❌ Không dùng được</td><td>✅ Dùng bình thường</td></tr>
+        <tr><td><strong>RTK Query hooks</strong></td><td>❌ Không dùng được</td><td>✅ Dùng bình thường</td></tr>
+        <tr><td><strong>Lấy dữ liệu ban đầu</strong></td><td>✅ Nên dùng <code>fetch()</code> trực tiếp của Next.js</td><td>Có thể, nhưng chậm hơn (thêm 1 round-trip)</td></tr>
+        <tr><td><strong>SEO / render sẵn HTML</strong></td><td>✅ Tốt</td><td>⚠️ Cần JS chạy xong mới có dữ liệu</td></tr>
+      </tbody>
+    </table>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Chiến lược khuyến nghị:</strong> Với dữ liệu hiển thị lần đầu, ưu tiên fetch trực tiếp trong Server Component bằng <code>fetch()</code> của Next.js (nhanh hơn, tốt SEO hơn). Chỉ dùng Redux/RTK Query cho state <strong>cần tương tác client</strong> — giỏ hàng, filter, dữ liệu cập nhật realtime, form phức tạp nhiều bước.</div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/posts/page.js — mô hình lai (hybrid)</span><span class="cb-tag ct-au">HYBRID</span></div>
+      <div class="cb-body"><pre><span class="cm">// SERVER COMPONENT — render danh sách ban đầu, nhanh, SEO tốt</span>
+<span class="kw">import</span> <span class="vr">LikeButton</span> <span class="kw">from</span> <span class="st-s">"./LikeButton"</span>; <span class="cm">// Client Component dùng RTK Query mutation</span>
+
+<span class="kw">export default async function</span> <span class="fn">PostsPage</span>() {
+  <span class="kw">const</span> <span class="vr">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st-s">"https://api.example.com/posts"</span>);
+  <span class="kw">const</span> <span class="vr">posts</span> = <span class="kw">await</span> <span class="vr">res</span>.<span class="fn">json</span>();
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;ul&gt;</span>
+      {<span class="vr">posts</span>.<span class="fn">map</span>((<span class="vr">p</span>) =&gt; (
+        <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">p</span>.<span class="vr">id</span>}<span class="an">&gt;</span>{<span class="vr">p</span>.<span class="vr">title</span>} <span class="an">&lt;LikeButton</span> <span class="pr">postId</span>={<span class="vr">p</span>.<span class="vr">id</span>} <span class="an">/&gt;&lt;/li&gt;</span>
+      ))}
+    <span class="an">&lt;/ul&gt;</span>
+  );
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S12 — BEST PRACTICES ════ -->
+<div class="section" id="s12">
+  <div class="sec-head">
+    <span class="sec-tag st-au">NEXT.JS</span>
+    <div><h2 class="sec-title">Best Practices khi dùng Redux Toolkit với Next.js</h2>
+    <p class="sec-sub">Những lưu ý giúp tránh bug khó chịu khi kết hợp 2 công nghệ</p></div>
+  </div>
+  <div class="sub">
+    <div class="grid-2">
+      <div class="rw-box rw-au">
+        <div class="rw-label">🟡 KHUYẾN NGHỊ</div>
+        <div class="rw-title">Store mới cho mỗi request (server)</div>
+        <div class="rw-body">Luôn dùng factory <code>makeStore()</code> thay vì singleton, tránh rò rỉ state giữa các user khi Next.js render trên server.</div>
+      </div>
+      <div class="rw-box rw-au">
+        <div class="rw-label">🟡 KHUYẾN NGHỊ</div>
+        <div class="rw-title">"use client" ở lá cây, không ở gốc</div>
+        <div class="rw-body">Chỉ những component thật sự cần <code>useSelector</code>/RTK Query mới đánh dấu client — giữ phần còn lại là Server Component để tối ưu bundle size.</div>
+      </div>
+      <div class="rw-box rw-au">
+        <div class="rw-label">🟡 KHUYẾN NGHỊ</div>
+        <div class="rw-title">Không lưu dữ liệu SEO-critical chỉ trong Redux</div>
+        <div class="rw-body">Nội dung cần Google index (bài viết, sản phẩm) nên fetch ở Server Component; Redux dành cho state tương tác thuần client.</div>
+      </div>
+      <div class="rw-box rw-au">
+        <div class="rw-label">🟡 KHUYẾN NGHỊ</div>
+        <div class="rw-title">Hydrate cache RTK Query từ Server nếu cần</div>
+        <div class="rw-body">Có thể dùng <code>apiSlice.util.upsertQueryData</code> để "mồi" cache client bằng dữ liệu đã fetch sẵn ở server, tránh gọi API 2 lần.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — VÍ DỤ THỰC CHIẾN ════ -->
+<div class="cat-banner cb-oc">
+  <div class="cb-icon">✅</div>
+  <div>
+    <div class="cb-badge">VÍ DỤ THỰC CHIẾN</div>
+    <div class="cb-title">Phần 5 — Ứng dụng hoàn chỉnh</div>
+    <div class="cb-sub">Todo App với Redux Toolkit thuần · Blog Next.js với RTK Query</div>
+  </div>
+</div>
+
+<!-- ════ S13 — TODO APP REDUX ════ -->
+<div class="section" id="s13">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">VÍ DỤ</span>
+    <div><h2 class="sec-title">Ví dụ: Todo App với Redux Toolkit</h2>
+    <p class="sec-sub">Slice + Store + Component — chạy được ngay trong dự án React/Vite</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">features/todos/todosSlice.js</span><span class="cb-tag ct-oc">SLICE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">createSlice</span>, <span class="vr">nanoid</span> } <span class="kw">from</span> <span class="st-s">"@reduxjs/toolkit"</span>;
+
+<span class="kw">const</span> <span class="vr">todosSlice</span> = <span class="fn">createSlice</span>({
+  <span class="vr">name</span>: <span class="st-s">"todos"</span>,
+  <span class="vr">initialState</span>: { <span class="vr">items</span>: [], <span class="vr">filter</span>: <span class="st-s">"all"</span> },
+  <span class="vr">reducers</span>: {
+    <span class="vr">todoAdded</span>: {
+      <span class="vr">reducer</span>(<span class="vr">state</span>, <span class="vr">action</span>) { <span class="vr">state</span>.<span class="vr">items</span>.<span class="fn">push</span>(<span class="vr">action</span>.<span class="vr">payload</span>); },
+      <span class="vr">prepare</span>(<span class="vr">text</span>) { <span class="kw">return</span> { <span class="vr">payload</span>: { <span class="vr">id</span>: <span class="fn">nanoid</span>(), <span class="vr">text</span>, <span class="vr">done</span>: <span class="kw">false</span> } }; },
+    },
+    <span class="vr">todoToggled</span>(<span class="vr">state</span>, <span class="vr">action</span>) {
+      <span class="kw">const</span> <span class="vr">t</span> = <span class="vr">state</span>.<span class="vr">items</span>.<span class="fn">find</span>((<span class="vr">x</span>) =&gt; <span class="vr">x</span>.<span class="vr">id</span> === <span class="vr">action</span>.<span class="vr">payload</span>);
+      <span class="kw">if</span> (<span class="vr">t</span>) <span class="vr">t</span>.<span class="vr">done</span> = !<span class="vr">t</span>.<span class="vr">done</span>;
+    },
+    <span class="vr">todoRemoved</span>(<span class="vr">state</span>, <span class="vr">action</span>) {
+      <span class="vr">state</span>.<span class="vr">items</span> = <span class="vr">state</span>.<span class="vr">items</span>.<span class="fn">filter</span>((<span class="vr">t</span>) =&gt; <span class="vr">t</span>.<span class="vr">id</span> !== <span class="vr">action</span>.<span class="vr">payload</span>);
+    },
+    <span class="vr">filterChanged</span>(<span class="vr">state</span>, <span class="vr">action</span>) { <span class="vr">state</span>.<span class="vr">filter</span> = <span class="vr">action</span>.<span class="vr">payload</span>; },
+  },
+});
+
+<span class="kw">export const</span> { <span class="vr">todoAdded</span>, <span class="vr">todoToggled</span>, <span class="vr">todoRemoved</span>, <span class="vr">filterChanged</span> } = <span class="vr">todosSlice</span>.<span class="vr">actions</span>;
+<span class="kw">export default</span> <span class="vr">todosSlice</span>.<span class="vr">reducer</span>;</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">TodoApp.jsx</span><span class="cb-tag ct-oc">COMPONENT</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useState</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+<span class="kw">import</span> { <span class="vr">useSelector</span>, <span class="vr">useDispatch</span> } <span class="kw">from</span> <span class="st-s">"react-redux"</span>;
+<span class="kw">import</span> { <span class="vr">todoAdded</span>, <span class="vr">todoToggled</span>, <span class="vr">todoRemoved</span>, <span class="vr">filterChanged</span> } <span class="kw">from</span> <span class="st-s">"./features/todos/todosSlice"</span>;
+
+<span class="kw">function</span> <span class="fn">TodoApp</span>() {
+  <span class="kw">const</span> <span class="vr">dispatch</span> = <span class="fn">useDispatch</span>();
+  <span class="kw">const</span> <span class="vr">items</span> = <span class="fn">useSelector</span>((<span class="vr">s</span>) =&gt; <span class="vr">s</span>.<span class="vr">todos</span>.<span class="vr">items</span>);
+  <span class="kw">const</span> <span class="vr">filter</span> = <span class="fn">useSelector</span>((<span class="vr">s</span>) =&gt; <span class="vr">s</span>.<span class="vr">todos</span>.<span class="vr">filter</span>);
+  <span class="kw">const</span> [<span class="vr">text</span>, <span class="vr">setText</span>] = <span class="fn">useState</span>(<span class="st-s">""</span>);
+
+  <span class="kw">const</span> <span class="vr">visible</span> = <span class="vr">items</span>.<span class="fn">filter</span>((<span class="vr">t</span>) =&gt;
+    <span class="vr">filter</span> === <span class="st-s">"all"</span> ? <span class="kw">true</span> : <span class="vr">filter</span> === <span class="st-s">"done"</span> ? <span class="vr">t</span>.<span class="vr">done</span> : !<span class="vr">t</span>.<span class="vr">done</span>
+  );
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;div&gt;</span>
+      <span class="an">&lt;input</span> <span class="pr">value</span>={<span class="vr">text</span>} <span class="pr">onChange</span>={(<span class="vr">e</span>) =&gt; <span class="fn">setText</span>(<span class="vr">e</span>.<span class="vr">target</span>.<span class="vr">value</span>)}
+        <span class="pr">onKeyDown</span>={(<span class="vr">e</span>) =&gt; {
+          <span class="kw">if</span> (<span class="vr">e</span>.<span class="vr">key</span> === <span class="st-s">"Enter"</span> &amp;&amp; <span class="vr">text</span>.<span class="fn">trim</span>()) {
+            <span class="fn">dispatch</span>(<span class="fn">todoAdded</span>(<span class="vr">text</span>));
+            <span class="fn">setText</span>(<span class="st-s">""</span>);
+          }
+        }} <span class="an">/&gt;</span>
+
+      <span class="an">&lt;div&gt;</span>
+        {[<span class="st-s">"all"</span>, <span class="st-s">"active"</span>, <span class="st-s">"done"</span>].<span class="fn">map</span>((<span class="vr">f</span>) =&gt; (
+          <span class="an">&lt;button</span> <span class="pr">key</span>={<span class="vr">f</span>} <span class="pr">onClick</span>={() =&gt; <span class="fn">dispatch</span>(<span class="fn">filterChanged</span>(<span class="vr">f</span>))}<span class="an">&gt;</span>{<span class="vr">f</span>}<span class="an">&lt;/button&gt;</span>
+        ))}
+      <span class="an">&lt;/div&gt;</span>
+
+      <span class="an">&lt;ul&gt;</span>
+        {<span class="vr">visible</span>.<span class="fn">map</span>((<span class="vr">t</span>) =&gt; (
+          <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">t</span>.<span class="vr">id</span>}<span class="an">&gt;</span>
+            <span class="an">&lt;span</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">dispatch</span>(<span class="fn">todoToggled</span>(<span class="vr">t</span>.<span class="vr">id</span>))}
+              <span class="pr">style</span>={{ <span class="vr">textDecoration</span>: <span class="vr">t</span>.<span class="vr">done</span> ? <span class="st-s">"line-through"</span> : <span class="st-s">"none"</span> }}<span class="an">&gt;</span>
+              {<span class="vr">t</span>.<span class="vr">text</span>}
+            <span class="an">&lt;/span&gt;</span>
+            <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">dispatch</span>(<span class="fn">todoRemoved</span>(<span class="vr">t</span>.<span class="vr">id</span>))}<span class="an">&gt;</span>Xoá<span class="an">&lt;/button&gt;</span>
+          <span class="an">&lt;/li&gt;</span>
+        ))}
+      <span class="an">&lt;/ul&gt;</span>
+    <span class="an">&lt;/div&gt;</span>
+  );
+}
+
+<span class="kw">export default</span> <span class="vr">TodoApp</span>;</pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">📝</span>
+      <div><strong style="color:var(--text)">Điểm học được:</strong> mẫu <code>prepare</code> callback giúp tạo <code>id</code> ngẫu nhiên (<code>nanoid</code>) ngay trong action creator thay vì trong component; state UI cục bộ (<code>text</code> đang gõ) vẫn dùng <code>useState</code> bình thường — chỉ state cần chia sẻ mới đưa vào Redux.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S14 — NEXT.JS BLOG RTK QUERY ════ -->
+<div class="section" id="s14">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">VÍ DỤ</span>
+    <div><h2 class="sec-title">Ví dụ: Next.js Blog với RTK Query</h2>
+    <p class="sec-sub">Danh sách bài viết + like button, cache tự động đồng bộ qua tags</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">1. Định nghĩa API</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">services/postsApi.js</span><span class="cb-tag ct-ins">API SLICE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">createApi</span>, <span class="vr">fetchBaseQuery</span> } <span class="kw">from</span> <span class="st-s">"@reduxjs/toolkit/query/react"</span>;
+
+<span class="kw">export const</span> <span class="vr">postsApi</span> = <span class="fn">createApi</span>({
+  <span class="vr">reducerPath</span>: <span class="st-s">"postsApi"</span>,
+  <span class="vr">baseQuery</span>: <span class="fn">fetchBaseQuery</span>({ <span class="vr">baseUrl</span>: <span class="st-s">"/api"</span> }),
+  <span class="vr">tagTypes</span>: [<span class="st-s">"Post"</span>],
+  <span class="vr">endpoints</span>: (<span class="vr">builder</span>) =&gt; ({
+    <span class="vr">getPosts</span>: <span class="vr">builder</span>.<span class="fn">query</span>({
+      <span class="vr">query</span>: () =&gt; <span class="st-s">"/posts"</span>,
+      <span class="vr">providesTags</span>: (<span class="vr">r</span> = []) =&gt; [...<span class="vr">r</span>.<span class="fn">map</span>(({ <span class="vr">id</span> }) =&gt; ({ <span class="vr">type</span>: <span class="st-s">"Post"</span>, <span class="vr">id</span> })), { <span class="vr">type</span>: <span class="st-s">"Post"</span>, <span class="vr">id</span>: <span class="st-s">"LIST"</span> }],
+    }),
+    <span class="vr">likePost</span>: <span class="vr">builder</span>.<span class="fn">mutation</span>({
+      <span class="vr">query</span>: (<span class="vr">id</span>) =&gt; ({ <span class="vr">url</span>: <span class="st-s">`/posts/`</span> + <span class="vr">id</span> + <span class="st-s">`/like`</span>, <span class="vr">method</span>: <span class="st-s">"POST"</span> }),
+      <span class="vr">invalidatesTags</span>: (<span class="vr">r</span>, <span class="vr">e</span>, <span class="vr">id</span>) =&gt; [{ <span class="vr">type</span>: <span class="st-s">"Post"</span>, <span class="vr">id</span> }],
+    }),
+  }),
+});
+
+<span class="kw">export const</span> { <span class="vr">useGetPostsQuery</span>, <span class="vr">useLikePostMutation</span> } = <span class="vr">postsApi</span>;</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">2. Client Component hiển thị danh sách + nút like</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/blog/PostList.js</span><span class="cb-tag ct-ch">CLIENT COMPONENT</span></div>
+      <div class="cb-body"><pre><span class="st-s">"use client"</span>;
+
+<span class="kw">import</span> { <span class="vr">useGetPostsQuery</span>, <span class="vr">useLikePostMutation</span> } <span class="kw">from</span> <span class="st-s">"../../services/postsApi"</span>;
+
+<span class="kw">export default function</span> <span class="fn">PostList</span>() {
+  <span class="kw">const</span> { <span class="vr">data</span>: <span class="vr">posts</span>, <span class="vr">isLoading</span> } = <span class="fn">useGetPostsQuery</span>();
+  <span class="kw">const</span> [<span class="vr">likePost</span>] = <span class="fn">useLikePostMutation</span>();
+
+  <span class="kw">if</span> (<span class="vr">isLoading</span>) <span class="kw">return</span> <span class="an">&lt;p&gt;</span>Đang tải bài viết...<span class="an">&lt;/p&gt;</span>;
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;ul&gt;</span>
+      {<span class="vr">posts</span>.<span class="fn">map</span>((<span class="vr">p</span>) =&gt; (
+        <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">p</span>.<span class="vr">id</span>}<span class="an">&gt;</span>
+          <span class="vr">p</span>.<span class="vr">title</span> — ❤️ {<span class="vr">p</span>.<span class="vr">likes</span>}
+          <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">likePost</span>(<span class="vr">p</span>.<span class="vr">id</span>)}<span class="an">&gt;</span>Thích<span class="an">&lt;/button&gt;</span>
+        <span class="an">&lt;/li&gt;</span>
+      ))}
+    <span class="an">&lt;/ul&gt;</span>
+  );
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">3. Gắn vào trang — StoreProvider đã bọc sẵn ở layout.js</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">app/blog/page.js</span><span class="cb-tag ct-au">SERVER + CLIENT</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> <span class="vr">PostList</span> <span class="kw">from</span> <span class="st-s">"./PostList"</span>;
+
+<span class="kw">export default function</span> <span class="fn">BlogPage</span>() {
+  <span class="kw">return</span> (
+    <span class="an">&lt;section&gt;</span>
+      <span class="an">&lt;h1&gt;</span>Blog<span class="an">&lt;/h1&gt;</span>
+      <span class="an">&lt;PostList</span> <span class="an">/&gt;</span> <span class="cm">{/* toàn bộ logic RTK Query nằm gọn trong đây */}</span>
+    <span class="an">&lt;/section&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div>Khi bấm "Thích", <code>likePost</code> tự động <code>invalidatesTags</code> đúng bài viết đó → RTK Query tự refetch → số lượt thích cập nhật ngay trên UI, không cần tự viết logic đồng bộ state thủ công.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ S15 — CHEAT SHEET ════ -->
+<div class="section" id="s15">
+  <div class="sec-head">
+    <span class="sec-tag st-y">CHEAT SHEET</span>
+    <div><h2 class="sec-title">Tổng hợp nhanh — Redux Toolkit &amp; RTK Query</h2>
+    <p class="sec-sub">Tra cứu nhanh API, hooks, cấu hình Next.js</p></div>
+  </div>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4 class="h4-ins">🔵 Redux Core</h4>
+      <div class="cheat-row"><span class="ck">Tạo store</span><span class="cv">configureStore({...})</span></div>
+      <div class="cheat-row"><span class="ck">Định nghĩa slice</span><span class="cv">createSlice({...})</span></div>
+      <div class="cheat-row"><span class="ck">Bọc app</span><span class="cv">&lt;Provider store={store}&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Đọc state</span><span class="cv">useSelector(s =&gt; s.x)</span></div>
+      <div class="cheat-row"><span class="ck">Dispatch action</span><span class="cv">useDispatch()</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ch">🟢 Async / Thunk</h4>
+      <div class="cheat-row"><span class="ck">Thunk async</span><span class="cv">createAsyncThunk</span></div>
+      <div class="cheat-row"><span class="ck">Xử lý trạng thái</span><span class="cv">extraReducers builder</span></div>
+      <div class="cheat-row"><span class="ck">Trạng thái pending</span><span class="cv">thunk.pending</span></div>
+      <div class="cheat-row"><span class="ck">Trạng thái thành công</span><span class="cv">thunk.fulfilled</span></div>
+      <div class="cheat-row"><span class="ck">Trạng thái lỗi</span><span class="cv">thunk.rejected</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-sk">🟣 RTK Query — khai báo</h4>
+      <div class="cheat-row"><span class="ck">Tạo API slice</span><span class="cv">createApi({...})</span></div>
+      <div class="cheat-row"><span class="ck">Base query</span><span class="cv">fetchBaseQuery({baseUrl})</span></div>
+      <div class="cheat-row"><span class="ck">Endpoint đọc</span><span class="cv">builder.query({...})</span></div>
+      <div class="cheat-row"><span class="ck">Endpoint ghi</span><span class="cv">builder.mutation({...})</span></div>
+      <div class="cheat-row"><span class="ck">Middleware</span><span class="cv">.concat(api.middleware)</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-sk">🟣 RTK Query — hooks</h4>
+      <div class="cheat-row"><span class="ck">Gọi query</span><span class="cv">useGetXQuery()</span></div>
+      <div class="cheat-row"><span class="ck">Gọi mutation</span><span class="cv">useXMutation()</span></div>
+      <div class="cheat-row"><span class="ck">Trạng thái tải</span><span class="cv">isLoading / isFetching</span></div>
+      <div class="cheat-row"><span class="ck">Gọi lại thủ công</span><span class="cv">refetch()</span></div>
+      <div class="cheat-row"><span class="ck">Ném lỗi thật</span><span class="cv">mutation(...).unwrap()</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-au">🟡 Cache &amp; Tags</h4>
+      <div class="cheat-row"><span class="ck">Khai báo loại tag</span><span class="cv">tagTypes: ["X"]</span></div>
+      <div class="cheat-row"><span class="ck">Gắn tag khi đọc</span><span class="cv">providesTags</span></div>
+      <div class="cheat-row"><span class="ck">Vô hiệu tag khi ghi</span><span class="cv">invalidatesTags</span></div>
+      <div class="cheat-row"><span class="ck">Tag toàn danh sách</span><span class="cv">{'{'}type:"X",id:"LIST"{'}'}</span></div>
+      <div class="cheat-row"><span class="ck">Cập nhật cache tay</span><span class="cv">util.updateQueryData</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-oc">🔄 Next.js Integration</h4>
+      <div class="cheat-row"><span class="ck">Store cho SSR</span><span class="cv">makeStore() factory</span></div>
+      <div class="cheat-row"><span class="ck">Provider bắt buộc</span><span class="cv">"use client"</span></div>
+      <div class="cheat-row"><span class="ck">Đặt ở đâu</span><span class="cv">app/layout.js</span></div>
+      <div class="cheat-row"><span class="ck">Component dùng hook</span><span class="cv">phải "use client"</span></div>
+      <div class="cheat-row"><span class="ck">Dữ liệu SEO</span><span class="cv">fetch() ở Server Component</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ins">🔵 Immer trong reducers</h4>
+      <div class="cheat-row"><span class="ck">Thêm phần tử mảng</span><span class="cv">state.arr.push(x)</span></div>
+      <div class="cheat-row"><span class="ck">Sửa thuộc tính</span><span class="cv">state.obj.field = x</span></div>
+      <div class="cheat-row"><span class="ck">Xoá phần tử</span><span class="cv">state.arr = arr.filter()</span></div>
+      <div class="cheat-row"><span class="ck">Không dùng được</span><span class="cv">async trong reducer</span></div>
+      <div class="cheat-row"><span class="ck">ID ngẫu nhiên</span><span class="cv">nanoid()</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ch">🟢 CLI</h4>
+      <div class="cheat-row"><span class="ck">Cài package</span><span class="cv">npm i @reduxjs/toolkit react-redux</span></div>
+      <div class="cheat-row"><span class="ck">DevTools Redux</span><span class="cv">Extension trình duyệt</span></div>
+      <div class="cheat-row"><span class="ck">Tạo dự án Next.js</span><span class="cv">npx create-next-app@latest</span></div>
+      <div class="cheat-row"><span class="ck">Chạy dev</span><span class="cv">npm run dev</span></div>
+      <div class="cheat-row"><span class="ck">Build production</span><span class="cv">npm run build</span></div>
+    </div>
+  </div>
+
+  <div class="info i-ok" style="margin-top:22px">
+    <span class="info-ico">🔗</span>
+    <div style="font-size:13.5px">
+      <strong style="color:var(--text)">Tài nguyên chính thức:</strong><br>
+      <span style="color:var(--muted)">
+        <a href="https://redux-toolkit.js.org" style="color:var(--acc)">redux-toolkit.js.org</a> — Tài liệu chính thức Redux Toolkit &nbsp;·&nbsp;
+        <a href="https://redux-toolkit.js.org/rtk-query/overview" style="color:var(--acc)">RTK Query Overview</a> — Tài liệu chính thức RTK Query &nbsp;·&nbsp;
+        <a href="https://react-redux.js.org" style="color:var(--acc)">react-redux.js.org</a> — API hooks đầy đủ &nbsp;·&nbsp;
+        <a href="https://nextjs.org/docs" style="color:var(--acc)">nextjs.org/docs</a> — Tài liệu chính thức Next.js
+      </span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  <span>🔄 Redux Toolkit &amp; RTK Query · Hướng dẫn toàn tập · React &amp; Next.js · 2026</span>
+  <span style="margin-left:auto;color:var(--faint)">Cài đặt ×2 · Redux Core ×3 · RTK Query ×4 · Next.js ×3 · Ví dụ ×2</span>
+</div>
+</div><!-- /main -->
+
+<script>
+window.addEventListener('scroll',()=>{
+  const el=document.documentElement;
+  document.getElementById('pbar').style.width=(el.scrollTop/(el.scrollHeight-el.clientHeight)*100)+'%';
+});
+const sections=document.querySelectorAll('.section[id]');
+const links=document.querySelectorAll('.nav-link');
+sections.forEach(s=>new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if(a)a.classList.add('active');
+    }
+  });
+},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
