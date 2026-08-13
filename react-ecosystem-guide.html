@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚛️ ReactJS Ecosystem — Thư viện &amp; Hooks thường dùng</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080810;--s1:#0e0e1c;--s2:#131326;--s3:#18182e;--s4:#1e1e38;
+  --border:#222240;--border2:#2c2c50;--text:#e6e6f2;--muted:#666698;--faint:#363660;
+  --acc:#ffd060;--acc-d:#f0b400;--acc-dim:rgba(255,208,96,.11);--acc-glow:rgba(255,208,96,.24);
+  --green:#40d88e;--green-dim:rgba(64,216,142,.10);
+  --blue:#5ba8ff;--blue-dim:rgba(91,168,255,.10);
+  --purple:#a07af4;--purple-dim:rgba(160,122,244,.10);
+  --yellow:#ffd060;--yellow-dim:rgba(255,208,96,.10);
+  --teal:#30d8c0;--teal-dim:rgba(48,216,192,.10);
+  --orange:#ff8c50;--orange-dim:rgba(255,140,80,.10);
+  --pink:#ff6584;--pink-dim:rgba(255,101,132,.11);--pink-glow:rgba(255,101,132,.22);
+  --sky:#38bdf8;--sky-dim:rgba(56,189,248,.10);
+  /* JS + React brand: yellow -> cyan */
+  --oc:#61dafb;--oc-dim:rgba(97,218,251,.14);--oc-glow:rgba(97,218,251,.32);
+  --oc2:#ffd060;--oc2-dim:rgba(255,208,96,.12);
+  /* sections */
+  --ins:#5ba8ff;--ins-dim:rgba(91,168,255,.12);--ins-glow:rgba(91,168,255,.28);
+  --ch:#40d88e;--ch-dim:rgba(64,216,142,.12);--ch-glow:rgba(64,216,142,.28);
+  --sk:#a07af4;--sk-dim:rgba(160,122,244,.12);--sk-glow:rgba(160,122,244,.28);
+  --au:#ffd060;--au-dim:rgba(255,208,96,.12);--au-glow:rgba(255,208,96,.28);
+  --code-bg:#05050e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:15px;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* PAGE NAV */
+.page-nav{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.pn-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:1;padding:10px 6px;text-decoration:none;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.2px;border-bottom:2px solid transparent;transition:all .15s;background:transparent;line-height:1.3;text-align:center}
+.pn-tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.pn-tab.pn-active{color:var(--acc);border-bottom-color:var(--acc);background:var(--acc-dim)}
+.pn-icon{font-size:16px;line-height:1}
+.pn-label{font-size:9.5px}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:0;width:268px;height:100vh;background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;z-index:400;display:flex;flex-direction:column}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-brand{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.logo-icon{width:44px;height:44px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,var(--oc2),var(--oc));display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 26px var(--oc-glow)}
+.logo-text h2{font-size:15px;font-weight:800;letter-spacing:-.4px}
+.logo-text p{font-size:10.5px;color:var(--muted);margin-top:2px}
+.prog-wrap{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--oc2),var(--ins),var(--ch),var(--sk),var(--au));width:0%;transition:width .4s;border-radius:2px}
+.nav-section{padding:8px 0 4px}
+.nav-sect-label{padding:8px 18px 3px;font-size:9.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--faint)}
+.nav-group-hdr{display:flex;align-items:center;gap:7px;margin:6px 12px 3px;padding:6px 10px;border-radius:7px;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.ngh-oc{background:var(--oc-dim);color:var(--oc)}
+.ngh-ins{background:var(--ins-dim);color:var(--ins)}
+.ngh-ch{background:var(--ch-dim);color:var(--ch)}
+.ngh-sk{background:var(--sk-dim);color:var(--sk)}
+.ngh-au{background:var(--au-dim);color:var(--au)}
+.ngh-other{background:rgba(255,255,255,.05);color:var(--muted)}
+.nav-link{display:flex;align-items:center;gap:9px;padding:6px 18px;color:var(--muted);text-decoration:none;font-size:12.5px;font-weight:600;border-left:2px solid transparent;transition:all .14s}
+.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,208,96,.08);border-left-color:var(--acc)}
+.nav-link .ico{font-size:13px;flex-shrink:0;width:16px;text-align:center}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;background:var(--acc-dim);color:var(--acc)}
+
+/* MAIN */
+.main{margin-left:268px;min-height:100vh}
+.hero{padding:80px 64px 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);
+  background:radial-gradient(ellipse 65% 55% at 75% 22%,rgba(97,218,251,.16) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 55% at 10% 82%,rgba(255,208,96,.08) 0%,transparent 55%),
+             radial-gradient(ellipse 40% 50% at 50% 50%,rgba(64,216,142,.04) 0%,transparent 60%),var(--bg)}
+.hero-dots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.028) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.hero-glow{position:absolute;right:-90px;top:-90px;width:520px;height:520px;background:radial-gradient(circle,rgba(97,218,251,.14) 0%,transparent 65%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--oc-dim);border:1px solid rgba(97,218,251,.4);color:var(--oc);padding:5px 16px;border-radius:100px;font-size:11.5px;font-weight:700;margin-bottom:26px;letter-spacing:.3px}
+.hero-eyebrow .pulse{width:6px;height:6px;border-radius:50%;background:var(--oc);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero h1{font-size:52px;font-weight:900;letter-spacing:-2.5px;line-height:1.04;margin-bottom:18px}
+.h-oc{color:var(--oc)}.h-ins{color:var(--ins)}.h-ch{color:var(--ch)}.h-sk{color:var(--sk)}.h-au{color:var(--au)}.h-acc{color:var(--acc)}
+.h-grad{background:linear-gradient(135deg,var(--oc2) 0%,var(--acc) 50%,var(--oc) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:16px;color:var(--muted);max-width:580px;line-height:1.72;margin-bottom:30px}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:5px 14px;border-radius:7px;font-size:12px;font-weight:700}
+.chip-oc{background:var(--oc-dim);color:var(--oc)}.chip-ins{background:var(--ins-dim);color:var(--ins)}
+.chip-ch{background:var(--ch-dim);color:var(--ch)}.chip-sk{background:var(--sk-dim);color:var(--sk)}
+.chip-au{background:var(--au-dim);color:var(--au)}.chip-t{background:var(--teal-dim);color:var(--teal)}
+.chip-p{background:var(--pink-dim);color:var(--pink)}.chip-s{background:var(--sky-dim);color:var(--sky)}
+
+/* CAT BANNERS */
+.cat-banner{display:flex;align-items:center;gap:16px;padding:20px 24px;border-radius:14px;margin-bottom:44px;position:relative;overflow:hidden}
+.cat-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cb-oc{background:var(--oc-dim);border:1px solid rgba(97,218,251,.32)}.cb-oc::before{background:linear-gradient(90deg,var(--oc),var(--oc2))}
+.cb-ins{background:var(--ins-dim);border:1px solid rgba(91,168,255,.30)}.cb-ins::before{background:linear-gradient(90deg,var(--ins),var(--sky))}
+.cb-ch{background:var(--ch-dim);border:1px solid rgba(64,216,142,.30)}.cb-ch::before{background:linear-gradient(90deg,var(--ch),var(--teal))}
+.cb-sk{background:var(--sk-dim);border:1px solid rgba(160,122,244,.30)}.cb-sk::before{background:linear-gradient(90deg,var(--sk),var(--pink))}
+.cb-au{background:var(--au-dim);border:1px solid rgba(255,208,96,.30)}.cb-au::before{background:linear-gradient(90deg,var(--au),var(--orange))}
+.cb-icon{font-size:38px;flex-shrink:0}
+.cb-badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;display:inline-block;margin-bottom:5px}
+.cb-oc .cb-badge{background:var(--oc-dim);color:var(--oc)}
+.cb-ins .cb-badge{background:var(--ins-dim);color:var(--ins)}
+.cb-ch .cb-badge{background:var(--ch-dim);color:var(--ch)}
+.cb-sk .cb-badge{background:var(--sk-dim);color:var(--sk)}
+.cb-au .cb-badge{background:var(--au-dim);color:var(--au)}
+.cb-title{font-size:20px;font-weight:800;letter-spacing:-.5px}.cb-sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+
+/* CONTENT */
+.content{padding:56px 64px;max-width:1020px}
+.section{margin-bottom:72px}
+.sec-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:30px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.sec-tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 10px;border-radius:5px;margin-top:5px;flex-shrink:0;letter-spacing:.5px}
+.st-oc{color:var(--oc);background:var(--oc-dim);border:1px solid var(--oc-glow)}
+.st-ins{color:var(--ins);background:var(--ins-dim);border:1px solid var(--ins-glow)}
+.st-ch{color:var(--ch);background:var(--ch-dim);border:1px solid var(--ch-glow)}
+.st-sk{color:var(--sk);background:var(--sk-dim);border:1px solid var(--sk-glow)}
+.st-au{color:var(--au);background:var(--au-dim);border:1px solid var(--au-glow)}
+.st-y{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(255,208,96,.24)}
+.sec-title{font-size:23px;font-weight:800;letter-spacing:-.6px;margin-bottom:5px}
+.sec-sub{font-size:13px;color:var(--muted)}
+.sub{margin-bottom:38px}
+.sub-title{font-size:14.5px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:10px}
+.sub-title::before{content:'';display:inline-block;width:14px;height:3px;background:var(--acc);border-radius:2px;flex-shrink:0}
+.sub p,.sub ul,.sub ol{color:var(--muted);font-size:13.5px;margin-bottom:11px;line-height:1.75}
+.sub ul,.sub ol{padding-left:22px}.sub li{margin-bottom:5px}.sub strong{color:var(--text)}
+
+/* GRIDS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:11px;padding:16px;transition:all .2s;cursor:default}
+.card:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.38)}
+.card-icon{font-size:24px;margin-bottom:8px}.card-title{font-size:13px;font-weight:700;margin-bottom:4px}.card-desc{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* CODE BLOCKS */
+.cblock{background:var(--code-bg);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin:13px 0}
+.cb-head{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--s2);border-bottom:1px solid var(--border)}
+.cb-dots{display:flex;gap:5px}.cbd{width:10px;height:10px;border-radius:50%}
+.cbd.r{background:#ff5f56}.cbd.y{background:#ffbd2e}.cbd.g{background:#27c93f}
+.cb-name{font-size:11.5px;font-weight:700;color:var(--muted);font-family:'JetBrains Mono',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cb-tag{margin-left:auto;font-size:9px;font-weight:700;padding:2px 9px;border-radius:100px;flex-shrink:0}
+.ct-oc{background:var(--oc-dim);color:var(--oc)}.ct-ins{background:var(--ins-dim);color:var(--ins)}
+.ct-ch{background:var(--ch-dim);color:var(--ch)}.ct-sk{background:var(--sk-dim);color:var(--sk)}
+.ct-au{background:var(--au-dim);color:var(--au)}.ct-y{background:var(--yellow-dim);color:var(--yellow)}
+.ct-g{background:var(--green-dim);color:var(--green)}.ct-t{background:var(--teal-dim);color:var(--teal)}
+.cb-body{padding:18px 20px;overflow-x:auto}
+.cb-body pre{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.72;white-space:pre;color:#8899bb}
+/* syntax */
+.kw{color:#c792ea}.tp{color:#ffcb6b}.fn{color:#82aaff}.st-s{color:#c3e88d}
+.cm{color:#546e7a;font-style:italic}.nm{color:#f78c6c}.an{color:#ff6584}
+.pr{color:#89ddff}.vr{color:#eeffff}.cl{color:#ffcb6b}
+.c-r{color:#ff6584}.c-b{color:#5ba8ff}.c-g{color:#40d88e}
+.c-t{color:#30d8c0}.c-y{color:#ffd060}.c-o{color:#ff8c50}.c-p{color:#a07af4}.c-s{color:#38bdf8}
+/* shell prompt */
+.sh-prompt{color:var(--ch);font-weight:700;user-select:none}
+.sh-cmd{color:var(--text)}
+.sh-arg{color:var(--sky)}
+.sh-str{color:var(--green)}
+.sh-flag{color:var(--au)}
+.sh-cmt{color:#546e7a;font-style:italic}
+
+/* INFO BOXES */
+.info{display:flex;gap:12px;padding:14px 16px;border-radius:9px;margin:13px 0;font-size:13px;line-height:1.6}
+.info-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.i-ok{background:var(--green-dim);border:1px solid rgba(64,216,142,.2);color:#30a870}
+.i-warn{background:var(--yellow-dim);border:1px solid rgba(255,208,96,.2);color:#b09030}
+.i-tip{background:var(--blue-dim);border:1px solid rgba(91,168,255,.2);color:#3878d0}
+.i-note{background:var(--purple-dim);border:1px solid rgba(160,122,244,.2);color:#8060d0}
+.i-err{background:var(--pink-dim);border:1px solid rgba(255,101,132,.2);color:#cc3355}
+
+/* RW BOX */
+.rw-box{background:var(--s1);border:1px solid var(--border2);border-radius:12px;padding:18px 20px;margin:14px 0;position:relative;overflow:hidden}
+.rw-box::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.rw-oc::before{background:var(--oc)}.rw-ins::before{background:var(--ins)}
+.rw-ch::before{background:var(--ch)}.rw-sk::before{background:var(--sk)}
+.rw-au::before{background:var(--au)}.rw-y::before{background:var(--yellow)}
+.rw-label{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.rw-oc .rw-label{color:var(--oc)}.rw-ins .rw-label{color:var(--ins)}
+.rw-ch .rw-label{color:var(--ch)}.rw-sk .rw-label{color:var(--sk)}
+.rw-au .rw-label{color:var(--au)}.rw-y .rw-label{color:var(--yellow)}
+.rw-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.rw-body{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:13px 0;border-radius:11px;overflow:hidden}
+.tbl th{background:var(--s3);padding:10px 14px;text-align:left;font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-bottom:1px solid var(--border2)}
+.tbl td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted);vertical-align:top}
+.tbl tr:hover td{background:rgba(255,255,255,.025)}
+.tbl code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--code-bg);padding:2px 7px;border-radius:4px;color:var(--teal)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;margin:14px 0}
+.step{display:flex;gap:16px}
+.step-L{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
+.step-num{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--acc);background:var(--acc-dim);border:2px solid var(--acc-glow)}
+.step-line{width:2px;flex:1;background:var(--border);margin:5px 0;min-height:14px}
+.step-B{padding:3px 0 26px}.step-B h4{font-size:14px;font-weight:700;margin-bottom:5px}
+.step-B p{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* CHEAT SHEET */
+.cheat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.cheat-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:15px}
+.cheat-card h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:11px}
+.h4-oc{color:var(--oc)}.h4-ins{color:var(--ins)}.h4-ch{color:var(--ch)}.h4-sk{color:var(--sk)}.h4-au{color:var(--au)}
+.cheat-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.cheat-row:last-child{border-bottom:none}.ck{color:var(--muted)}.cv{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--teal)}
+
+/* ARCH DIAGRAM */
+.arch{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:0;margin:18px 0}
+.arch-box{background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;text-align:center}
+.arch-title{font-size:12px;font-weight:700;margin-bottom:3px}
+.arch-desc{font-size:11px;color:var(--muted)}
+.arch-arrow{text-align:center;color:var(--muted);font-size:20px;padding:0 8px}
+
+p code,li code,td code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(255,208,96,.12);color:var(--acc);padding:2px 6px;border-radius:4px}
+hr.dv{border:none;border-top:1px solid var(--border);margin:58px 0}
+.footer{border-top:1px solid var(--border);padding:28px 64px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+@media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.hero,.content,.footer{padding-left:22px;padding-right:22px}.hero h1{font-size:32px}.grid-2,.grid-3,.grid-4,.cheat-grid{grid-template-columns:1fr}.arch{grid-template-columns:1fr;gap:8px}.arch-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="page-nav">
+    <a href="js-reactjs-guide.html" class="pn-tab">
+      <span class="pn-icon">🟨</span>
+      <span class="pn-label">JS & React</span>
+    </a>
+    <a href="react-nextjs-guide.html" class="pn-tab">
+      <span class="pn-icon">⚛️</span>
+      <span class="pn-label">Next.js</span>
+    </a>
+    <a href="react-ecosystem-guide.html" class="pn-tab pn-active">
+      <span class="pn-icon">🌐</span>
+      <span class="pn-label">Ecosystem</span>
+    </a>
+    <a href="redux-rtk-query-guide.html" class="pn-tab">
+      <span class="pn-icon">🔄</span>
+      <span class="pn-label">Redux</span>
+    </a>
+  </div>
+  <div class="sb-logo">
+    <div class="sb-brand">
+      <div class="logo-icon">⚛️</div>
+      <div class="logo-text"><h2>React Ecosystem</h2><p>Thư viện &amp; Hooks thường dùng</p></div>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar" id="pbar"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-sect-label">Tổng quan</div>
+    <a href="#s0" class="nav-link active"><span class="ico">🗺️</span> Bản đồ hệ sinh thái React <span class="nav-badge">START</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ins">🔵 Routing &amp; Điều hướng — 3 sections</div>
+    <a href="#s1" class="nav-link"><span class="ico">🧭</span> React Router — cấu trúc cơ bản</a>
+    <a href="#s2" class="nav-link"><span class="ico">🔗</span> Link, NavLink &amp; điều hướng động</a>
+    <a href="#s3" class="nav-link"><span class="ico">📍</span> useNavigate, useParams, useSearchParams</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ch">🟢 Quản lý Form — 3 sections</div>
+    <a href="#s4" class="nav-link"><span class="ico">📝</span> React Hook Form — cơ bản</a>
+    <a href="#s5" class="nav-link"><span class="ico">✅</span> Validation với Zod / Yup</a>
+    <a href="#s6" class="nav-link"><span class="ico">🧩</span> Controller, useFieldArray &amp; form nâng cao</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-sk">🟣 Quản lý State toàn cục — 3 sections</div>
+    <a href="#s7" class="nav-link"><span class="ico">🌐</span> Context API — chia sẻ state</a>
+    <a href="#s8" class="nav-link"><span class="ico">🐻</span> Zustand — state đơn giản, nhẹ</a>
+    <a href="#s9" class="nav-link"><span class="ico">🧰</span> Redux Toolkit — khi app lớn</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-au">🟡 Data Fetching — 3 sections</div>
+    <a href="#s10" class="nav-link"><span class="ico">📡</span> Axios — gọi API chuyên nghiệp</a>
+    <a href="#s11" class="nav-link"><span class="ico">🔄</span> TanStack Query — useQuery/useMutation</a>
+    <a href="#s12" class="nav-link"><span class="ico">🗃️</span> Cache, Invalidation &amp; Refetch</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-oc">🔄 Hooks cốt lõi của React — 4 sections</div>
+    <a href="#s13" class="nav-link"><span class="ico">🧠</span> useState &amp; useEffect</a>
+    <a href="#s14" class="nav-link"><span class="ico">📌</span> useRef, useMemo &amp; useCallback</a>
+    <a href="#s15" class="nav-link"><span class="ico">🌐</span> useContext &amp; useReducer</a>
+    <a href="#s16" class="nav-link"><span class="ico">🪝</span> Tự viết Custom Hook</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-other">📦 Thư viện tiện ích khác</div>
+    <a href="#s17" class="nav-link"><span class="ico">🧰</span> clsx, dayjs, react-icons, toast</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-other">📋 Tham khảo nhanh</div>
+    <a href="#s18" class="nav-link"><span class="ico">📋</span> Cheat Sheet</a>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-dots"></div><div class="hero-glow"></div>
+  <div class="hero-eyebrow"><span class="pulse"></span> ReactJS · Thư viện phổ biến · Hooks thường dùng · 2026</div>
+  <h1><span class="h-grad">React Ecosystem</span> ⚛️<br><span class="h-acc">Thư viện &amp; Hooks</span><br><span class="h-ins">Thường dùng nhất</span></h1>
+  <p class="hero-desc">Tổng hợp những thư viện xuất hiện trong gần như mọi dự án ReactJS thực tế — routing, quản lý form, quản lý state toàn cục, gọi API — cùng các hook (built-in &amp; custom) bạn sẽ dùng hằng ngày, kèm ví dụ code cụ thể, dễ áp dụng ngay.</p>
+  <div class="hero-chips">
+    <span class="chip chip-ins">🧭 React Router</span>
+    <span class="chip chip-ch">📝 React Hook Form</span>
+    <span class="chip chip-sk">🌐 Context / Zustand / Redux</span>
+    <span class="chip chip-au">🔄 TanStack Query / Axios</span>
+    <span class="chip chip-oc">🪝 Hooks cốt lõi</span>
+    <span class="chip chip-t">✅ Zod / Yup</span>
+    <span class="chip chip-p">🧰 clsx · dayjs</span>
+    <span class="chip chip-s">✅ Ví dụ thực tế</span>
+  </div>
+</div>
+
+<div class="content">
+<!-- ════ S0 — OVERVIEW ════ -->
+<div class="section" id="s0">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">OVERVIEW</span>
+    <div><h2 class="sec-title">Bản đồ hệ sinh thái React — dùng thư viện nào cho việc gì?</h2>
+    <p class="sec-sub">React chỉ lo phần UI — mọi thứ khác (routing, form, state, gọi API) đều cần thư viện ngoài</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">React "tối giản" theo chủ đích</div>
+    <p>Bản thân React chỉ giải quyết một việc: <strong>dựng UI từ state</strong>. Điều hướng trang, quản lý form phức tạp, chia sẻ state giữa nhiều component, gọi API và cache dữ liệu... đều <strong>không</strong> nằm trong React core — đó là lý do hệ sinh thái thư viện xung quanh React rất lớn. Nắm được "việc nào dùng thư viện nào" giúp bạn không phải tự viết lại những gì cộng đồng đã tối ưu sẵn.</p>
+    <div class="grid-4">
+      <div class="card"><div class="card-icon">🧭</div><div class="card-title" style="color:var(--ins)">Routing</div><div class="card-desc">react-router-dom — điều hướng giữa các trang trong Single Page App.</div></div>
+      <div class="card"><div class="card-icon">📝</div><div class="card-title" style="color:var(--ch)">Form</div><div class="card-desc">react-hook-form + zod/yup — quản lý input, validate dữ liệu nhập.</div></div>
+      <div class="card"><div class="card-icon">🌐</div><div class="card-title" style="color:var(--sk)">State toàn cục</div><div class="card-desc">Context, Zustand, Redux Toolkit — chia sẻ state giữa nhiều component xa nhau.</div></div>
+      <div class="card"><div class="card-icon">🔄</div><div class="card-title" style="color:var(--au)">Data fetching</div><div class="card-desc">Axios + TanStack Query — gọi API, cache, loading/error tự động.</div></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Luồng chọn công cụ khi bắt đầu 1 tính năng mới</div>
+    <div class="arch">
+      <div class="arch-box" style="border-color:rgba(91,168,255,.3)">
+        <div class="arch-title" style="color:var(--ins)">🧭 Cần đổi trang?</div>
+        <div class="arch-desc">→ react-router-dom<br>Link / NavLink / Routes</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(64,216,142,.3)">
+        <div class="arch-title" style="color:var(--ch)">📝 Cần nhập liệu?</div>
+        <div class="arch-desc">→ react-hook-form<br>+ zod resolver</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(255,208,96,.3)">
+        <div class="arch-title" style="color:var(--au)">🔄 Cần dữ liệu server?</div>
+        <div class="arch-desc">→ TanStack Query<br>+ axios</div>
+      </div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Nguyên tắc chọn state:</strong> State chỉ 1 component dùng → <code>useState</code>. Vài component gần nhau → truyền props. Nhiều component ở nhiều nơi khác nhau cùng cần → <strong>Context/Zustand/Redux</strong>. Dữ liệu đến từ server → đừng lưu bằng state thường, hãy dùng <strong>TanStack Query</strong> vì nó tự lo cache, loading, refetch.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — ROUTING ════ -->
+<div class="cat-banner cb-ins">
+  <div class="cb-icon">🔵</div>
+  <div>
+    <div class="cb-badge">ROUTING</div>
+    <div class="cb-title">Phần 1 — Routing &amp; Điều hướng</div>
+    <div class="cb-sub">react-router-dom · Link · NavLink · useNavigate · useParams</div>
+  </div>
+</div>
+
+<!-- ════ S1 — REACT ROUTER CƠ BẢN ════ -->
+<div class="section" id="s1">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">ROUTING</span>
+    <div><h2 class="sec-title">React Router — cấu trúc cơ bản</h2>
+    <p class="sec-sub">Thư viện điều hướng phổ biến nhất cho ReactJS (react-router-dom v6+)</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Cài đặt &amp; dựng khung Routes</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">terminal</span><span class="cb-tag ct-ins">INSTALL</span></div>
+      <div class="cb-body"><pre><span class="sh-prompt">$</span> <span class="sh-cmd">npm install</span> <span class="sh-arg">react-router-dom</span></pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">main.jsx / App.jsx — khai báo Routes</span><span class="cb-tag ct-ins">ROUTER</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">BrowserRouter</span>, <span class="vr">Routes</span>, <span class="vr">Route</span> } <span class="kw">from</span> <span class="st-s">"react-router-dom"</span>;
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    <span class="an">&lt;BrowserRouter&gt;</span>
+      <span class="an">&lt;Routes&gt;</span>
+        {<span class="cm">/* path="/" -&gt; trang chủ */</span>}
+        <span class="an">&lt;Route</span> <span class="pr">path</span>=<span class="st-s">"/"</span> <span class="pr">element</span>={<span class="an">&lt;Home</span> <span class="an">/&gt;</span>} <span class="an">/&gt;</span>
+        <span class="an">&lt;Route</span> <span class="pr">path</span>=<span class="st-s">"/about"</span> <span class="pr">element</span>={<span class="an">&lt;About</span> <span class="an">/&gt;</span>} <span class="an">/&gt;</span>
+        {<span class="cm">/* :id -&gt; tham số động, đọc bằng useParams */</span>}
+        <span class="an">&lt;Route</span> <span class="pr">path</span>=<span class="st-s">"/products/:id"</span> <span class="pr">element</span>={<span class="an">&lt;ProductDetail</span> <span class="an">/&gt;</span>} <span class="an">/&gt;</span>
+        {<span class="cm">/* route lồng nhau -&gt; dùng &lt;Outlet /&gt; trong Layout để render con */</span>}
+        <span class="an">&lt;Route</span> <span class="pr">path</span>=<span class="st-s">"/dashboard"</span> <span class="pr">element</span>={<span class="an">&lt;DashboardLayout</span> <span class="an">/&gt;</span>}<span class="an">&gt;</span>
+          <span class="an">&lt;Route</span> <span class="pr">index</span> <span class="pr">element</span>={<span class="an">&lt;DashboardHome</span> <span class="an">/&gt;</span>} <span class="an">/&gt;</span>
+          <span class="an">&lt;Route</span> <span class="pr">path</span>=<span class="st-s">"settings"</span> <span class="pr">element</span>={<span class="an">&lt;Settings</span> <span class="an">/&gt;</span>} <span class="an">/&gt;</span>
+        <span class="an">&lt;/Route&gt;</span>
+        {<span class="cm">/* path="*" -&gt; bắt mọi URL không khớp -&gt; trang 404 */</span>}
+        <span class="an">&lt;Route</span> <span class="pr">path</span>=<span class="st-s">"*"</span> <span class="pr">element</span>={<span class="an">&lt;NotFound</span> <span class="an">/&gt;</span>} <span class="an">/&gt;</span>
+      <span class="an">&lt;/Routes&gt;</span>
+    <span class="an">&lt;/BrowserRouter&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Ghi nhớ:</strong> <code>BrowserRouter</code> bọc ngoài cùng app (thường đặt trong <code>main.jsx</code>). <code>Routes</code> chỉ chứa các <code>Route</code>. Mỗi <code>Route</code> ánh xạ 1 <code>path</code> tới 1 component qua prop <code>element</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S2 — LINK, NAVLINK ════ -->
+<div class="section" id="s2">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">ROUTING</span>
+    <div><h2 class="sec-title">Link, NavLink &amp; điều hướng động</h2>
+    <p class="sec-sub">Chuyển trang không reload, và tô sáng menu đang active</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Link — thay thế thẻ &lt;a&gt; để không reload trang</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Navbar.jsx</span><span class="cb-tag ct-ins">LINK</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">Link</span> } <span class="kw">from</span> <span class="st-s">"react-router-dom"</span>;
+
+<span class="kw">function</span> <span class="fn">Navbar</span>() {
+  <span class="kw">return</span> (
+    <span class="an">&lt;nav&gt;</span>
+      {<span class="cm">/* dùng Link thay <a href> -&gt; SPA điều hướng, không load lại trang */</span>}
+      <span class="an">&lt;Link</span> <span class="pr">to</span>=<span class="st-s">"/"</span><span class="an">&gt;</span>Trang chủ<span class="an">&lt;/Link&gt;</span>
+      <span class="an">&lt;Link</span> <span class="pr">to</span>=<span class="st-s">"/products/42"</span><span class="an">&gt;</span>Sản phẩm 42<span class="an">&lt;/Link&gt;</span>
+    <span class="an">&lt;/nav&gt;</span>
+  );
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">NavLink — tự động biết link nào đang active</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Navbar.jsx — highlight menu active</span><span class="cb-tag ct-ch">NAVLINK</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">NavLink</span> } <span class="kw">from</span> <span class="st-s">"react-router-dom"</span>;
+
+<span class="kw">function</span> <span class="fn">Navbar</span>() {
+  <span class="kw">return</span> (
+    <span class="an">&lt;nav&gt;</span>
+      {<span class="cm">/* className nhận callback ({isActive}) -&gt; tự thêm class khi URL khớp */</span>}
+      <span class="an">&lt;NavLink</span>
+        <span class="pr">to</span>=<span class="st-s">"/"</span>
+        <span class="pr">className</span>={({ <span class="vr">isActive</span> }) =&gt; <span class="vr">isActive</span> ? <span class="st-s">"link active"</span> : <span class="st-s">"link"</span>}
+        <span class="pr">end</span> {<span class="cm">/* end -&gt; chỉ active khi khớp CHÍNH XÁC "/", tránh active nhầm với "/products" */</span>}
+      <span class="an">&gt;</span>
+        Trang chủ
+      <span class="an">&lt;/NavLink&gt;</span>
+      <span class="an">&lt;NavLink</span> <span class="pr">to</span>=<span class="st-s">"/products"</span> <span class="pr">className</span>={({ <span class="vr">isActive</span> }) =&gt; <span class="vr">isActive</span> ? <span class="st-s">"link active"</span> : <span class="st-s">"link"</span>}<span class="an">&gt;</span>
+        Sản phẩm
+      <span class="an">&lt;/NavLink&gt;</span>
+    <span class="an">&lt;/nav&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Link vs NavLink:</strong> Dùng <code>Link</code> cho link thường (footer, nội dung bài viết). Dùng <code>NavLink</code> cho <strong>thanh menu điều hướng</strong> vì nó tự biết trang nào đang active để bạn style khác biệt — không cần tự so sánh URL bằng tay.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S3 — useNavigate, useParams, useSearchParams ════ -->
+<div class="section" id="s3">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">ROUTING</span>
+    <div><h2 class="sec-title">useNavigate, useParams &amp; useSearchParams</h2>
+    <p class="sec-sub">3 hook của react-router-dom dùng nhiều nhất sau Link/NavLink</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">ProductDetail.jsx — điều hướng bằng code + đọc URL</span><span class="cb-tag ct-ins">HOOKS</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useNavigate</span>, <span class="vr">useParams</span>, <span class="vr">useSearchParams</span> } <span class="kw">from</span> <span class="st-s">"react-router-dom"</span>;
+
+<span class="kw">function</span> <span class="fn">ProductDetail</span>() {
+  <span class="cm">// useParams -&gt; đọc tham số động trên path, vd path="/products/:id"</span>
+  <span class="kw">const</span> { <span class="vr">id</span> } = <span class="fn">useParams</span>();
+
+  <span class="cm">// useSearchParams -&gt; đọc/ghi query string ?sort=price&page=2</span>
+  <span class="kw">const</span> [<span class="vr">searchParams</span>, <span class="vr">setSearchParams</span>] = <span class="fn">useSearchParams</span>();
+  <span class="kw">const</span> <span class="vr">sort</span> = <span class="vr">searchParams</span>.<span class="fn">get</span>(<span class="st-s">"sort"</span>) ?? <span class="st-s">"newest"</span>;
+
+  <span class="cm">// useNavigate -&gt; chuyển trang bằng code (sau khi submit, sau khi xoá...)</span>
+  <span class="kw">const</span> <span class="vr">navigate</span> = <span class="fn">useNavigate</span>();
+
+  <span class="kw">async</span> <span class="kw">function</span> <span class="fn">handleDelete</span>() {
+    <span class="kw">await</span> <span class="fn">deleteProduct</span>(<span class="vr">id</span>);
+    <span class="vr">navigate</span>(<span class="st-s">"/products"</span>); <span class="cm">// chuyển về danh sách sau khi xoá</span>
+  }
+
+  <span class="kw">function</span> <span class="fn">changeSort</span>(<span class="vr">value</span>) {
+    <span class="fn">setSearchParams</span>({ <span class="vr">sort</span>: <span class="vr">value</span> }); <span class="cm">// cập nhật URL: ?sort=price</span>
+  }
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;div&gt;</span>
+      <span class="an">&lt;p&gt;</span>Đang xem sản phẩm #{<span class="vr">id</span>}, sắp xếp theo {<span class="vr">sort</span>}<span class="an">&lt;/p&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">onClick</span>={<span class="vr">handleDelete</span>}<span class="an">&gt;</span>Xoá sản phẩm<span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/div&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <table class="tbl">
+      <tr><th>Hook</th><th>Dùng để</th><th>Ví dụ</th></tr>
+      <tr><td><code>useNavigate()</code></td><td>Chuyển trang bằng code (sau submit, sau login...)</td><td><code>navigate("/login")</code></td></tr>
+      <tr><td><code>useParams()</code></td><td>Đọc tham số động trong path</td><td><code>const {'{'} id {'}'} = useParams()</code></td></tr>
+      <tr><td><code>useSearchParams()</code></td><td>Đọc/ghi query string trên URL</td><td><code>searchParams.get("page")</code></td></tr>
+      <tr><td><code>useLocation()</code></td><td>Lấy thông tin URL hiện tại (pathname, state...)</td><td><code>location.pathname</code></td></tr>
+    </table>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Lỗi hay gặp:</strong> Đừng dùng <code>window.location.href</code> để chuyển trang trong app React Router — nó làm <strong>reload toàn bộ trang</strong>, mất hết state. Luôn dùng <code>navigate()</code> hoặc <code>&lt;Link&gt;</code>.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+<!-- ════ BANNER — FORM ════ -->
+<div class="cat-banner cb-ch">
+  <div class="cb-icon">🟢</div>
+  <div>
+    <div class="cb-badge">FORM</div>
+    <div class="cb-title">Phần 2 — Quản lý Form</div>
+    <div class="cb-sub">react-hook-form · zod / yup · Controller · useFieldArray</div>
+  </div>
+</div>
+
+<!-- ════ S4 — REACT HOOK FORM CƠ BẢN ════ -->
+<div class="section" id="s4">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">FORM</span>
+    <div><h2 class="sec-title">React Hook Form — cơ bản</h2>
+    <p class="sec-sub">Thư viện quản lý form phổ biến nhất: ít re-render, ít code, hiệu năng cao</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Vì sao không tự quản form bằng useState?</div>
+    <p>Nếu quản mỗi input bằng 1 <code>useState</code>, mỗi lần gõ phím component sẽ <strong>re-render lại toàn bộ form</strong>. Với form nhiều field hoặc form phức tạp, việc này gây giật, chậm. <strong>react-hook-form</strong> dùng ref &amp; uncontrolled input để hạn chế tối đa re-render, đồng thời cung cấp validate, hiển thị lỗi, submit... gọn trong 1 API duy nhất.</p>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">terminal</span><span class="cb-tag ct-ch">INSTALL</span></div>
+      <div class="cb-body"><pre><span class="sh-prompt">$</span> <span class="sh-cmd">npm install</span> <span class="sh-arg">react-hook-form</span></pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">LoginForm.jsx — register + handleSubmit</span><span class="cb-tag ct-ch">RHF</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useForm</span> } <span class="kw">from</span> <span class="st-s">"react-hook-form"</span>;
+
+<span class="kw">function</span> <span class="fn">LoginForm</span>() {
+  <span class="cm">// register -&gt; gắn input vào form; handleSubmit -&gt; bọc hàm submit + tự validate</span>
+  <span class="cm">// formState.errors -&gt; object chứa lỗi validate của từng field</span>
+  <span class="kw">const</span> {
+    <span class="vr">register</span>,
+    <span class="vr">handleSubmit</span>,
+    <span class="vr">formState</span>: { <span class="vr">errors</span>, <span class="vr">isSubmitting</span> },
+  } = <span class="fn">useForm</span>();
+
+  <span class="kw">function</span> <span class="fn">onSubmit</span>(<span class="vr">data</span>) {
+    <span class="cm">// data = { email: "...", password: "..." } -&gt; đúng tên field đã register</span>
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">data</span>);
+  }
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;form</span> <span class="pr">onSubmit</span>={<span class="fn">handleSubmit</span>(<span class="vr">onSubmit</span>)}<span class="an">&gt;</span>
+      <span class="an">&lt;input</span>
+        {...<span class="fn">register</span>(<span class="st-s">"email"</span>, {
+          <span class="vr">required</span>: <span class="st-s">"Email là bắt buộc"</span>,
+          <span class="vr">pattern</span>: { <span class="vr">value</span>: <span class="nm">/^\S+@\S+\.\S+$/</span>, <span class="vr">message</span>: <span class="st-s">"Email không hợp lệ"</span> },
+        })}
+        <span class="pr">placeholder</span>=<span class="st-s">"Email"</span>
+      <span class="an">/&gt;</span>
+      {<span class="vr">errors</span>.<span class="vr">email</span> &amp;&amp; <span class="an">&lt;p</span> <span class="pr">className</span>=<span class="st-s">"err"</span><span class="an">&gt;</span>{<span class="vr">errors</span>.<span class="vr">email</span>.<span class="vr">message</span>}<span class="an">&lt;/p&gt;</span>}
+
+      <span class="an">&lt;input</span>
+        <span class="pr">type</span>=<span class="st-s">"password"</span>
+        {...<span class="fn">register</span>(<span class="st-s">"password"</span>, { <span class="vr">required</span>: <span class="kw">true</span>, <span class="vr">minLength</span>: { <span class="vr">value</span>: <span class="nm">6</span>, <span class="vr">message</span>: <span class="st-s">"Tối thiểu 6 ký tự"</span> } })}
+        <span class="pr">placeholder</span>=<span class="st-s">"Mật khẩu"</span>
+      <span class="an">/&gt;</span>
+      {<span class="vr">errors</span>.<span class="vr">password</span> &amp;&amp; <span class="an">&lt;p</span> <span class="pr">className</span>=<span class="st-s">"err"</span><span class="an">&gt;</span>{<span class="vr">errors</span>.<span class="vr">password</span>.<span class="vr">message</span>}<span class="an">&lt;/p&gt;</span>}
+
+      <span class="an">&lt;button</span> <span class="pr">type</span>=<span class="st-s">"submit"</span> <span class="pr">disabled</span>={<span class="vr">isSubmitting</span>}<span class="an">&gt;</span>
+        {<span class="vr">isSubmitting</span> ? <span class="st-s">"Đang đăng nhập..."</span> : <span class="st-s">"Đăng nhập"</span>}
+      <span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/form&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">3 thứ cần nhớ:</strong> <code>register("tên", rules)</code> gắn input + khai báo rule validate ngay tại chỗ · <code>handleSubmit(onSubmit)</code> tự validate trước khi gọi <code>onSubmit</code> · <code>formState.errors.tenField</code> để hiển thị lỗi.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S5 — VALIDATION VỚI ZOD/YUP ════ -->
+<div class="section" id="s5">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">FORM</span>
+    <div><h2 class="sec-title">Validation với Zod / Yup</h2>
+    <p class="sec-sub">Tách rule validate ra schema riêng — tái sử dụng được, dễ đọc hơn khai báo rời rạc</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">zodResolver — kết hợp Zod với React Hook Form</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">terminal</span><span class="cb-tag ct-ch">INSTALL</span></div>
+      <div class="cb-body"><pre><span class="sh-prompt">$</span> <span class="sh-cmd">npm install</span> <span class="sh-arg">zod @hookform/resolvers</span></pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">RegisterForm.jsx — schema + resolver</span><span class="cb-tag ct-t">ZOD</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">z</span> } <span class="kw">from</span> <span class="st-s">"zod"</span>;
+<span class="kw">import</span> { <span class="vr">zodResolver</span> } <span class="kw">from</span> <span class="st-s">"@hookform/resolvers/zod"</span>;
+<span class="kw">import</span> { <span class="vr">useForm</span> } <span class="kw">from</span> <span class="st-s">"react-hook-form"</span>;
+
+<span class="cm">// Khai báo schema 1 lần -&gt; dùng lại được cho validate FE lẫn hiển thị type (TS)</span>
+<span class="kw">const</span> <span class="vr">schema</span> = <span class="vr">z</span>.<span class="fn">object</span>({
+  <span class="vr">email</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">email</span>(<span class="st-s">"Email không hợp lệ"</span>),
+  <span class="vr">password</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">min</span>(<span class="nm">6</span>, <span class="st-s">"Tối thiểu 6 ký tự"</span>),
+  <span class="vr">confirmPassword</span>: <span class="vr">z</span>.<span class="fn">string</span>(),
+}).<span class="fn">refine</span>((<span class="vr">data</span>) =&gt; <span class="vr">data</span>.<span class="vr">password</span> === <span class="vr">data</span>.<span class="vr">confirmPassword</span>, {
+  <span class="vr">message</span>: <span class="st-s">"Mật khẩu xác nhận không khớp"</span>,
+  <span class="vr">path</span>: [<span class="st-s">"confirmPassword"</span>], <span class="cm">// lỗi hiện ở field nào</span>
+});
+
+<span class="kw">function</span> <span class="fn">RegisterForm</span>() {
+  <span class="kw">const</span> { <span class="vr">register</span>, <span class="vr">handleSubmit</span>, <span class="vr">formState</span>: { <span class="vr">errors</span> } } = <span class="fn">useForm</span>({
+    <span class="vr">resolver</span>: <span class="fn">zodResolver</span>(<span class="vr">schema</span>), <span class="cm">// gắn schema vào react-hook-form</span>
+  });
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;form</span> <span class="pr">onSubmit</span>={<span class="fn">handleSubmit</span>((<span class="vr">data</span>) =&gt; <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">data</span>))}<span class="an">&gt;</span>
+      <span class="an">&lt;input</span> {...<span class="fn">register</span>(<span class="st-s">"email"</span>)} <span class="an">/&gt;</span>
+      {<span class="vr">errors</span>.<span class="vr">email</span> &amp;&amp; <span class="an">&lt;p&gt;</span>{<span class="vr">errors</span>.<span class="vr">email</span>.<span class="vr">message</span>}<span class="an">&lt;/p&gt;</span>}
+      <span class="an">&lt;input</span> <span class="pr">type</span>=<span class="st-s">"password"</span> {...<span class="fn">register</span>(<span class="st-s">"password"</span>)} <span class="an">/&gt;</span>
+      {<span class="vr">errors</span>.<span class="vr">password</span> &amp;&amp; <span class="an">&lt;p&gt;</span>{<span class="vr">errors</span>.<span class="vr">password</span>.<span class="vr">message</span>}<span class="an">&lt;/p&gt;</span>}
+      <span class="an">&lt;button</span> <span class="pr">type</span>=<span class="st-s">"submit"</span><span class="an">&gt;</span>Đăng ký<span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/form&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Zod vs Yup:</strong> Cả hai đều tốt. <strong>Zod</strong> phổ biến hơn trong dự án TypeScript vì tự suy ra type từ schema (<code>z.infer&lt;typeof schema&gt;</code>). <strong>Yup</strong> lâu đời hơn, cú pháp tương tự, phổ biến trong dự án JS thuần hoặc đi cùng Formik.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S6 — CONTROLLER, useFieldArray ════ -->
+<div class="section" id="s6">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">FORM</span>
+    <div><h2 class="sec-title">Controller, useFieldArray &amp; form nâng cao</h2>
+    <p class="sec-sub">Xử lý input không phải HTML thuần (select custom, date picker...) và danh sách field động</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Controller — dùng khi input là component UI thư viện ngoài</div>
+    <p><code>register</code> chỉ hoạt động tốt với input HTML thuần. Với các component như <code>&lt;DatePicker&gt;</code>, <code>&lt;Select&gt;</code> custom (không nhận ref trực tiếp), cần bọc bằng <code>&lt;Controller&gt;</code>.</p>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Controller — input custom</span><span class="cb-tag ct-ch">CONTROLLER</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useForm</span>, <span class="vr">Controller</span> } <span class="kw">from</span> <span class="st-s">"react-hook-form"</span>;
+<span class="kw">import</span> <span class="vr">Select</span> <span class="kw">from</span> <span class="st-s">"react-select"</span>;
+
+<span class="kw">function</span> <span class="fn">CityForm</span>() {
+  <span class="kw">const</span> { <span class="vr">control</span>, <span class="vr">handleSubmit</span> } = <span class="fn">useForm</span>();
+  <span class="kw">const</span> <span class="vr">options</span> = [{ <span class="vr">value</span>: <span class="st-s">"hn"</span>, <span class="vr">label</span>: <span class="st-s">"Hà Nội"</span> }, { <span class="vr">value</span>: <span class="st-s">"hcm"</span>, <span class="vr">label</span>: <span class="st-s">"TP.HCM"</span> }];
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;form</span> <span class="pr">onSubmit</span>={<span class="fn">handleSubmit</span>((<span class="vr">data</span>) =&gt; <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">data</span>))}<span class="an">&gt;</span>
+      <span class="an">&lt;Controller</span>
+        <span class="pr">name</span>=<span class="st-s">"city"</span>
+        <span class="pr">control</span>={<span class="vr">control</span>}
+        <span class="pr">rules</span>={{ <span class="vr">required</span>: <span class="kw">true</span> }}
+        <span class="pr">render</span>={({ <span class="vr">field</span> }) =&gt; <span class="an">&lt;Select</span> {...<span class="vr">field</span>} <span class="pr">options</span>={<span class="vr">options</span>} <span class="an">/&gt;</span>}
+      <span class="an">/&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">type</span>=<span class="st-s">"submit"</span><span class="an">&gt;</span>Lưu<span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/form&gt;</span>
+  );
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useFieldArray — danh sách field động (thêm/xoá dòng)</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">InvoiceForm.jsx — thêm/xoá dòng sản phẩm</span><span class="cb-tag ct-ch">FIELD-ARRAY</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useForm</span>, <span class="vr">useFieldArray</span> } <span class="kw">from</span> <span class="st-s">"react-hook-form"</span>;
+
+<span class="kw">function</span> <span class="fn">InvoiceForm</span>() {
+  <span class="kw">const</span> { <span class="vr">control</span>, <span class="vr">register</span>, <span class="vr">handleSubmit</span> } = <span class="fn">useForm</span>({
+    <span class="vr">defaultValues</span>: { <span class="vr">items</span>: [{ <span class="vr">name</span>: <span class="st-s">""</span>, <span class="vr">qty</span>: <span class="nm">1</span> }] },
+  });
+  <span class="cm">// fields -&gt; mảng field hiện có; append/remove -&gt; thêm/xoá 1 dòng</span>
+  <span class="kw">const</span> { <span class="vr">fields</span>, <span class="vr">append</span>, <span class="vr">remove</span> } = <span class="fn">useFieldArray</span>({ <span class="vr">control</span>, <span class="vr">name</span>: <span class="st-s">"items"</span> });
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;form</span> <span class="pr">onSubmit</span>={<span class="fn">handleSubmit</span>((<span class="vr">data</span>) =&gt; <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">data</span>))}<span class="an">&gt;</span>
+      {<span class="vr">fields</span>.<span class="fn">map</span>((<span class="vr">field</span>, <span class="vr">index</span>) =&gt; (
+        <span class="an">&lt;div</span> <span class="pr">key</span>={<span class="vr">field</span>.<span class="vr">id</span>}<span class="an">&gt;</span> {<span class="cm">/* field.id ổn định, không dùng index làm key */</span>}
+          <span class="an">&lt;input</span> {...<span class="fn">register</span>(`items.${<span class="vr">index</span>}.name`)} <span class="pr">placeholder</span>=<span class="st-s">"Tên SP"</span> <span class="an">/&gt;</span>
+          <span class="an">&lt;input</span> <span class="pr">type</span>=<span class="st-s">"number"</span> {...<span class="fn">register</span>(`items.${<span class="vr">index</span>}.qty`)} <span class="an">/&gt;</span>
+          <span class="an">&lt;button</span> <span class="pr">type</span>=<span class="st-s">"button"</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">remove</span>(<span class="vr">index</span>)}<span class="an">&gt;</span>Xoá<span class="an">&lt;/button&gt;</span>
+        <span class="an">&lt;/div&gt;</span>
+      ))}
+      <span class="an">&lt;button</span> <span class="pr">type</span>=<span class="st-s">"button"</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">append</span>({ <span class="vr">name</span>: <span class="st-s">""</span>, <span class="vr">qty</span>: <span class="nm">1</span> })}<span class="an">&gt;</span>+ Thêm dòng<span class="an">&lt;/button&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">type</span>=<span class="st-s">"submit"</span><span class="an">&gt;</span>Lưu hoá đơn<span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/form&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Lưu ý:</strong> Khi render <code>fields</code>, luôn dùng <code>field.id</code> (do useFieldArray tự sinh) làm <code>key</code> — không dùng <code>index</code>, vì khi thêm/xoá dòng ở giữa, index sẽ bị lệch và React render nhầm dữ liệu.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+<!-- ════ BANNER — STATE TOÀN CỤC ════ -->
+<div class="cat-banner cb-sk">
+  <div class="cb-icon">🟣</div>
+  <div>
+    <div class="cb-badge">STATE TOÀN CỤC</div>
+    <div class="cb-title">Phần 3 — Quản lý State toàn cục</div>
+    <div class="cb-sub">Context API · Zustand · Redux Toolkit</div>
+  </div>
+</div>
+
+<!-- ════ S7 — CONTEXT API ════ -->
+<div class="section" id="s7">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">STATE</span>
+    <div><h2 class="sec-title">Context API — chia sẻ state không cần thư viện</h2>
+    <p class="sec-sub">Built-in trong React — đủ dùng cho state ít thay đổi (theme, auth user, ngôn ngữ...)</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Tạo Context + Provider + hook đọc context</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">AuthContext.jsx</span><span class="cb-tag ct-sk">CONTEXT</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">createContext</span>, <span class="vr">useContext</span>, <span class="vr">useState</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="cm">// 1. Tạo context — giá trị mặc định chỉ dùng khi thiếu Provider</span>
+<span class="kw">const</span> <span class="vr">AuthContext</span> = <span class="fn">createContext</span>(<span class="kw">null</span>);
+
+<span class="cm">// 2. Provider — bọc quanh phần cây component cần dùng chung state</span>
+<span class="kw">export</span> <span class="kw">function</span> <span class="fn">AuthProvider</span>({ <span class="vr">children</span> }) {
+  <span class="kw">const</span> [<span class="vr">user</span>, <span class="vr">setUser</span>] = <span class="fn">useState</span>(<span class="kw">null</span>);
+
+  <span class="kw">function</span> <span class="fn">login</span>(<span class="vr">userData</span>) { <span class="fn">setUser</span>(<span class="vr">userData</span>); }
+  <span class="kw">function</span> <span class="fn">logout</span>() { <span class="fn">setUser</span>(<span class="kw">null</span>); }
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;AuthContext.Provider</span> <span class="pr">value</span>={{ <span class="vr">user</span>, <span class="vr">login</span>, <span class="vr">logout</span> }}<span class="an">&gt;</span>
+      {<span class="vr">children</span>}
+    <span class="an">&lt;/AuthContext.Provider&gt;</span>
+  );
+}
+
+<span class="cm">// 3. Custom hook -&gt; nơi duy nhất gọi useContext, tiện dùng &amp; báo lỗi rõ ràng</span>
+<span class="kw">export</span> <span class="kw">function</span> <span class="fn">useAuth</span>() {
+  <span class="kw">const</span> <span class="vr">ctx</span> = <span class="fn">useContext</span>(<span class="vr">AuthContext</span>);
+  <span class="kw">if</span> (!<span class="vr">ctx</span>) <span class="kw">throw</span> <span class="kw">new</span> <span class="cl">Error</span>(<span class="st-s">"useAuth phải dùng bên trong AuthProvider"</span>);
+  <span class="kw">return</span> <span class="vr">ctx</span>;
+}</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">App.jsx &amp; Profile.jsx — bọc Provider &amp; dùng hook</span><span class="cb-tag ct-sk">USAGE</span></div>
+      <div class="cb-body"><pre><span class="cm">// App.jsx — bọc Provider quanh app (hoặc phần cây cần dùng)</span>
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    <span class="an">&lt;AuthProvider&gt;</span>
+      <span class="an">&lt;Profile</span> <span class="an">/&gt;</span>
+    <span class="an">&lt;/AuthProvider&gt;</span>
+  );
+}
+
+<span class="cm">// Profile.jsx — component con nào cũng đọc được, không cần truyền props qua từng cấp</span>
+<span class="kw">function</span> <span class="fn">Profile</span>() {
+  <span class="kw">const</span> { <span class="vr">user</span>, <span class="vr">logout</span> } = <span class="fn">useAuth</span>();
+  <span class="kw">if</span> (!<span class="vr">user</span>) <span class="kw">return</span> <span class="an">&lt;p&gt;</span>Chưa đăng nhập<span class="an">&lt;/p&gt;</span>;
+  <span class="kw">return</span> <span class="an">&lt;button</span> <span class="pr">onClick</span>={<span class="vr">logout</span>}<span class="an">&gt;</span>Đăng xuất {<span class="vr">user</span>.<span class="vr">name</span>}<span class="an">&lt;/button&gt;</span>;
+}</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Giới hạn của Context:</strong> Mọi component gọi <code>useContext</code> sẽ re-render khi <code>value</code> đổi — <strong>kể cả khi chỉ 1 field trong value thay đổi</strong>. Với state cập nhật liên tục (giỏ hàng, filter danh sách...), Context dễ gây re-render thừa → cân nhắc Zustand/Redux.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S8 — ZUSTAND ════ -->
+<div class="section" id="s8">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">STATE</span>
+    <div><h2 class="sec-title">Zustand — state toàn cục nhẹ &amp; đơn giản</h2>
+    <p class="sec-sub">Không cần Provider, không boilerplate — được ưa chuộng thay Redux cho phần lớn dự án vừa</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">terminal</span><span class="cb-tag ct-sk">INSTALL</span></div>
+      <div class="cb-body"><pre><span class="sh-prompt">$</span> <span class="sh-cmd">npm install</span> <span class="sh-arg">zustand</span></pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">cartStore.js — tạo store</span><span class="cb-tag ct-sk">ZUSTAND</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">create</span> } <span class="kw">from</span> <span class="st-s">"zustand"</span>;
+
+<span class="cm">// create() -&gt; trả về 1 hook dùng thẳng trong component, không cần Provider</span>
+<span class="kw">export</span> <span class="kw">const</span> <span class="vr">useCartStore</span> = <span class="fn">create</span>((<span class="vr">set</span>, <span class="vr">get</span>) =&gt; ({
+  <span class="vr">items</span>: [],
+  <span class="fn">addItem</span>: (<span class="vr">product</span>) =&gt;
+    <span class="fn">set</span>((<span class="vr">state</span>) =&gt; ({ <span class="vr">items</span>: [...<span class="vr">state</span>.<span class="vr">items</span>, <span class="vr">product</span>] })),
+  <span class="fn">removeItem</span>: (<span class="vr">id</span>) =&gt;
+    <span class="fn">set</span>((<span class="vr">state</span>) =&gt; ({ <span class="vr">items</span>: <span class="vr">state</span>.<span class="vr">items</span>.<span class="fn">filter</span>((<span class="vr">i</span>) =&gt; <span class="vr">i</span>.<span class="vr">id</span> !== <span class="vr">id</span>) })),
+  <span class="fn">clear</span>: () =&gt; <span class="fn">set</span>({ <span class="vr">items</span>: [] }),
+  <span class="cm">// get() -&gt; đọc state hiện tại bên trong 1 action khác (tính tổng tiền)</span>
+  <span class="fn">total</span>: () =&gt; <span class="fn">get</span>().<span class="vr">items</span>.<span class="fn">reduce</span>((<span class="vr">sum</span>, <span class="vr">i</span>) =&gt; <span class="vr">sum</span> + <span class="vr">i</span>.<span class="vr">price</span>, <span class="nm">0</span>),
+}));</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">CartBadge.jsx — dùng store trực tiếp, không Provider</span><span class="cb-tag ct-sk">USAGE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useCartStore</span> } <span class="kw">from</span> <span class="st-s">"./cartStore"</span>;
+
+<span class="kw">function</span> <span class="fn">CartBadge</span>() {
+  <span class="cm">// Selector -&gt; chỉ subscribe field "items", component KHÔNG re-render khi field khác đổi</span>
+  <span class="kw">const</span> <span class="vr">items</span> = <span class="fn">useCartStore</span>((<span class="vr">state</span>) =&gt; <span class="vr">state</span>.<span class="vr">items</span>);
+  <span class="kw">return</span> <span class="an">&lt;span&gt;</span>Giỏ hàng: {<span class="vr">items</span>.<span class="vr">length</span>}<span class="an">&lt;/span&gt;</span>;
+}
+
+<span class="kw">function</span> <span class="fn">AddToCartButton</span>({ <span class="vr">product</span> }) {
+  <span class="kw">const</span> <span class="vr">addItem</span> = <span class="fn">useCartStore</span>((<span class="vr">state</span>) =&gt; <span class="vr">state</span>.<span class="vr">addItem</span>);
+  <span class="kw">return</span> <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">addItem</span>(<span class="vr">product</span>)}<span class="an">&gt;</span>Thêm vào giỏ<span class="an">&lt;/button&gt;</span>;
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Vì sao Zustand ít gây re-render hơn Context:</strong> Mỗi component chỉ <strong>subscribe đúng phần state nó cần</strong> qua selector (<code>state =&gt; state.items</code>) — field khác trong store đổi sẽ không làm component này render lại, khác với Context vốn re-render toàn bộ khi <code>value</code> đổi.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S9 — REDUX TOOLKIT ════ -->
+<div class="section" id="s9">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">STATE</span>
+    <div><h2 class="sec-title">Redux Toolkit — khi app đủ lớn &amp; cần chuẩn hoá</h2>
+    <p class="sec-sub">Cách viết Redux hiện đại (thay thế Redux cũ rườm rà) — mạnh về debug &amp; quy ước rõ ràng</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">terminal</span><span class="cb-tag ct-sk">INSTALL</span></div>
+      <div class="cb-body"><pre><span class="sh-prompt">$</span> <span class="sh-cmd">npm install</span> <span class="sh-arg">@reduxjs/toolkit react-redux</span></pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">counterSlice.js — createSlice</span><span class="cb-tag ct-sk">SLICE</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">createSlice</span> } <span class="kw">from</span> <span class="st-s">"@reduxjs/toolkit"</span>;
+
+<span class="cm">// createSlice -&gt; gộp state ban đầu + reducers + action creators trong 1 chỗ</span>
+<span class="kw">const</span> <span class="vr">counterSlice</span> = <span class="fn">createSlice</span>({
+  <span class="vr">name</span>: <span class="st-s">"counter"</span>,
+  <span class="vr">initialState</span>: { <span class="vr">value</span>: <span class="nm">0</span> },
+  <span class="vr">reducers</span>: {
+    <span class="cm">// Nhờ Immer bên trong RTK, có thể viết "mutate" trực tiếp mà vẫn immutable</span>
+    <span class="fn">increment</span>: (<span class="vr">state</span>) =&gt; { <span class="vr">state</span>.<span class="vr">value</span> += <span class="nm">1</span>; },
+    <span class="fn">decrement</span>: (<span class="vr">state</span>) =&gt; { <span class="vr">state</span>.<span class="vr">value</span> -= <span class="nm">1</span>; },
+    <span class="fn">addBy</span>: (<span class="vr">state</span>, <span class="vr">action</span>) =&gt; { <span class="vr">state</span>.<span class="vr">value</span> += <span class="vr">action</span>.<span class="vr">payload</span>; },
+  },
+});
+
+<span class="kw">export</span> <span class="kw">const</span> { <span class="vr">increment</span>, <span class="vr">decrement</span>, <span class="vr">addBy</span> } = <span class="vr">counterSlice</span>.<span class="vr">actions</span>;
+<span class="kw">export</span> <span class="kw">default</span> <span class="vr">counterSlice</span>.<span class="vr">reducer</span>;</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">store.js &amp; Counter.jsx — cấu hình store &amp; dùng trong component</span><span class="cb-tag ct-sk">STORE</span></div>
+      <div class="cb-body"><pre><span class="cm">// store.js</span>
+<span class="kw">import</span> { <span class="vr">configureStore</span> } <span class="kw">from</span> <span class="st-s">"@reduxjs/toolkit"</span>;
+<span class="kw">import</span> <span class="vr">counterReducer</span> <span class="kw">from</span> <span class="st-s">"./counterSlice"</span>;
+
+<span class="kw">export</span> <span class="kw">const</span> <span class="vr">store</span> = <span class="fn">configureStore</span>({
+  <span class="vr">reducer</span>: { <span class="vr">counter</span>: <span class="vr">counterReducer</span> }, <span class="cm">// gom nhiều slice tại đây</span>
+});
+
+<span class="cm">// main.jsx — bọc &lt;Provider&gt; ở gốc app (chỉ 1 lần, khác Context — không cần nhiều Provider)</span>
+<span class="an">&lt;Provider</span> <span class="pr">store</span>={<span class="vr">store</span>}<span class="an">&gt;</span><span class="an">&lt;App</span> <span class="an">/&gt;</span><span class="an">&lt;/Provider&gt;</span>
+
+<span class="cm">// Counter.jsx — đọc/ghi state bằng useSelector &amp; useDispatch</span>
+<span class="kw">import</span> { <span class="vr">useSelector</span>, <span class="vr">useDispatch</span> } <span class="kw">from</span> <span class="st-s">"react-redux"</span>;
+<span class="kw">import</span> { <span class="vr">increment</span>, <span class="vr">decrement</span> } <span class="kw">from</span> <span class="st-s">"./counterSlice"</span>;
+
+<span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> <span class="vr">value</span> = <span class="fn">useSelector</span>((<span class="vr">state</span>) =&gt; <span class="vr">state</span>.<span class="vr">counter</span>.<span class="vr">value</span>);
+  <span class="kw">const</span> <span class="vr">dispatch</span> = <span class="fn">useDispatch</span>();
+  <span class="kw">return</span> (
+    <span class="an">&lt;&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">dispatch</span>(<span class="fn">decrement</span>())}<span class="an">&gt;</span>-<span class="an">&lt;/button&gt;</span>
+      <span class="an">&lt;span&gt;</span>{<span class="vr">value</span>}<span class="an">&lt;/span&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">dispatch</span>(<span class="fn">increment</span>())}<span class="an">&gt;</span>+<span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <table class="tbl">
+      <tr><th>Tiêu chí</th><th>Context API</th><th>Zustand</th><th>Redux Toolkit</th></tr>
+      <tr><td>Boilerplate</td><td>Ít</td><td>Rất ít</td><td>Trung bình</td></tr>
+      <tr><td>Cần Provider?</td><td>Có, bắt buộc</td><td>Không</td><td>Có, 1 lần ở gốc</td></tr>
+      <tr><td>Tránh re-render thừa</td><td>Kém, cần tự chia nhỏ Context</td><td>Tốt (selector)</td><td>Tốt (selector)</td></tr>
+      <tr><td>DevTools debug</td><td>Không có</td><td>Có (middleware)</td><td>Rất mạnh, built-in</td></tr>
+      <tr><td>Phù hợp</td><td>State ít đổi: theme, auth</td><td>Đa số dự án vừa/nhỏ</td><td>App lớn, nhiều team</td></tr>
+    </table>
+  </div>
+</div>
+
+<hr class="dv">
+<!-- ════ BANNER — DATA FETCHING ════ -->
+<div class="cat-banner cb-au">
+  <div class="cb-icon">🟡</div>
+  <div>
+    <div class="cb-badge">DATA FETCHING</div>
+    <div class="cb-title">Phần 4 — Data Fetching &amp; Cache</div>
+    <div class="cb-sub">Axios · TanStack Query · Invalidation</div>
+  </div>
+</div>
+
+<!-- ════ S10 — AXIOS ════ -->
+<div class="section" id="s10">
+  <div class="sec-head">
+    <span class="sec-tag st-au">DATA</span>
+    <div><h2 class="sec-title">Axios — gọi API chuyên nghiệp hơn fetch</h2>
+    <p class="sec-sub">Tự parse JSON, interceptor để gắn token, huỷ request, config base URL 1 chỗ</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">terminal</span><span class="cb-tag ct-au">INSTALL</span></div>
+      <div class="cb-body"><pre><span class="sh-prompt">$</span> <span class="sh-cmd">npm install</span> <span class="sh-arg">axios</span></pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">api/axiosClient.js — instance dùng chung + interceptor</span><span class="cb-tag ct-au">AXIOS</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> <span class="vr">axios</span> <span class="kw">from</span> <span class="st-s">"axios"</span>;
+
+<span class="cm">// Tạo instance riêng -&gt; cấu hình 1 lần, dùng lại khắp app</span>
+<span class="kw">const</span> <span class="vr">api</span> = <span class="vr">axios</span>.<span class="fn">create</span>({
+  <span class="vr">baseURL</span>: <span class="st-s">"https://api.example.com"</span>,
+  <span class="vr">timeout</span>: <span class="nm">10000</span>,
+});
+
+<span class="cm">// Interceptor request -&gt; tự động gắn token vào mọi request</span>
+<span class="vr">api</span>.<span class="vr">interceptors</span>.<span class="vr">request</span>.<span class="fn">use</span>((<span class="vr">config</span>) =&gt; {
+  <span class="kw">const</span> <span class="vr">token</span> = <span class="vr">localStorage</span>.<span class="fn">getItem</span>(<span class="st-s">"token"</span>);
+  <span class="kw">if</span> (<span class="vr">token</span>) <span class="vr">config</span>.<span class="vr">headers</span>.<span class="vr">Authorization</span> = `Bearer ${<span class="vr">token</span>}`;
+  <span class="kw">return</span> <span class="vr">config</span>;
+});
+
+<span class="cm">// Interceptor response -&gt; xử lý lỗi tập trung, vd token hết hạn thì logout</span>
+<span class="vr">api</span>.<span class="vr">interceptors</span>.<span class="vr">response</span>.<span class="fn">use</span>(
+  (<span class="vr">res</span>) =&gt; <span class="vr">res</span>,
+  (<span class="vr">error</span>) =&gt; {
+    <span class="kw">if</span> (<span class="vr">error</span>.<span class="vr">response</span>?.<span class="vr">status</span> === <span class="nm">401</span>) {
+      <span class="vr">localStorage</span>.<span class="fn">removeItem</span>(<span class="st-s">"token"</span>);
+      <span class="vr">window</span>.<span class="vr">location</span>.<span class="vr">href</span> = <span class="st-s">"/login"</span>;
+    }
+    <span class="kw">return</span> <span class="cl">Promise</span>.<span class="fn">reject</span>(<span class="vr">error</span>);
+  }
+);
+
+<span class="kw">export</span> <span class="kw">default</span> <span class="vr">api</span>;</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">userApi.js — hàm gọi API tách riêng theo tài nguyên</span><span class="cb-tag ct-au">CALLS</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> <span class="vr">api</span> <span class="kw">from</span> <span class="st-s">"./axiosClient"</span>;
+
+<span class="kw">export</span> <span class="kw">const</span> <span class="vr">userApi</span> = {
+  <span class="fn">getAll</span>: () =&gt; <span class="vr">api</span>.<span class="fn">get</span>(<span class="st-s">"/users"</span>).<span class="fn">then</span>((<span class="vr">res</span>) =&gt; <span class="vr">res</span>.<span class="vr">data</span>),
+  <span class="fn">getById</span>: (<span class="vr">id</span>) =&gt; <span class="vr">api</span>.<span class="fn">get</span>(`/users/${<span class="vr">id</span>}`).<span class="fn">then</span>((<span class="vr">res</span>) =&gt; <span class="vr">res</span>.<span class="vr">data</span>),
+  <span class="fn">create</span>: (<span class="vr">payload</span>) =&gt; <span class="vr">api</span>.<span class="fn">post</span>(<span class="st-s">"/users"</span>, <span class="vr">payload</span>).<span class="fn">then</span>((<span class="vr">res</span>) =&gt; <span class="vr">res</span>.<span class="vr">data</span>),
+  <span class="fn">update</span>: (<span class="vr">id</span>, <span class="vr">payload</span>) =&gt; <span class="vr">api</span>.<span class="fn">put</span>(`/users/${<span class="vr">id</span>}`, <span class="vr">payload</span>).<span class="fn">then</span>((<span class="vr">res</span>) =&gt; <span class="vr">res</span>.<span class="vr">data</span>),
+  <span class="fn">remove</span>: (<span class="vr">id</span>) =&gt; <span class="vr">api</span>.<span class="fn">delete</span>(`/users/${<span class="vr">id</span>}`),
+};</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Axios vs fetch:</strong> <code>fetch</code> built-in, không cần cài, nhưng phải tự <code>res.json()</code>, tự parse lỗi HTTP (fetch không throw khi status 404/500). <strong>Axios</strong> tự parse JSON, tự throw khi lỗi, hỗ trợ interceptor &amp; huỷ request gọn hơn — vì vậy được dùng phổ biến trong dự án thực tế.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S11 — TANSTACK QUERY ════ -->
+<div class="section" id="s11">
+  <div class="sec-head">
+    <span class="sec-tag st-au">DATA</span>
+    <div><h2 class="sec-title">TanStack Query — useQuery &amp; useMutation</h2>
+    <p class="sec-sub">Quản lý dữ liệu server: tự cache, tự loading/error, tự refetch — không cần useState + useEffect thủ công</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">terminal</span><span class="cb-tag ct-au">INSTALL</span></div>
+      <div class="cb-body"><pre><span class="sh-prompt">$</span> <span class="sh-cmd">npm install</span> <span class="sh-arg">@tanstack/react-query</span></pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">main.jsx — bọc QueryClientProvider (1 lần ở gốc app)</span><span class="cb-tag ct-au">SETUP</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">QueryClient</span>, <span class="vr">QueryClientProvider</span> } <span class="kw">from</span> <span class="st-s">"@tanstack/react-query"</span>;
+
+<span class="kw">const</span> <span class="vr">queryClient</span> = <span class="kw">new</span> <span class="fn">QueryClient</span>();
+
+<span class="an">&lt;QueryClientProvider</span> <span class="pr">client</span>={<span class="vr">queryClient</span>}<span class="an">&gt;</span>
+  <span class="an">&lt;App</span> <span class="an">/&gt;</span>
+<span class="an">&lt;/QueryClientProvider&gt;</span></pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">UserList.jsx — useQuery thay cho useEffect + fetch thủ công</span><span class="cb-tag ct-au">USE-QUERY</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useQuery</span> } <span class="kw">from</span> <span class="st-s">"@tanstack/react-query"</span>;
+<span class="kw">import</span> { <span class="vr">userApi</span> } <span class="kw">from</span> <span class="st-s">"./userApi"</span>;
+
+<span class="kw">function</span> <span class="fn">UserList</span>() {
+  <span class="cm">// queryKey -&gt; định danh dữ liệu để cache; queryFn -&gt; hàm lấy dữ liệu</span>
+  <span class="kw">const</span> { <span class="vr">data</span>, <span class="vr">isLoading</span>, <span class="vr">isError</span>, <span class="vr">error</span> } = <span class="fn">useQuery</span>({
+    <span class="vr">queryKey</span>: [<span class="st-s">"users"</span>],
+    <span class="vr">queryFn</span>: <span class="vr">userApi</span>.<span class="vr">getAll</span>,
+    <span class="vr">staleTime</span>: <span class="nm">60_000</span>, <span class="cm">// 1 phút -&gt; trong thời gian này không tự fetch lại</span>
+  });
+
+  <span class="kw">if</span> (<span class="vr">isLoading</span>) <span class="kw">return</span> <span class="an">&lt;p&gt;</span>Đang tải...<span class="an">&lt;/p&gt;</span>;
+  <span class="kw">if</span> (<span class="vr">isError</span>) <span class="kw">return</span> <span class="an">&lt;p&gt;</span>Lỗi: {<span class="vr">error</span>.<span class="vr">message</span>}<span class="an">&lt;/p&gt;</span>;
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;ul&gt;</span>
+      {<span class="vr">data</span>.<span class="fn">map</span>((<span class="vr">u</span>) =&gt; <span class="an">&lt;li</span> <span class="pr">key</span>={<span class="vr">u</span>.<span class="vr">id</span>}<span class="an">&gt;</span>{<span class="vr">u</span>.<span class="vr">name</span>}<span class="an">&lt;/li&gt;</span>)}
+    <span class="an">&lt;/ul&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">CreateUserForm.jsx — useMutation cho POST/PUT/DELETE</span><span class="cb-tag ct-au">USE-MUTATION</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useMutation</span>, <span class="vr">useQueryClient</span> } <span class="kw">from</span> <span class="st-s">"@tanstack/react-query"</span>;
+<span class="kw">import</span> { <span class="vr">userApi</span> } <span class="kw">from</span> <span class="st-s">"./userApi"</span>;
+
+<span class="kw">function</span> <span class="fn">CreateUserForm</span>() {
+  <span class="kw">const</span> <span class="vr">queryClient</span> = <span class="fn">useQueryClient</span>();
+
+  <span class="kw">const</span> <span class="vr">mutation</span> = <span class="fn">useMutation</span>({
+    <span class="vr">mutationFn</span>: <span class="vr">userApi</span>.<span class="vr">create</span>,
+    <span class="fn">onSuccess</span>: () =&gt; {
+      <span class="cm">// Tạo xong -&gt; đánh dấu cache "users" là cũ -&gt; TanStack Query tự fetch lại</span>
+      <span class="vr">queryClient</span>.<span class="fn">invalidateQueries</span>({ <span class="vr">queryKey</span>: [<span class="st-s">"users"</span>] });
+    },
+  });
+
+  <span class="kw">function</span> <span class="fn">handleSubmit</span>(<span class="vr">e</span>) {
+    <span class="vr">e</span>.<span class="fn">preventDefault</span>();
+    <span class="vr">mutation</span>.<span class="fn">mutate</span>({ <span class="vr">name</span>: <span class="st-s">"Người dùng mới"</span> });
+  }
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;form</span> <span class="pr">onSubmit</span>={<span class="vr">handleSubmit</span>}<span class="an">&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">type</span>=<span class="st-s">"submit"</span> <span class="pr">disabled</span>={<span class="vr">mutation</span>.<span class="vr">isPending</span>}<span class="an">&gt;</span>
+        {<span class="vr">mutation</span>.<span class="vr">isPending</span> ? <span class="st-s">"Đang tạo..."</span> : <span class="st-s">"Tạo user"</span>}
+      <span class="an">&lt;/button&gt;</span>
+    <span class="an">&lt;/form&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">useQuery vs useMutation:</strong> <code>useQuery</code> dùng để <strong>đọc</strong> dữ liệu (GET), tự chạy khi component mount. <code>useMutation</code> dùng để <strong>thay đổi</strong> dữ liệu (POST/PUT/DELETE), chỉ chạy khi bạn gọi <code>mutate()</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S12 — CACHE & INVALIDATION ════ -->
+<div class="section" id="s12">
+  <div class="sec-head">
+    <span class="sec-tag st-au">DATA</span>
+    <div><h2 class="sec-title">Cache, Invalidation &amp; Refetch</h2>
+    <p class="sec-sub">Hiểu vòng đời dữ liệu trong TanStack Query để tránh hiển thị dữ liệu cũ</p></div>
+  </div>
+  <div class="sub">
+    <div class="arch">
+      <div class="arch-box" style="border-color:rgba(255,208,96,.3)">
+        <div class="arch-title" style="color:var(--au)">🟢 fresh</div>
+        <div class="arch-desc">Vừa fetch xong,<br>trong staleTime</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(255,140,80,.3)">
+        <div class="arch-title" style="color:var(--orange)">🟠 stale</div>
+        <div class="arch-desc">Hết staleTime,<br>coi như "cũ"</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(91,168,255,.3)">
+        <div class="arch-title" style="color:var(--ins)">🔵 refetch</div>
+        <div class="arch-desc">Focus lại tab / mount lại<br>-&gt; tự fetch nền</div>
+      </div>
+    </div>
+    <table class="tbl">
+      <tr><th>Option / API</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>staleTime</code></td><td>Thời gian dữ liệu được coi là "còn mới" — trong khoảng này sẽ không tự fetch lại.</td></tr>
+      <tr><td><code>gcTime</code> (trước là cacheTime)</td><td>Thời gian giữ cache trong bộ nhớ sau khi không còn component nào dùng.</td></tr>
+      <tr><td><code>refetchOnWindowFocus</code></td><td>Tự fetch lại khi người dùng quay lại tab trình duyệt (mặc định: bật).</td></tr>
+      <tr><td><code>invalidateQueries()</code></td><td>Đánh dấu 1 queryKey là "cũ" — kích hoạt fetch lại ở lần dùng tiếp theo.</td></tr>
+      <tr><td><code>queryClient.setQueryData()</code></td><td>Ghi đè cache thủ công — dùng cho optimistic update.</td></tr>
+    </table>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Đặt queryKey theo tham số:</strong> Khi query phụ thuộc biến (vd trang, id), luôn đưa biến đó vào <code>queryKey</code>: <code>["users", page]</code> — TanStack Query coi mỗi tổ hợp key là 1 cache riêng, tự fetch lại khi <code>page</code> đổi mà không cần bạn tự viết <code>useEffect</code>.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+<!-- ════ BANNER — HOOKS CỐT LÕI ════ -->
+<div class="cat-banner cb-oc">
+  <div class="cb-icon">🔄</div>
+  <div>
+    <div class="cb-badge">HOOKS CỐT LÕI</div>
+    <div class="cb-title">Phần 5 — Hooks cốt lõi của React</div>
+    <div class="cb-sub">useState · useEffect · useRef · useMemo · useCallback · useContext · useReducer · Custom Hook</div>
+  </div>
+</div>
+
+<!-- ════ S13 — useState & useEffect ════ -->
+<div class="section" id="s13">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">HOOK</span>
+    <div><h2 class="sec-title">useState &amp; useEffect</h2>
+    <p class="sec-sub">2 hook nền tảng — gần như mọi component đều dùng đến ít nhất 1 trong 2</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useState — lưu &amp; cập nhật state cục bộ</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Counter.jsx</span><span class="cb-tag ct-oc">useState</span></div>
+      <div class="cb-body"><pre><span class="kw">const</span> [<span class="vr">count</span>, <span class="vr">setCount</span>] = <span class="fn">useState</span>(<span class="nm">0</span>);
+
+<span class="cm">// Cập nhật dựa trên giá trị mới -&gt; luôn dùng functional update để tránh stale state</span>
+<span class="fn">setCount</span>((<span class="vr">prev</span>) =&gt; <span class="vr">prev</span> + <span class="nm">1</span>);
+
+<span class="cm">// State là object/array -&gt; luôn tạo bản sao mới, không mutate trực tiếp</span>
+<span class="kw">const</span> [<span class="vr">user</span>, <span class="vr">setUser</span>] = <span class="fn">useState</span>({ <span class="vr">name</span>: <span class="st-s">"An"</span>, <span class="vr">age</span>: <span class="nm">20</span> });
+<span class="fn">setUser</span>((<span class="vr">prev</span>) =&gt; ({ ...<span class="vr">prev</span>, <span class="vr">age</span>: <span class="vr">prev</span>.<span class="vr">age</span> + <span class="nm">1</span> }));</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useEffect — chạy side effect &amp; dọn dẹp</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">UserProfile.jsx — fetch dữ liệu khi id đổi</span><span class="cb-tag ct-oc">useEffect</span></div>
+      <div class="cb-body"><pre><span class="fn">useEffect</span>(() =&gt; {
+  <span class="kw">const</span> <span class="vr">controller</span> = <span class="kw">new</span> <span class="fn">AbortController</span>();
+
+  <span class="kw">async</span> <span class="kw">function</span> <span class="fn">load</span>() {
+    <span class="kw">const</span> <span class="vr">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(`/api/users/${<span class="vr">id</span>}`, { <span class="vr">signal</span>: <span class="vr">controller</span>.<span class="vr">signal</span> });
+    <span class="kw">const</span> <span class="vr">data</span> = <span class="kw">await</span> <span class="vr">res</span>.<span class="fn">json</span>();
+    <span class="fn">setUser</span>(<span class="vr">data</span>);
+  }
+  <span class="fn">load</span>();
+
+  <span class="cm">// Cleanup -&gt; chạy trước lần effect kế tiếp hoặc khi unmount -&gt; huỷ request cũ</span>
+  <span class="kw">return</span> () =&gt; <span class="vr">controller</span>.<span class="fn">abort</span>();
+}, [<span class="vr">id</span>]); <span class="cm">// dependency array -&gt; effect chạy lại mỗi khi "id" đổi</span></pre></div>
+    </div>
+    <table class="tbl">
+      <tr><th>Dependency array</th><th>Khi nào effect chạy</th></tr>
+      <tr><td>Không có (bỏ trống)</td><td>Sau mỗi lần render — hiếm khi cần, dễ gây lặp vô hạn</td></tr>
+      <tr><td><code>[]</code></td><td>Chỉ 1 lần, ngay sau lần render đầu (giống componentDidMount)</td></tr>
+      <tr><td><code>[id]</code></td><td>Lần đầu + mỗi khi <code>id</code> thay đổi giá trị</td></tr>
+    </table>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Lỗi hay gặp:</strong> Đưa 1 object/array/function <strong>tạo mới mỗi render</strong> vào dependency array sẽ khiến effect chạy lại vô hạn, vì mỗi lần so sánh, tham chiếu đều khác nhau — dù nội dung giống hệt.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S14 — useRef, useMemo, useCallback ════ -->
+<div class="section" id="s14">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">HOOK</span>
+    <div><h2 class="sec-title">useRef, useMemo &amp; useCallback</h2>
+    <p class="sec-sub">3 hook giữ giá trị "bền" qua các lần render mà không gây re-render</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useRef — tham chiếu DOM &amp; lưu giá trị không cần re-render</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">SearchInput.jsx</span><span class="cb-tag ct-oc">useRef</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">SearchInput</span>() {
+  <span class="kw">const</span> <span class="vr">inputRef</span> = <span class="fn">useRef</span>(<span class="kw">null</span>);   <span class="cm">// tham chiếu tới DOM node</span>
+  <span class="kw">const</span> <span class="vr">renderCount</span> = <span class="fn">useRef</span>(<span class="nm">0</span>); <span class="cm">// đếm số lần render mà KHÔNG gây render lại</span>
+  <span class="vr">renderCount</span>.<span class="vr">current</span> += <span class="nm">1</span>;
+
+  <span class="kw">function</span> <span class="fn">focusInput</span>() {
+    <span class="vr">inputRef</span>.<span class="vr">current</span>.<span class="fn">focus</span>(); <span class="cm">// gọi thẳng DOM API</span>
+  }
+
+  <span class="kw">return</span> <span class="an">&lt;input</span> <span class="pr">ref</span>={<span class="vr">inputRef</span>} <span class="pr">onFocus</span>={<span class="vr">focusInput</span>} <span class="an">/&gt;</span>;
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useMemo — cache kết quả tính toán tốn kém</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">ProductList.jsx</span><span class="cb-tag ct-oc">useMemo</span></div>
+      <div class="cb-body"><pre><span class="cm">// Chỉ tính lại "filtered" khi products hoặc keyword đổi — không phải mọi lần render</span>
+<span class="kw">const</span> <span class="vr">filtered</span> = <span class="fn">useMemo</span>(() =&gt; {
+  <span class="kw">return</span> <span class="vr">products</span>.<span class="fn">filter</span>((<span class="vr">p</span>) =&gt; <span class="vr">p</span>.<span class="vr">name</span>.<span class="fn">includes</span>(<span class="vr">keyword</span>));
+}, [<span class="vr">products</span>, <span class="vr">keyword</span>]);</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useCallback — cache tham chiếu hàm</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">TodoList.jsx — giữ ổn định hàm truyền cho component con memo hoá</span><span class="cb-tag ct-oc">useCallback</span></div>
+      <div class="cb-body"><pre><span class="cm">// Không có useCallback: mỗi render tạo hàm mới -&gt; TodoItem (dù đã React.memo) vẫn re-render</span>
+<span class="kw">const</span> <span class="vr">handleToggle</span> = <span class="fn">useCallback</span>((<span class="vr">id</span>) =&gt; {
+  <span class="fn">setTodos</span>((<span class="vr">prev</span>) =&gt; <span class="vr">prev</span>.<span class="fn">map</span>((<span class="vr">t</span>) =&gt; (<span class="vr">t</span>.<span class="vr">id</span> === <span class="vr">id</span> ? { ...<span class="vr">t</span>, <span class="vr">done</span>: !<span class="vr">t</span>.<span class="vr">done</span> } : <span class="vr">t</span>)));
+}, []); <span class="cm">// [] -&gt; hàm KHÔNG bao giờ đổi tham chiếu giữa các lần render</span>
+
+<span class="kw">return</span> <span class="vr">todos</span>.<span class="fn">map</span>((<span class="vr">t</span>) =&gt; <span class="an">&lt;TodoItem</span> <span class="pr">key</span>={<span class="vr">t</span>.<span class="vr">id</span>} <span class="pr">todo</span>={<span class="vr">t</span>} <span class="pr">onToggle</span>={<span class="vr">handleToggle</span>} <span class="an">/&gt;</span>);</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Khi nào thật sự cần useMemo/useCallback:</strong> Chỉ khi tính toán <strong>tốn kém rõ rệt</strong>, hoặc truyền giá trị/hàm xuống component con đã <code>React.memo</code>. Lạm dụng cho mọi biến/hàm chỉ làm code rối và tốn bộ nhớ so sánh mà không cải thiện hiệu năng đáng kể.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S15 — useContext & useReducer ════ -->
+<div class="section" id="s15">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">HOOK</span>
+    <div><h2 class="sec-title">useContext &amp; useReducer</h2>
+    <p class="sec-sub">Đọc context (đã nói ở phần State) &amp; quản lý state phức tạp có nhiều hành động</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">useReducer — thay useState khi state có nhiều action liên quan</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">cartReducer.js — reducer thuần</span><span class="cb-tag ct-oc">useReducer</span></div>
+      <div class="cb-body"><pre><span class="cm">// reducer -&gt; hàm thuần (state, action) =&gt; newState, KHÔNG mutate state cũ</span>
+<span class="kw">function</span> <span class="fn">cartReducer</span>(<span class="vr">state</span>, <span class="vr">action</span>) {
+  <span class="kw">switch</span> (<span class="vr">action</span>.<span class="vr">type</span>) {
+    <span class="kw">case</span> <span class="st-s">"ADD_ITEM"</span>:
+      <span class="kw">return</span> { ...<span class="vr">state</span>, <span class="vr">items</span>: [...<span class="vr">state</span>.<span class="vr">items</span>, <span class="vr">action</span>.<span class="vr">payload</span>] };
+    <span class="kw">case</span> <span class="st-s">"REMOVE_ITEM"</span>:
+      <span class="kw">return</span> { ...<span class="vr">state</span>, <span class="vr">items</span>: <span class="vr">state</span>.<span class="vr">items</span>.<span class="fn">filter</span>((<span class="vr">i</span>) =&gt; <span class="vr">i</span>.<span class="vr">id</span> !== <span class="vr">action</span>.<span class="vr">payload</span>) };
+    <span class="kw">case</span> <span class="st-s">"CLEAR"</span>:
+      <span class="kw">return</span> { ...<span class="vr">state</span>, <span class="vr">items</span>: [] };
+    <span class="kw">default</span>:
+      <span class="kw">return</span> <span class="vr">state</span>;
+  }
+}
+
+<span class="kw">function</span> <span class="fn">Cart</span>() {
+  <span class="kw">const</span> [<span class="vr">state</span>, <span class="vr">dispatch</span>] = <span class="fn">useReducer</span>(<span class="vr">cartReducer</span>, { <span class="vr">items</span>: [] });
+
+  <span class="kw">return</span> (
+    <span class="an">&lt;button</span> <span class="pr">onClick</span>={() =&gt; <span class="fn">dispatch</span>({ <span class="vr">type</span>: <span class="st-s">"ADD_ITEM"</span>, <span class="vr">payload</span>: { <span class="vr">id</span>: <span class="nm">1</span> } })}<span class="an">&gt;</span>
+      Thêm ({<span class="vr">state</span>.<span class="vr">items</span>.<span class="vr">length</span>})
+    <span class="an">&lt;/button&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">📌</span>
+      <div><strong style="color:var(--text)">Khi nào chọn useReducer thay useState:</strong> Khi state có <strong>nhiều field liên quan với nhau</strong>, hoặc có nhiều "hành động" khác nhau tác động lên cùng 1 state (thêm, xoá, sửa, reset...) — gom logic cập nhật vào 1 reducer giúp code dễ theo dõi hơn nhiều <code>useState</code> rời rạc.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S16 — CUSTOM HOOK ════ -->
+<div class="section" id="s16">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">HOOK</span>
+    <div><h2 class="sec-title">Tự viết Custom Hook</h2>
+    <p class="sec-sub">Đóng gói logic tái sử dụng — chỉ là 1 hàm JS bắt đầu bằng "use"</p></div>
+  </div>
+  <div class="sub">
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">useDebounce.js — hook debounce tái sử dụng</span><span class="cb-tag ct-oc">CUSTOM HOOK</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">useState</span>, <span class="vr">useEffect</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="cm">// Nhận value + delay -&gt; trả về giá trị đã "trễ" delay ms so với value gốc</span>
+<span class="kw">function</span> <span class="fn">useDebounce</span>(<span class="vr">value</span>, <span class="vr">delay</span> = <span class="nm">400</span>) {
+  <span class="kw">const</span> [<span class="vr">debounced</span>, <span class="vr">setDebounced</span>] = <span class="fn">useState</span>(<span class="vr">value</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> <span class="vr">timer</span> = <span class="fn">setTimeout</span>(() =&gt; <span class="fn">setDebounced</span>(<span class="vr">value</span>), <span class="vr">delay</span>);
+    <span class="kw">return</span> () =&gt; <span class="fn">clearTimeout</span>(<span class="vr">timer</span>); <span class="cm">// huỷ timer cũ nếu value đổi trước khi hết delay</span>
+  }, [<span class="vr">value</span>, <span class="vr">delay</span>]);
+
+  <span class="kw">return</span> <span class="vr">debounced</span>;
+}
+
+<span class="kw">export</span> <span class="kw">default</span> <span class="vr">useDebounce</span>;</pre></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">SearchBox.jsx — dùng lại custom hook, gọn như hook có sẵn</span><span class="cb-tag ct-oc">USAGE</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">SearchBox</span>() {
+  <span class="kw">const</span> [<span class="vr">keyword</span>, <span class="vr">setKeyword</span>] = <span class="fn">useState</span>(<span class="st-s">""</span>);
+  <span class="kw">const</span> <span class="vr">debouncedKeyword</span> = <span class="fn">useDebounce</span>(<span class="vr">keyword</span>, <span class="nm">500</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">if</span> (!<span class="vr">debouncedKeyword</span>) <span class="kw">return</span>;
+    <span class="fn">searchApi</span>(<span class="vr">debouncedKeyword</span>); <span class="cm">// chỉ gọi API sau khi người dùng ngừng gõ 500ms</span>
+  }, [<span class="vr">debouncedKeyword</span>]);
+
+  <span class="kw">return</span> <span class="an">&lt;input</span> <span class="pr">value</span>={<span class="vr">keyword</span>} <span class="pr">onChange</span>={(<span class="vr">e</span>) =&gt; <span class="fn">setKeyword</span>(<span class="vr">e</span>.<span class="vr">target</span>.<span class="vr">value</span>)} <span class="an">/&gt;</span>;
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Quy tắc đặt tên &amp; dùng hook:</strong> Custom hook luôn bắt đầu bằng <code>use</code> (để React lint kiểm tra được Rules of Hooks) · chỉ gọi hook ở top-level component/hook khác, <strong>không gọi trong if/for/hàm lồng</strong>.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+<!-- ════ S17 — THƯ VIỆN TIỆN ÍCH KHÁC ════ -->
+<div class="section" id="s17">
+  <div class="sec-head">
+    <span class="sec-tag st-y">TIỆN ÍCH</span>
+    <div><h2 class="sec-title">clsx, dayjs, react-icons &amp; react-hot-toast</h2>
+    <p class="sec-sub">Những thư viện nhỏ nhưng xuất hiện trong hầu hết mọi dự án React</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">clsx — ghép class có điều kiện, gọn hơn template string</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Button.jsx</span><span class="cb-tag ct-y">clsx</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> <span class="vr">clsx</span> <span class="kw">from</span> <span class="st-s">"clsx"</span>;
+
+<span class="kw">function</span> <span class="fn">Button</span>({ <span class="vr">variant</span>, <span class="vr">disabled</span>, <span class="vr">children</span> }) {
+  <span class="kw">return</span> (
+    <span class="an">&lt;button</span>
+      <span class="pr">className</span>={<span class="fn">clsx</span>(
+        <span class="st-s">"btn"</span>,
+        <span class="vr">variant</span> === <span class="st-s">"primary"</span> &amp;&amp; <span class="st-s">"btn-primary"</span>,
+        <span class="vr">disabled</span> &amp;&amp; <span class="st-s">"btn-disabled"</span>
+      )}
+      <span class="pr">disabled</span>={<span class="vr">disabled</span>}
+    <span class="an">&gt;</span>
+      {<span class="vr">children</span>}
+    <span class="an">&lt;/button&gt;</span>
+  );
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">dayjs — xử lý ngày giờ nhẹ, thay thế moment.js</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">format date</span><span class="cb-tag ct-t">dayjs</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> <span class="vr">dayjs</span> <span class="kw">from</span> <span class="st-s">"dayjs"</span>;
+<span class="kw">import</span> <span class="st-s">"dayjs/locale/vi"</span>;
+
+<span class="vr">dayjs</span>.<span class="fn">locale</span>(<span class="st-s">"vi"</span>);
+<span class="fn">dayjs</span>(<span class="vr">order</span>.<span class="vr">createdAt</span>).<span class="fn">format</span>(<span class="st-s">"DD/MM/YYYY HH:mm"</span>); <span class="cm">// "13/08/2026 14:30"</span>
+<span class="fn">dayjs</span>(<span class="vr">order</span>.<span class="vr">createdAt</span>).<span class="fn">fromNow</span>();               <span class="cm">// "3 giờ trước"</span></pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">react-icons &amp; react-hot-toast</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">icon + toast thông báo</span><span class="cb-tag ct-p">UI KIT</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="vr">FiTrash2</span> } <span class="kw">from</span> <span class="st-s">"react-icons/fi"</span>;
+<span class="kw">import</span> <span class="vr">toast</span>, { <span class="vr">Toaster</span> } <span class="kw">from</span> <span class="st-s">"react-hot-toast"</span>;
+
+<span class="kw">function</span> <span class="fn">DeleteButton</span>({ <span class="vr">onDelete</span> }) {
+  <span class="kw">function</span> <span class="fn">handleClick</span>() {
+    <span class="vr">onDelete</span>();
+    <span class="vr">toast</span>.<span class="fn">success</span>(<span class="st-s">"Đã xoá thành công!"</span>); <span class="cm">// hiện thông báo góc màn hình</span>
+  }
+  <span class="kw">return</span> (
+    <span class="an">&lt;&gt;</span>
+      <span class="an">&lt;button</span> <span class="pr">onClick</span>={<span class="vr">handleClick</span>}<span class="an">&gt;</span><span class="an">&lt;FiTrash2</span> <span class="an">/&gt;</span> Xoá<span class="an">&lt;/button&gt;</span>
+      <span class="an">&lt;Toaster</span> <span class="an">/&gt;</span> {<span class="cm">/* đặt 1 lần ở gốc app */</span>}
+    <span class="an">&lt;/&gt;</span>
+  );
+}</pre></div>
+    </div>
+    <table class="tbl">
+      <tr><th>Thư viện</th><th>Dùng để</th></tr>
+      <tr><td><code>clsx</code> / <code>classnames</code></td><td>Ghép className có điều kiện, tránh template string dài dòng</td></tr>
+      <tr><td><code>dayjs</code></td><td>Format, so sánh, tính toán ngày giờ — nhẹ hơn moment.js nhiều lần</td></tr>
+      <tr><td><code>react-icons</code></td><td>Bộ icon tổng hợp (Feather, Font Awesome, Material...) dùng như component</td></tr>
+      <tr><td><code>react-hot-toast</code> / <code>sonner</code></td><td>Hiển thị thông báo (toast) sau hành động: lưu thành công, lỗi API...</td></tr>
+      <tr><td><code>framer-motion</code></td><td>Animation cho component — chuyển cảnh, hiệu ứng mượt mà</td></tr>
+    </table>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ S18 — CHEAT SHEET ════ -->
+<div class="section" id="s18">
+  <div class="sec-head">
+    <span class="sec-tag st-y">THAM KHẢO</span>
+    <div><h2 class="sec-title">Cheat Sheet</h2>
+    <p class="sec-sub">Tra cứu nhanh thư viện &amp; hook đã học</p></div>
+  </div>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4 class="h4-ins">🔵 Routing</h4>
+      <div class="cheat-row"><span class="ck">Chuyển trang (JSX)</span><span class="cv">&lt;Link to="/x"&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Menu active</span><span class="cv">&lt;NavLink&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Chuyển trang (code)</span><span class="cv">useNavigate()</span></div>
+      <div class="cheat-row"><span class="ck">Đọc param URL</span><span class="cv">useParams()</span></div>
+      <div class="cheat-row"><span class="ck">Đọc query string</span><span class="cv">useSearchParams()</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ch">🟢 Form</h4>
+      <div class="cheat-row"><span class="ck">Gắn input</span><span class="cv">register("name")</span></div>
+      <div class="cheat-row"><span class="ck">Xử lý submit</span><span class="cv">handleSubmit(fn)</span></div>
+      <div class="cheat-row"><span class="ck">Lỗi field</span><span class="cv">formState.errors</span></div>
+      <div class="cheat-row"><span class="ck">Schema validate</span><span class="cv">zodResolver(schema)</span></div>
+      <div class="cheat-row"><span class="ck">Danh sách field động</span><span class="cv">useFieldArray()</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-sk">🟣 State toàn cục</h4>
+      <div class="cheat-row"><span class="ck">Tạo context</span><span class="cv">createContext()</span></div>
+      <div class="cheat-row"><span class="ck">Đọc context</span><span class="cv">useContext(Ctx)</span></div>
+      <div class="cheat-row"><span class="ck">Tạo store Zustand</span><span class="cv">create((set)=&gt;({}))</span></div>
+      <div class="cheat-row"><span class="ck">Đọc/ghi Redux</span><span class="cv">useSelector/useDispatch</span></div>
+      <div class="cheat-row"><span class="ck">Tạo slice Redux</span><span class="cv">createSlice()</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-au">🟡 Data fetching</h4>
+      <div class="cheat-row"><span class="ck">Gọi API GET</span><span class="cv">useQuery({queryKey,queryFn})</span></div>
+      <div class="cheat-row"><span class="ck">Gọi API ghi</span><span class="cv">useMutation({mutationFn})</span></div>
+      <div class="cheat-row"><span class="ck">Fetch lại dữ liệu</span><span class="cv">invalidateQueries()</span></div>
+      <div class="cheat-row"><span class="ck">Instance axios</span><span class="cv">axios.create({baseURL})</span></div>
+      <div class="cheat-row"><span class="ck">Gắn token tự động</span><span class="cv">interceptors.request</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-oc">🔄 Hooks cốt lõi</h4>
+      <div class="cheat-row"><span class="ck">State cục bộ</span><span class="cv">useState(initial)</span></div>
+      <div class="cheat-row"><span class="ck">Side effect</span><span class="cv">useEffect(fn, deps)</span></div>
+      <div class="cheat-row"><span class="ck">Tham chiếu DOM</span><span class="cv">useRef(null)</span></div>
+      <div class="cheat-row"><span class="ck">Cache giá trị</span><span class="cv">useMemo(fn, deps)</span></div>
+      <div class="cheat-row"><span class="ck">Cache hàm</span><span class="cv">useCallback(fn, deps)</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ins">📦 Tiện ích &amp; lỗi hay gặp</h4>
+      <div class="cheat-row"><span class="ck">Ghép class điều kiện</span><span class="cv">clsx(a, b &amp;&amp; c)</span></div>
+      <div class="cheat-row"><span class="ck">Format ngày</span><span class="cv">dayjs().format()</span></div>
+      <div class="cheat-row"><span class="ck">List key sai</span><span class="cv">Tránh dùng index khi list đổi thứ tự</span></div>
+      <div class="cheat-row"><span class="ck">Context re-render thừa</span><span class="cv">Cân nhắc Zustand</span></div>
+      <div class="cheat-row"><span class="ck">Quên staleTime</span><span class="cv">Query fetch lại quá thường xuyên</span></div>
+    </div>
+  </div>
+
+  <div class="info i-ok" style="margin-top:22px">
+    <span class="info-ico">🔗</span>
+    <div style="font-size:13.5px">
+      <strong style="color:var(--text)">Tài nguyên chính thức:</strong><br>
+      <span style="color:var(--muted)">
+        <a href="https://react.dev" style="color:var(--acc)">react.dev</a> — Tài liệu chính thức React &nbsp;·&nbsp;
+        <a href="https://reactrouter.com" style="color:var(--acc)">reactrouter.com</a> — React Router &nbsp;·&nbsp;
+        <a href="https://react-hook-form.com" style="color:var(--acc)">react-hook-form.com</a> — React Hook Form &nbsp;·&nbsp;
+        <a href="https://zustand-demo.pmnd.rs" style="color:var(--acc)">zustand docs</a> — Zustand &nbsp;·&nbsp;
+        <a href="https://redux-toolkit.js.org" style="color:var(--acc)">redux-toolkit.js.org</a> — Redux Toolkit &nbsp;·&nbsp;
+        <a href="https://tanstack.com/query/latest" style="color:var(--acc)">tanstack.com/query</a> — TanStack Query
+      </span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  <span>⚛️ React Ecosystem · Thư viện &amp; Hooks thường dùng · 2026</span>
+  <span style="margin-left:auto;color:var(--faint)">Routing ×3 · Form ×3 · State ×3 · Data ×3 · Hooks ×4 · Tiện ích ×1 · Cheat sheet ×1</span>
+</div>
+</div><!-- /main -->
+
+<script>
+window.addEventListener('scroll',()=>{
+  const el=document.documentElement;
+  document.getElementById('pbar').style.width=(el.scrollTop/(el.scrollHeight-el.clientHeight)*100)+'%';
+});
+const sections=document.querySelectorAll('.section[id]');
+const links=document.querySelectorAll('.nav-link');
+sections.forEach(s=>new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if(a)a.classList.add('active');
+    }
+  });
+},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
