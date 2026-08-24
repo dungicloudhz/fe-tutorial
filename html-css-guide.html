@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌐 HTML &amp; CSS — Hướng dẫn từ cơ bản đến nâng cao</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080810;--s1:#0e0e1c;--s2:#131326;--s3:#18182e;--s4:#1e1e38;
+  --border:#222240;--border2:#2c2c50;--text:#e6e6f2;--muted:#666698;--faint:#363660;
+  --acc:#ffd060;--acc-d:#f0b400;--acc-dim:rgba(255,208,96,.11);--acc-glow:rgba(255,208,96,.24);
+  --green:#40d88e;--green-dim:rgba(64,216,142,.10);
+  --blue:#5ba8ff;--blue-dim:rgba(91,168,255,.10);
+  --purple:#a07af4;--purple-dim:rgba(160,122,244,.10);
+  --yellow:#ffd060;--yellow-dim:rgba(255,208,96,.10);
+  --teal:#30d8c0;--teal-dim:rgba(48,216,192,.10);
+  --orange:#ff8c50;--orange-dim:rgba(255,140,80,.10);
+  --pink:#ff6584;--pink-dim:rgba(255,101,132,.11);--pink-glow:rgba(255,101,132,.22);
+  --sky:#38bdf8;--sky-dim:rgba(56,189,248,.10);
+  /* HTML + CSS brand: orange (HTML5) -> blue (CSS3) */
+  --oc:#38bdf8;--oc-dim:rgba(56,189,248,.14);--oc-glow:rgba(56,189,248,.32);
+  --oc2:#ff8c50;--oc2-dim:rgba(255,140,80,.12);
+  /* sections */
+  --ins:#5ba8ff;--ins-dim:rgba(91,168,255,.12);--ins-glow:rgba(91,168,255,.28);
+  --ch:#40d88e;--ch-dim:rgba(64,216,142,.12);--ch-glow:rgba(64,216,142,.28);
+  --sk:#a07af4;--sk-dim:rgba(160,122,244,.12);--sk-glow:rgba(160,122,244,.28);
+  --au:#ffd060;--au-dim:rgba(255,208,96,.12);--au-glow:rgba(255,208,96,.28);
+  --code-bg:#05050e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:15px;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* PAGE NAV */
+.page-nav{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--border);flex-shrink:0}
+.pn-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 4px;text-decoration:none;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.2px;border-bottom:2px solid transparent;transition:all .15s;background:transparent;line-height:1.3;text-align:center}
+.pn-tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.pn-tab.pn-active{color:var(--acc);border-bottom-color:var(--acc);background:var(--acc-dim)}
+.pn-icon{font-size:15px;line-height:1}
+.pn-label{font-size:9px}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:0;width:268px;height:100vh;background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;z-index:400;display:flex;flex-direction:column}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-brand{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.logo-icon{width:44px;height:44px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,var(--oc2),var(--oc));display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 26px var(--oc-glow)}
+.logo-text h2{font-size:15px;font-weight:800;letter-spacing:-.4px}
+.logo-text p{font-size:10.5px;color:var(--muted);margin-top:2px}
+.prog-wrap{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--oc2),var(--ins),var(--ch),var(--sk),var(--au));width:0%;transition:width .4s;border-radius:2px}
+.nav-section{padding:8px 0 4px}
+.nav-sect-label{padding:8px 18px 3px;font-size:9.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--faint)}
+.nav-group-hdr{display:flex;align-items:center;gap:7px;margin:6px 12px 3px;padding:6px 10px;border-radius:7px;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.ngh-oc{background:var(--oc-dim);color:var(--oc)}
+.ngh-ins{background:var(--ins-dim);color:var(--ins)}
+.ngh-ch{background:var(--ch-dim);color:var(--ch)}
+.ngh-sk{background:var(--sk-dim);color:var(--sk)}
+.ngh-au{background:var(--au-dim);color:var(--au)}
+.ngh-other{background:rgba(255,255,255,.05);color:var(--muted)}
+.nav-link{display:flex;align-items:center;gap:9px;padding:6px 18px;color:var(--muted);text-decoration:none;font-size:12.5px;font-weight:600;border-left:2px solid transparent;transition:all .14s}
+.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,208,96,.08);border-left-color:var(--acc)}
+.nav-link .ico{font-size:13px;flex-shrink:0;width:16px;text-align:center}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;background:var(--acc-dim);color:var(--acc)}
+
+/* MAIN */
+.main{margin-left:268px;min-height:100vh}
+.hero{padding:80px 64px 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);
+  background:radial-gradient(ellipse 65% 55% at 75% 22%,rgba(56,189,248,.16) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 55% at 10% 82%,rgba(255,140,80,.08) 0%,transparent 55%),
+             radial-gradient(ellipse 40% 50% at 50% 50%,rgba(64,216,142,.04) 0%,transparent 60%),var(--bg)}
+.hero-dots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.028) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.hero-glow{position:absolute;right:-90px;top:-90px;width:520px;height:520px;background:radial-gradient(circle,rgba(56,189,248,.14) 0%,transparent 65%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--oc-dim);border:1px solid rgba(56,189,248,.4);color:var(--oc);padding:5px 16px;border-radius:100px;font-size:11.5px;font-weight:700;margin-bottom:26px;letter-spacing:.3px}
+.hero-eyebrow .pulse{width:6px;height:6px;border-radius:50%;background:var(--oc);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero h1{font-size:52px;font-weight:900;letter-spacing:-2.5px;line-height:1.04;margin-bottom:18px}
+.h-oc{color:var(--oc)}.h-ins{color:var(--ins)}.h-ch{color:var(--ch)}.h-sk{color:var(--sk)}.h-au{color:var(--au)}.h-acc{color:var(--acc)}
+.h-grad{background:linear-gradient(135deg,var(--oc2) 0%,var(--acc) 50%,var(--oc) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:16px;color:var(--muted);max-width:580px;line-height:1.72;margin-bottom:30px}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:5px 14px;border-radius:7px;font-size:12px;font-weight:700}
+.chip-oc{background:var(--oc-dim);color:var(--oc)}.chip-ins{background:var(--ins-dim);color:var(--ins)}
+.chip-ch{background:var(--ch-dim);color:var(--ch)}.chip-sk{background:var(--sk-dim);color:var(--sk)}
+.chip-au{background:var(--au-dim);color:var(--au)}.chip-t{background:var(--teal-dim);color:var(--teal)}
+.chip-p{background:var(--pink-dim);color:var(--pink)}.chip-s{background:var(--sky-dim);color:var(--sky)}
+
+/* CAT BANNERS */
+.cat-banner{display:flex;align-items:center;gap:16px;padding:20px 24px;border-radius:14px;margin-bottom:44px;position:relative;overflow:hidden}
+.cat-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cb-oc{background:var(--oc-dim);border:1px solid rgba(56,189,248,.32)}.cb-oc::before{background:linear-gradient(90deg,var(--oc),var(--oc2))}
+.cb-ins{background:var(--ins-dim);border:1px solid rgba(91,168,255,.30)}.cb-ins::before{background:linear-gradient(90deg,var(--ins),var(--sky))}
+.cb-ch{background:var(--ch-dim);border:1px solid rgba(64,216,142,.30)}.cb-ch::before{background:linear-gradient(90deg,var(--ch),var(--teal))}
+.cb-sk{background:var(--sk-dim);border:1px solid rgba(160,122,244,.30)}.cb-sk::before{background:linear-gradient(90deg,var(--sk),var(--pink))}
+.cb-au{background:var(--au-dim);border:1px solid rgba(255,208,96,.30)}.cb-au::before{background:linear-gradient(90deg,var(--au),var(--orange))}
+.cb-icon{font-size:38px;flex-shrink:0}
+.cb-badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;display:inline-block;margin-bottom:5px}
+.cb-oc .cb-badge{background:var(--oc-dim);color:var(--oc)}
+.cb-ins .cb-badge{background:var(--ins-dim);color:var(--ins)}
+.cb-ch .cb-badge{background:var(--ch-dim);color:var(--ch)}
+.cb-sk .cb-badge{background:var(--sk-dim);color:var(--sk)}
+.cb-au .cb-badge{background:var(--au-dim);color:var(--au)}
+.cb-title{font-size:20px;font-weight:800;letter-spacing:-.5px}.cb-sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+
+/* CONTENT */
+.content{padding:56px 64px;max-width:1020px}
+.section{margin-bottom:72px}
+.sec-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:30px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.sec-tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 10px;border-radius:5px;margin-top:5px;flex-shrink:0;letter-spacing:.5px}
+.st-oc{color:var(--oc);background:var(--oc-dim);border:1px solid var(--oc-glow)}
+.st-ins{color:var(--ins);background:var(--ins-dim);border:1px solid var(--ins-glow)}
+.st-ch{color:var(--ch);background:var(--ch-dim);border:1px solid var(--ch-glow)}
+.st-sk{color:var(--sk);background:var(--sk-dim);border:1px solid var(--sk-glow)}
+.st-au{color:var(--au);background:var(--au-dim);border:1px solid var(--au-glow)}
+.st-y{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(255,208,96,.24)}
+.sec-title{font-size:23px;font-weight:800;letter-spacing:-.6px;margin-bottom:5px}
+.sec-sub{font-size:13px;color:var(--muted)}
+.sub{margin-bottom:38px}
+.sub-title{font-size:14.5px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:10px}
+.sub-title::before{content:'';display:inline-block;width:14px;height:3px;background:var(--acc);border-radius:2px;flex-shrink:0}
+.sub p,.sub ul,.sub ol{color:var(--muted);font-size:13.5px;margin-bottom:11px;line-height:1.75}
+.sub ul,.sub ol{padding-left:22px}.sub li{margin-bottom:5px}.sub strong{color:var(--text)}
+
+/* GRIDS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:11px;padding:16px;transition:all .2s;cursor:default}
+.card:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.38)}
+.card-icon{font-size:24px;margin-bottom:8px}.card-title{font-size:13px;font-weight:700;margin-bottom:4px}.card-desc{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* CODE BLOCKS */
+.cblock{background:var(--code-bg);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin:13px 0}
+.cb-head{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--s2);border-bottom:1px solid var(--border)}
+.cb-dots{display:flex;gap:5px}.cbd{width:10px;height:10px;border-radius:50%}
+.cbd.r{background:#ff5f56}.cbd.y{background:#ffbd2e}.cbd.g{background:#27c93f}
+.cb-name{font-size:11.5px;font-weight:700;color:var(--muted);font-family:'JetBrains Mono',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cb-tag{margin-left:auto;font-size:9px;font-weight:700;padding:2px 9px;border-radius:100px;flex-shrink:0}
+.ct-oc{background:var(--oc-dim);color:var(--oc)}.ct-ins{background:var(--ins-dim);color:var(--ins)}
+.ct-ch{background:var(--ch-dim);color:var(--ch)}.ct-sk{background:var(--sk-dim);color:var(--sk)}
+.ct-au{background:var(--au-dim);color:var(--au)}.ct-y{background:var(--yellow-dim);color:var(--yellow)}
+.ct-g{background:var(--green-dim);color:var(--green)}.ct-t{background:var(--teal-dim);color:var(--teal)}
+.cb-body{padding:18px 20px;overflow-x:auto}
+.cb-body pre{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.72;white-space:pre;color:#8899bb}
+/* syntax */
+.kw{color:#c792ea}.tp{color:#ffcb6b}.fn{color:#82aaff}.st-s{color:#c3e88d}
+.cm{color:#546e7a;font-style:italic}.nm{color:#f78c6c}.an{color:#ff6584}
+.pr{color:#89ddff}.vr{color:#eeffff}.cl{color:#ffcb6b}
+.c-r{color:#ff6584}.c-b{color:#5ba8ff}.c-g{color:#40d88e}
+.c-t{color:#30d8c0}.c-y{color:#ffd060}.c-o{color:#ff8c50}.c-p{color:#a07af4}.c-s{color:#38bdf8}
+/* shell prompt */
+.sh-prompt{color:var(--ch);font-weight:700;user-select:none}
+.sh-cmd{color:var(--text)}
+.sh-arg{color:var(--sky)}
+.sh-str{color:var(--green)}
+.sh-flag{color:var(--au)}
+.sh-cmt{color:#546e7a;font-style:italic}
+
+/* INFO BOXES */
+.info{display:flex;gap:12px;padding:14px 16px;border-radius:9px;margin:13px 0;font-size:13px;line-height:1.6}
+.info-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.i-ok{background:var(--green-dim);border:1px solid rgba(64,216,142,.2);color:#30a870}
+.i-warn{background:var(--yellow-dim);border:1px solid rgba(255,208,96,.2);color:#b09030}
+.i-tip{background:var(--blue-dim);border:1px solid rgba(91,168,255,.2);color:#3878d0}
+.i-note{background:var(--purple-dim);border:1px solid rgba(160,122,244,.2);color:#8060d0}
+.i-err{background:var(--pink-dim);border:1px solid rgba(255,101,132,.2);color:#cc3355}
+
+/* RW BOX */
+.rw-box{background:var(--s1);border:1px solid var(--border2);border-radius:12px;padding:18px 20px;margin:14px 0;position:relative;overflow:hidden}
+.rw-box::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.rw-oc::before{background:var(--oc)}.rw-ins::before{background:var(--ins)}
+.rw-ch::before{background:var(--ch)}.rw-sk::before{background:var(--sk)}
+.rw-au::before{background:var(--au)}.rw-y::before{background:var(--yellow)}
+.rw-label{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.rw-oc .rw-label{color:var(--oc)}.rw-ins .rw-label{color:var(--ins)}
+.rw-ch .rw-label{color:var(--ch)}.rw-sk .rw-label{color:var(--sk)}
+.rw-au .rw-label{color:var(--au)}.rw-y .rw-label{color:var(--yellow)}
+.rw-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.rw-body{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:13px 0;border-radius:11px;overflow:hidden}
+.tbl th{background:var(--s3);padding:10px 14px;text-align:left;font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-bottom:1px solid var(--border2)}
+.tbl td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted);vertical-align:top}
+.tbl tr:hover td{background:rgba(255,255,255,.025)}
+.tbl code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--code-bg);padding:2px 7px;border-radius:4px;color:var(--teal)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;margin:14px 0}
+.step{display:flex;gap:16px}
+.step-L{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
+.step-num{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--acc);background:var(--acc-dim);border:2px solid var(--acc-glow)}
+.step-line{width:2px;flex:1;background:var(--border);margin:5px 0;min-height:14px}
+.step-B{padding:3px 0 26px}.step-B h4{font-size:14px;font-weight:700;margin-bottom:5px}
+.step-B p{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* CHEAT SHEET */
+.cheat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.cheat-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:15px}
+.cheat-card h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:11px}
+.h4-oc{color:var(--oc)}.h4-ins{color:var(--ins)}.h4-ch{color:var(--ch)}.h4-sk{color:var(--sk)}.h4-au{color:var(--au)}
+.cheat-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.cheat-row:last-child{border-bottom:none}.ck{color:var(--muted)}.cv{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--teal)}
+
+/* ARCH DIAGRAM */
+.arch{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:0;margin:18px 0}
+.arch-box{background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;text-align:center}
+.arch-title{font-size:12px;font-weight:700;margin-bottom:3px}
+.arch-desc{font-size:11px;color:var(--muted)}
+.arch-arrow{text-align:center;color:var(--muted);font-size:20px;padding:0 8px}
+
+/* SWATCH */
+.swatch-row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.swatch{display:flex;flex-direction:column;align-items:center;gap:6px;width:84px}
+.swatch-box{width:60px;height:60px;border-radius:10px;border:1px solid var(--border2)}
+.swatch span{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+
+/* BOX MODEL DEMO */
+.boxmodel{display:flex;justify-content:center;margin:20px 0}
+.bm-margin{background:rgba(255,140,80,.13);border:1px dashed rgba(255,140,80,.5);padding:22px;border-radius:6px;position:relative}
+.bm-border{background:rgba(255,208,96,.15);border:1px dashed rgba(255,208,96,.5);padding:18px;border-radius:6px;position:relative}
+.bm-padding{background:rgba(64,216,142,.15);border:1px dashed rgba(64,216,142,.5);padding:18px;border-radius:6px;position:relative}
+.bm-content{background:rgba(91,168,255,.22);border:1px solid rgba(91,168,255,.6);padding:20px 34px;border-radius:4px;font-size:12px;font-weight:700;color:var(--ins);text-align:center}
+.bm-label{position:absolute;top:2px;left:8px;font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;opacity:.75}
+.bm-margin .bm-label{color:var(--orange)}.bm-border .bm-label{color:var(--yellow)}.bm-padding .bm-label{color:var(--ch)}
+
+p code,li code,td code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(255,208,96,.12);color:var(--acc);padding:2px 6px;border-radius:4px}
+hr.dv{border:none;border-top:1px solid var(--border);margin:58px 0}
+.footer{border-top:1px solid var(--border);padding:28px 64px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+@media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.hero,.content,.footer{padding-left:22px;padding-right:22px}.hero h1{font-size:32px}.grid-2,.grid-3,.grid-4,.cheat-grid{grid-template-columns:1fr}.arch{grid-template-columns:1fr;gap:8px}.arch-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="page-nav">
+    <a href="html-css-guide.html" class="pn-tab pn-active">
+      <span class="pn-icon">🌐</span>
+      <span class="pn-label">HTML/CSS</span>
+    </a>
+    <a href="typescript-guide.html" class="pn-tab">
+      <span class="pn-icon">🔷</span>
+      <span class="pn-label">TypeScript</span>
+    </a>
+    <a href="js-reactjs-guide.html" class="pn-tab">
+      <span class="pn-icon">🟨</span>
+      <span class="pn-label">JS & React</span>
+    </a>
+    <a href="react-nextjs-guide.html" class="pn-tab">
+      <span class="pn-icon">⚛️</span>
+      <span class="pn-label">Next.js</span>
+    </a>
+    <a href="react-ecosystem-guide.html" class="pn-tab">
+      <span class="pn-icon">📦</span>
+      <span class="pn-label">Ecosystem</span>
+    </a>
+    <a href="redux-rtk-query-guide.html" class="pn-tab">
+      <span class="pn-icon">🔄</span>
+      <span class="pn-label">Redux</span>
+    </a>
+  </div>
+  <div class="sb-logo">
+    <div class="sb-brand">
+      <div class="logo-icon">🌐</div>
+      <div class="logo-text"><h2>HTML &amp; CSS</h2><p>Cơ bản đến nâng cao</p></div>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar" id="pbar"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-sect-label">Tổng quan</div>
+    <a href="#s0" class="nav-link active"><span class="ico">🗺️</span> Bản đồ HTML &amp; CSS <span class="nav-badge">START</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ins">🔵 HTML Cơ bản — 3 sections</div>
+    <a href="#s1" class="nav-link"><span class="ico">📄</span> Cấu trúc tài liệu HTML</a>
+    <a href="#s2" class="nav-link"><span class="ico">✍️</span> Văn bản, danh sách, liên kết, ảnh</a>
+    <a href="#s3" class="nav-link"><span class="ico">🧾</span> Bảng (table) &amp; Form</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ch">🟢 HTML Nâng cao — 3 sections</div>
+    <a href="#s4" class="nav-link"><span class="ico">🏗️</span> Semantic HTML5</a>
+    <a href="#s5" class="nav-link"><span class="ico">🎬</span> Đa phương tiện &amp; nhúng nội dung</a>
+    <a href="#s6" class="nav-link"><span class="ico">♿</span> Thuộc tính nâng cao &amp; Accessibility</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-sk">🟣 CSS Cơ bản — 3 sections</div>
+    <a href="#s7" class="nav-link"><span class="ico">🎯</span> Nhúng CSS &amp; Selector</a>
+    <a href="#s8" class="nav-link"><span class="ico">📦</span> Box Model</a>
+    <a href="#s9" class="nav-link"><span class="ico">🎨</span> Màu sắc, Typography &amp; Đơn vị</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-au">🟡 CSS Layout — 3 sections</div>
+    <a href="#s10" class="nav-link"><span class="ico">📐</span> Display &amp; Position</a>
+    <a href="#s11" class="nav-link"><span class="ico">🧭</span> Flexbox</a>
+    <a href="#s12" class="nav-link"><span class="ico">▦</span> CSS Grid</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-oc">🔄 CSS Nâng cao — 4 sections</div>
+    <a href="#s13" class="nav-link"><span class="ico">📱</span> Responsive &amp; Media Query</a>
+    <a href="#s14" class="nav-link"><span class="ico">🎞️</span> Transition &amp; Animation</a>
+    <a href="#s15" class="nav-link"><span class="ico">🧩</span> Pseudo-class/element &amp; biến CSS</a>
+    <a href="#s16" class="nav-link"><span class="ico">🌀</span> Transform, z-index &amp; overflow</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-other">📦 Mẹo &amp; lỗi thường gặp</div>
+    <a href="#s17" class="nav-link"><span class="ico">🧰</span> Best practice &amp; lỗi hay gặp</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-other">📋 Tham khảo nhanh</div>
+    <a href="#s18" class="nav-link"><span class="ico">📋</span> Cheat Sheet</a>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-dots"></div><div class="hero-glow"></div>
+  <div class="hero-eyebrow"><span class="pulse"></span> HTML5 · CSS3 · Từ zero đến layout thành thạo · 2026</div>
+  <h1><span class="h-grad">HTML &amp; CSS</span> 🌐<br><span class="h-acc">Hướng dẫn chi tiết</span><br><span class="h-ins">Cơ bản → Nâng cao</span></h1>
+  <p class="hero-desc">Toàn bộ kiến thức nền tảng để xây dựng một trang web hoàn chỉnh — từ cấu trúc tài liệu HTML, semantic, form, cho tới bố cục CSS với Flexbox/Grid, responsive, animation và các kỹ thuật nâng cao — kèm ví dụ code cụ thể, giải thích dễ hiểu, áp dụng được ngay.</p>
+  <div class="hero-chips">
+    <span class="chip chip-ins">📄 Cấu trúc HTML</span>
+    <span class="chip chip-ch">🏗️ Semantic HTML5</span>
+    <span class="chip chip-sk">📦 Box Model</span>
+    <span class="chip chip-au">🧭 Flexbox / Grid</span>
+    <span class="chip chip-oc">📱 Responsive</span>
+    <span class="chip chip-t">🎞️ Animation</span>
+    <span class="chip chip-p">🧩 Pseudo &amp; biến CSS</span>
+    <span class="chip chip-s">✅ Ví dụ thực tế</span>
+  </div>
+</div>
+
+<div class="content">
+<!-- ════ S0 — OVERVIEW ════ -->
+<div class="section" id="s0">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">OVERVIEW</span>
+    <div><h2 class="sec-title">Bản đồ HTML &amp; CSS — hai nền tảng của mọi trang web</h2>
+    <p class="sec-sub">HTML lo về nội dung &amp; cấu trúc, CSS lo về trình bày &amp; bố cục — hiểu rõ vai trò từng bên trước khi học sâu</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">HTML và CSS làm việc gì, cho ai?</div>
+    <p><strong>HTML (HyperText Markup Language)</strong> là ngôn ngữ đánh dấu dùng để mô tả <strong>nội dung và cấu trúc</strong> của trang: đâu là tiêu đề, đâu là đoạn văn, đâu là danh sách, đâu là ảnh. <strong>CSS (Cascading Style Sheets)</strong> quyết định <strong>trang trông như thế nào</strong>: màu sắc, khoảng cách, font chữ, bố cục responsive trên các kích thước màn hình khác nhau. Trình duyệt đọc HTML để dựng cây DOM, rồi áp CSS lên cây đó để vẽ ra giao diện cuối cùng.</p>
+    <div class="grid-4">
+      <div class="card"><div class="card-icon">📄</div><div class="card-title" style="color:var(--ins)">Cấu trúc</div><div class="card-desc">Thẻ HTML (tag) — bao bọc nội dung, khai báo ý nghĩa: heading, list, table, form...</div></div>
+      <div class="card"><div class="card-icon">🏗️</div><div class="card-title" style="color:var(--ch)">Semantic</div><div class="card-desc">HTML5 bổ sung thẻ có ý nghĩa: header, nav, main, article — tốt cho SEO &amp; accessibility.</div></div>
+      <div class="card"><div class="card-icon">📦</div><div class="card-title" style="color:var(--sk)">Box Model</div><div class="card-desc">Mọi phần tử CSS đều là 1 "hộp" gồm content, padding, border, margin.</div></div>
+      <div class="card"><div class="card-icon">🧭</div><div class="card-title" style="color:var(--au)">Layout</div><div class="card-desc">Flexbox &amp; Grid — hai công cụ bố cục hiện đại thay thế float thời xưa.</div></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Lộ trình học đề xuất trong trang này</div>
+    <div class="arch">
+      <div class="arch-box" style="border-color:rgba(91,168,255,.3)">
+        <div class="arch-title" style="color:var(--ins)">1️⃣ HTML cơ bản → nâng cao</div>
+        <div class="arch-desc">Cấu trúc, văn bản, bảng, form<br>Semantic, media, accessibility</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(160,122,244,.3)">
+        <div class="arch-title" style="color:var(--sk)">2️⃣ CSS cơ bản</div>
+        <div class="arch-desc">Selector, Box Model<br>Màu sắc, Typography, đơn vị</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(255,208,96,.3)">
+        <div class="arch-title" style="color:var(--au)">3️⃣ Layout &amp; nâng cao</div>
+        <div class="arch-desc">Flexbox, Grid, Responsive<br>Animation, biến CSS, transform</div>
+      </div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Nguyên tắc học:</strong> Đừng học CSS trước khi nắm chắc HTML — CSS chỉ style những gì HTML đã có sẵn. Học <strong>Box Model</strong> thật kỹ vì nó là nền tảng của mọi thứ trong CSS, sau đó mới sang <strong>Flexbox/Grid</strong> để dựng layout thật.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — HTML CƠ BẢN ════ -->
+<div class="cat-banner cb-ins">
+  <div class="cb-icon">🔵</div>
+  <div>
+    <div class="cb-badge">HTML CƠ BẢN</div>
+    <div class="cb-title">Phần 1 — HTML Cơ bản</div>
+    <div class="cb-sub">Cấu trúc tài liệu · Văn bản &amp; danh sách · Liên kết &amp; ảnh · Bảng &amp; Form</div>
+  </div>
+</div>
+
+<!-- ════ S1 — CẤU TRÚC TÀI LIỆU HTML ════ -->
+<div class="section" id="s1">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">HTML CƠ BẢN</span>
+    <div><h2 class="sec-title">Cấu trúc tài liệu HTML</h2>
+    <p class="sec-sub">Bộ khung tối thiểu mà mọi trang HTML đều cần có</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Khung HTML chuẩn</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">index.html</span><span class="cb-tag ct-ins">STRUCTURE</span></div>
+      <div class="cb-body"><pre><span class="an">&lt;!DOCTYPE</span> <span class="pr">html</span><span class="an">&gt;</span> <span class="cm">&lt;!-- báo cho trình duyệt đây là HTML5 --&gt;</span>
+<span class="an">&lt;html</span> <span class="pr">lang</span>=<span class="st-s">"vi"</span><span class="an">&gt;</span>
+<span class="an">&lt;head&gt;</span>
+  <span class="an">&lt;meta</span> <span class="pr">charset</span>=<span class="st-s">"UTF-8"</span><span class="an">&gt;</span> <span class="cm">&lt;!-- bảng mã ký tự, cần cho tiếng Việt --&gt;</span>
+  <span class="an">&lt;meta</span> <span class="pr">name</span>=<span class="st-s">"viewport"</span> <span class="pr">content</span>=<span class="st-s">"width=device-width, initial-scale=1.0"</span><span class="an">&gt;</span>
+  <span class="an">&lt;title&gt;</span>Trang của tôi<span class="an">&lt;/title&gt;</span> <span class="cm">&lt;!-- hiện trên tab trình duyệt --&gt;</span>
+  <span class="an">&lt;link</span> <span class="pr">rel</span>=<span class="st-s">"stylesheet"</span> <span class="pr">href</span>=<span class="st-s">"style.css"</span><span class="an">&gt;</span>
+<span class="an">&lt;/head&gt;</span>
+<span class="an">&lt;body&gt;</span>
+  <span class="cm">&lt;!-- toàn bộ nội dung hiển thị nằm trong body --&gt;</span>
+  <span class="an">&lt;h1&gt;</span>Xin chào!<span class="an">&lt;/h1&gt;</span>
+  <span class="an">&lt;p&gt;</span>Đây là đoạn văn đầu tiên.<span class="an">&lt;/p&gt;</span>
+  <span class="an">&lt;script</span> <span class="pr">src</span>=<span class="st-s">"script.js"</span><span class="an">&gt;&lt;/script&gt;</span>
+<span class="an">&lt;/body&gt;</span>
+<span class="an">&lt;/html&gt;</span></pre></div>
+    </div>
+    <table class="tbl">
+      <tr><th>Thẻ</th><th>Vai trò</th></tr>
+      <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td>Khai báo phiên bản HTML5, luôn đặt ở dòng đầu tiên</td></tr>
+      <tr><td><code>&lt;html&gt;</code></td><td>Thẻ gốc bao bọc toàn bộ tài liệu, nên có <code>lang</code> để hỗ trợ SEO/screen reader</td></tr>
+      <tr><td><code>&lt;head&gt;</code></td><td>Chứa metadata: title, charset, viewport, link CSS — không hiển thị trực tiếp</td></tr>
+      <tr><td><code>&lt;body&gt;</code></td><td>Chứa toàn bộ nội dung người dùng nhìn thấy trên trang</td></tr>
+      <tr><td><code>&lt;meta viewport&gt;</code></td><td>Bắt buộc để trang responsive đúng trên điện thoại</td></tr>
+    </table>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Ghi nhớ:</strong> Đặt <code>&lt;script&gt;</code> ở cuối <code>&lt;body&gt;</code> (hoặc dùng <code>defer</code>) để JS không chặn việc render HTML — trang sẽ hiện nội dung nhanh hơn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S2 — VĂN BẢN, DANH SÁCH, LIÊN KẾT, ẢNH ════ -->
+<div class="section" id="s2">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">HTML CƠ BẢN</span>
+    <div><h2 class="sec-title">Văn bản, danh sách, liên kết &amp; hình ảnh</h2>
+    <p class="sec-sub">Nhóm thẻ xuất hiện trong gần như mọi trang HTML</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Heading &amp; đoạn văn</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">text.html</span><span class="cb-tag ct-ins">TEXT</span></div>
+      <div class="cb-body"><pre><span class="an">&lt;h1&gt;</span>Tiêu đề cấp 1 — chỉ nên dùng 1 lần / trang<span class="an">&lt;/h1&gt;</span>
+<span class="an">&lt;h2&gt;</span>Tiêu đề cấp 2<span class="an">&lt;/h2&gt;</span>
+<span class="an">&lt;p&gt;</span>Đoạn văn bản thường. Có thể chứa <span class="an">&lt;strong&gt;</span>chữ in đậm quan trọng<span class="an">&lt;/strong&gt;</span>
+và <span class="an">&lt;em&gt;</span>chữ nhấn mạnh in nghiêng<span class="an">&lt;/em&gt;</span>.<span class="an">&lt;/p&gt;</span>
+<span class="an">&lt;br&gt;</span> <span class="cm">&lt;!-- xuống dòng, không tạo đoạn mới --&gt;</span>
+<span class="an">&lt;hr&gt;</span> <span class="cm">&lt;!-- đường kẻ ngang phân cách nội dung --&gt;</span></pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Đừng nhầm:</strong> <code>&lt;b&gt;</code>/<code>&lt;i&gt;</code> chỉ đổi kiểu chữ (không mang ý nghĩa), còn <code>&lt;strong&gt;</code>/<code>&lt;em&gt;</code> mang <strong>ý nghĩa ngữ nghĩa</strong> (quan trọng/nhấn mạnh) — screen reader sẽ đọc khác nhau. Ưu tiên dùng <code>strong</code>/<code>em</code>.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Danh sách — ul, ol, dl</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">list.html</span><span class="cb-tag ct-ch">LIST</span></div>
+      <div class="cb-body"><pre><span class="cm">&lt;!-- ul: danh sách không thứ tự (bullet) --&gt;</span>
+<span class="an">&lt;ul&gt;</span>
+  <span class="an">&lt;li&gt;</span>HTML<span class="an">&lt;/li&gt;</span>
+  <span class="an">&lt;li&gt;</span>CSS<span class="an">&lt;/li&gt;</span>
+<span class="an">&lt;/ul&gt;</span>
+
+<span class="cm">&lt;!-- ol: danh sách có thứ tự (số) --&gt;</span>
+<span class="an">&lt;ol&gt;</span>
+  <span class="an">&lt;li&gt;</span>Học HTML trước<span class="an">&lt;/li&gt;</span>
+  <span class="an">&lt;li&gt;</span>Rồi học CSS<span class="an">&lt;/li&gt;</span>
+<span class="an">&lt;/ol&gt;</span>
+
+<span class="cm">&lt;!-- dl: danh sách định nghĩa (thuật ngữ - giải thích) --&gt;</span>
+<span class="an">&lt;dl&gt;</span>
+  <span class="an">&lt;dt&gt;</span>HTML<span class="an">&lt;/dt&gt;</span>
+  <span class="an">&lt;dd&gt;</span>Ngôn ngữ đánh dấu cấu trúc trang<span class="an">&lt;/dd&gt;</span>
+<span class="an">&lt;/dl&gt;</span></pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Liên kết &amp; hình ảnh</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">link-img.html</span><span class="cb-tag ct-sk">LINK/IMG</span></div>
+      <div class="cb-body"><pre><span class="cm">&lt;!-- liên kết nội bộ --&gt;</span>
+<span class="an">&lt;a</span> <span class="pr">href</span>=<span class="st-s">"/gioi-thieu.html"</span><span class="an">&gt;</span>Giới thiệu<span class="an">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- liên kết ngoài, mở tab mới an toàn --&gt;</span>
+<span class="an">&lt;a</span> <span class="pr">href</span>=<span class="st-s">"https://example.com"</span> <span class="pr">target</span>=<span class="st-s">"_blank"</span> <span class="pr">rel</span>=<span class="st-s">"noopener noreferrer"</span><span class="an">&gt;</span>
+  Trang ngoài
+<span class="an">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- ảnh: luôn có alt để mô tả (SEO + accessibility) --&gt;</span>
+<span class="an">&lt;img</span> <span class="pr">src</span>=<span class="st-s">"logo.png"</span> <span class="pr">alt</span>=<span class="st-s">"Logo công ty ABC"</span> <span class="pr">width</span>=<span class="st-s">"120"</span><span class="an">&gt;</span>
+
+<span class="cm">&lt;!-- ảnh responsive theo kích thước màn hình --&gt;</span>
+<span class="an">&lt;img</span> <span class="pr">src</span>=<span class="st-s">"banner-mobile.jpg"</span>
+     <span class="pr">srcset</span>=<span class="st-s">"banner-mobile.jpg 480w, banner-desktop.jpg 1200w"</span>
+     <span class="pr">sizes</span>=<span class="st-s">"(max-width: 600px) 480px, 1200px"</span>
+     <span class="pr">alt</span>=<span class="st-s">"Banner khuyến mãi"</span><span class="an">&gt;</span></pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">alt không phải tùy chọn:</strong> Thiếu <code>alt</code> khiến người dùng screen reader không hiểu ảnh nói gì, và Google cũng dùng <code>alt</code> để đánh giá nội dung ảnh cho SEO.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S3 — BẢNG & FORM ════ -->
+<div class="section" id="s3">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">HTML CƠ BẢN</span>
+    <div><h2 class="sec-title">Bảng (table) &amp; Form</h2>
+    <p class="sec-sub">Hiển thị dữ liệu dạng bảng và thu thập dữ liệu từ người dùng</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Table — bảng dữ liệu</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">table.html</span><span class="cb-tag ct-au">TABLE</span></div>
+      <div class="cb-body"><pre><span class="an">&lt;table&gt;</span>
+  <span class="an">&lt;thead&gt;</span>
+    <span class="an">&lt;tr&gt;</span><span class="an">&lt;th&gt;</span>Tên<span class="an">&lt;/th&gt;</span><span class="an">&lt;th&gt;</span>Điểm<span class="an">&lt;/th&gt;</span><span class="an">&lt;/tr&gt;</span>
+  <span class="an">&lt;/thead&gt;</span>
+  <span class="an">&lt;tbody&gt;</span>
+    <span class="an">&lt;tr&gt;</span><span class="an">&lt;td&gt;</span>An<span class="an">&lt;/td&gt;</span><span class="an">&lt;td&gt;</span>9<span class="an">&lt;/td&gt;</span><span class="an">&lt;/tr&gt;</span>
+    <span class="an">&lt;tr&gt;</span><span class="an">&lt;td&gt;</span>Bình<span class="an">&lt;/td&gt;</span><span class="an">&lt;td&gt;</span>8<span class="an">&lt;/td&gt;</span><span class="an">&lt;/tr&gt;</span>
+  <span class="an">&lt;/tbody&gt;</span>
+<span class="an">&lt;/table&gt;</span></pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Không dùng table để dàn layout trang!</strong> table chỉ dành cho <strong>dữ liệu dạng bảng</strong> (bảng điểm, bảng giá...). Dàn layout trang hãy dùng Flexbox/Grid ở phần CSS.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Form — thu thập dữ liệu người dùng</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">form.html</span><span class="cb-tag ct-ch">FORM</span></div>
+      <div class="cb-body"><pre><span class="an">&lt;form</span> <span class="pr">action</span>=<span class="st-s">"/dang-ky"</span> <span class="pr">method</span>=<span class="st-s">"POST"</span><span class="an">&gt;</span>
+  <span class="an">&lt;label</span> <span class="pr">for</span>=<span class="st-s">"email"</span><span class="an">&gt;</span>Email<span class="an">&lt;/label&gt;</span>
+  <span class="cm">&lt;!-- for/id khớp nhau -&gt; click label sẽ focus vào input --&gt;</span>
+  <span class="an">&lt;input</span> <span class="pr">type</span>=<span class="st-s">"email"</span> <span class="pr">id</span>=<span class="st-s">"email"</span> <span class="pr">name</span>=<span class="st-s">"email"</span> <span class="pr">required</span><span class="an">&gt;</span>
+
+  <span class="an">&lt;label</span> <span class="pr">for</span>=<span class="st-s">"pass"</span><span class="an">&gt;</span>Mật khẩu<span class="an">&lt;/label&gt;</span>
+  <span class="an">&lt;input</span> <span class="pr">type</span>=<span class="st-s">"password"</span> <span class="pr">id</span>=<span class="st-s">"pass"</span> <span class="pr">name</span>=<span class="st-s">"pass"</span> <span class="pr">minlength</span>=<span class="st-s">"6"</span> <span class="pr">required</span><span class="an">&gt;</span>
+
+  <span class="an">&lt;label&gt;</span>
+    <span class="an">&lt;input</span> <span class="pr">type</span>=<span class="st-s">"checkbox"</span> <span class="pr">name</span>=<span class="st-s">"agree"</span> <span class="pr">required</span><span class="an">&gt;</span>
+    Tôi đồng ý điều khoản
+  <span class="an">&lt;/label&gt;</span>
+
+  <span class="an">&lt;select</span> <span class="pr">name</span>=<span class="st-s">"role"</span><span class="an">&gt;</span>
+    <span class="an">&lt;option</span> <span class="pr">value</span>=<span class="st-s">"user"</span><span class="an">&gt;</span>Người dùng<span class="an">&lt;/option&gt;</span>
+    <span class="an">&lt;option</span> <span class="pr">value</span>=<span class="st-s">"admin"</span><span class="an">&gt;</span>Quản trị<span class="an">&lt;/option&gt;</span>
+  <span class="an">&lt;/select&gt;</span>
+
+  <span class="an">&lt;textarea</span> <span class="pr">name</span>=<span class="st-s">"note"</span> <span class="pr">rows</span>=<span class="st-s">"3"</span> <span class="pr">placeholder</span>=<span class="st-s">"Ghi chú..."</span><span class="an">&gt;&lt;/textarea&gt;</span>
+
+  <span class="an">&lt;button</span> <span class="pr">type</span>=<span class="st-s">"submit"</span><span class="an">&gt;</span>Đăng ký<span class="an">&lt;/button&gt;</span>
+<span class="an">&lt;/form&gt;</span></pre></div>
+    </div>
+    <table class="tbl">
+      <tr><th>type</th><th>Dùng khi</th></tr>
+      <tr><td><code>text</code></td><td>Nhập văn bản ngắn thông thường</td></tr>
+      <tr><td><code>email</code></td><td>Nhập email — trình duyệt tự validate định dạng</td></tr>
+      <tr><td><code>number</code></td><td>Nhập số, hiện bàn phím số trên mobile</td></tr>
+      <tr><td><code>date</code></td><td>Chọn ngày qua date-picker có sẵn của trình duyệt</td></tr>
+      <tr><td><code>radio</code></td><td>Chọn 1 trong nhiều lựa chọn cùng <code>name</code></td></tr>
+      <tr><td><code>checkbox</code></td><td>Chọn 0 hoặc nhiều lựa chọn độc lập</td></tr>
+    </table>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Validate miễn phí:</strong> Thuộc tính <code>required</code>, <code>minlength</code>, <code>pattern</code>, <code>type="email"</code> cho trình duyệt tự kiểm tra dữ liệu <strong>trước khi</strong> gửi — giảm code JS validate cơ bản.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — HTML NÂNG CAO ════ -->
+<div class="cat-banner cb-ch">
+  <div class="cb-icon">🟢</div>
+  <div>
+    <div class="cb-badge">HTML NÂNG CAO</div>
+    <div class="cb-title">Phần 2 — HTML Nâng cao</div>
+    <div class="cb-sub">Semantic HTML5 · Đa phương tiện · Accessibility</div>
+  </div>
+</div>
+
+<!-- ════ S4 — SEMANTIC HTML5 ════ -->
+<div class="section" id="s4">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HTML NÂNG CAO</span>
+    <div><h2 class="sec-title">Semantic HTML5</h2>
+    <p class="sec-sub">Dùng thẻ đúng ý nghĩa thay vì nhồi toàn &lt;div&gt;</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Vì sao cần semantic?</div>
+    <p>Trước HTML5, người ta hay dùng <code>&lt;div id="header"&gt;</code>, <code>&lt;div id="nav"&gt;</code>... Trình duyệt/máy tìm kiếm/screen reader không hiểu đó là gì ngoài "1 khối chung chung". HTML5 thêm các thẻ <strong>có ý nghĩa (semantic)</strong> để khai báo rõ vai trò từng vùng — giúp <strong>SEO tốt hơn</strong>, <strong>accessibility tốt hơn</strong>, và code dễ đọc hơn.</p>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">layout.html — bố cục trang bằng thẻ semantic</span><span class="cb-tag ct-g">SEMANTIC</span></div>
+      <div class="cb-body"><pre><span class="an">&lt;body&gt;</span>
+  <span class="an">&lt;header&gt;</span>
+    <span class="an">&lt;h1&gt;</span>Tên trang<span class="an">&lt;/h1&gt;</span>
+    <span class="an">&lt;nav&gt;</span> <span class="cm">&lt;!-- menu điều hướng chính --&gt;</span>
+      <span class="an">&lt;ul&gt;</span><span class="an">&lt;li&gt;</span><span class="an">&lt;a</span> <span class="pr">href</span>=<span class="st-s">"/"</span><span class="an">&gt;</span>Trang chủ<span class="an">&lt;/a&gt;</span><span class="an">&lt;/li&gt;</span><span class="an">&lt;/ul&gt;</span>
+    <span class="an">&lt;/nav&gt;</span>
+  <span class="an">&lt;/header&gt;</span>
+
+  <span class="an">&lt;main&gt;</span> <span class="cm">&lt;!-- nội dung chính, chỉ 1 thẻ main / trang --&gt;</span>
+    <span class="an">&lt;article&gt;</span> <span class="cm">&lt;!-- nội dung độc lập, có thể đứng riêng: bài viết, sản phẩm --&gt;</span>
+      <span class="an">&lt;h2&gt;</span>Tiêu đề bài viết<span class="an">&lt;/h2&gt;</span>
+      <span class="an">&lt;p&gt;</span>Nội dung...<span class="an">&lt;/p&gt;</span>
+    <span class="an">&lt;/article&gt;</span>
+
+    <span class="an">&lt;section&gt;</span> <span class="cm">&lt;!-- một nhóm nội dung liên quan, thường có heading riêng --&gt;</span>
+      <span class="an">&lt;h2&gt;</span>Bình luận<span class="an">&lt;/h2&gt;</span>
+    <span class="an">&lt;/section&gt;</span>
+
+    <span class="an">&lt;aside&gt;</span> <span class="cm">&lt;!-- nội dung phụ, liên quan gián tiếp: sidebar, quảng cáo --&gt;</span>
+      <span class="an">&lt;p&gt;</span>Bài viết liên quan<span class="an">&lt;/p&gt;</span>
+    <span class="an">&lt;/aside&gt;</span>
+  <span class="an">&lt;/main&gt;</span>
+
+  <span class="an">&lt;footer&gt;</span>
+    <span class="an">&lt;p&gt;</span>© 2026 Công ty ABC<span class="an">&lt;/p&gt;</span>
+  <span class="an">&lt;/footer&gt;</span>
+<span class="an">&lt;/body&gt;</span></pre></div>
+    </div>
+    <table class="tbl">
+      <tr><th>Thẻ</th><th>Dùng cho</th></tr>
+      <tr><td><code>&lt;header&gt;</code></td><td>Phần đầu trang hoặc đầu 1 section (logo, tiêu đề, nav)</td></tr>
+      <tr><td><code>&lt;nav&gt;</code></td><td>Khối chứa các liên kết điều hướng chính</td></tr>
+      <tr><td><code>&lt;main&gt;</code></td><td>Nội dung chính, duy nhất, không lặp lại (không chứa nav/footer)</td></tr>
+      <tr><td><code>&lt;article&gt;</code></td><td>Nội dung có thể đứng độc lập, tái sử dụng được: bài blog, sản phẩm</td></tr>
+      <tr><td><code>&lt;section&gt;</code></td><td>Một nhóm nội dung theo chủ đề, thường đi kèm heading riêng</td></tr>
+      <tr><td><code>&lt;aside&gt;</code></td><td>Nội dung phụ, không phải trọng tâm: sidebar, ghi chú</td></tr>
+      <tr><td><code>&lt;footer&gt;</code></td><td>Phần cuối trang hoặc cuối 1 section: bản quyền, liên kết phụ</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ════ S5 — ĐA PHƯƠNG TIỆN & NHÚNG ════ -->
+<div class="section" id="s5">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HTML NÂNG CAO</span>
+    <div><h2 class="sec-title">Đa phương tiện &amp; nhúng nội dung</h2>
+    <p class="sec-sub">audio, video, iframe — nhúng nội dung phong phú vào trang</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Video &amp; Audio</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">media.html</span><span class="cb-tag ct-sk">MEDIA</span></div>
+      <div class="cb-body"><pre><span class="an">&lt;video</span> <span class="pr">controls</span> <span class="pr">width</span>=<span class="st-s">"480"</span> <span class="pr">poster</span>=<span class="st-s">"thumb.jpg"</span><span class="an">&gt;</span>
+  <span class="an">&lt;source</span> <span class="pr">src</span>=<span class="st-s">"video.mp4"</span> <span class="pr">type</span>=<span class="st-s">"video/mp4"</span><span class="an">&gt;</span>
+  Trình duyệt của bạn không hỗ trợ video.
+<span class="an">&lt;/video&gt;</span>
+
+<span class="an">&lt;audio</span> <span class="pr">controls</span> <span class="pr">src</span>=<span class="st-s">"nhac.mp3"</span><span class="an">&gt;&lt;/audio&gt;</span>
+
+<span class="cm">&lt;!-- nhúng nội dung từ trang khác, vd YouTube --&gt;</span>
+<span class="an">&lt;iframe</span>
+  <span class="pr">src</span>=<span class="st-s">"https://www.youtube.com/embed/xxxx"</span>
+  <span class="pr">width</span>=<span class="st-s">"560"</span> <span class="pr">height</span>=<span class="st-s">"315"</span>
+  <span class="pr">title</span>=<span class="st-s">"Video giới thiệu"</span>
+  <span class="pr">loading</span>=<span class="st-s">"lazy"</span> <span class="pr">allowfullscreen</span><span class="an">&gt;</span>
+<span class="an">&lt;/iframe&gt;</span></pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">loading="lazy":</strong> Áp dụng cho cả <code>&lt;img&gt;</code> và <code>&lt;iframe&gt;</code> để trình duyệt chỉ tải nội dung khi người dùng cuộn đến gần — cải thiện tốc độ tải trang ban đầu đáng kể.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">SVG &amp; Canvas — đồ họa trực tiếp trong HTML</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">graphic.html</span><span class="cb-tag ct-au">SVG</span></div>
+      <div class="cb-body"><pre><span class="cm">&lt;!-- SVG: đồ họa vector, sắc nét ở mọi kích thước, style được bằng CSS --&gt;</span>
+<span class="an">&lt;svg</span> <span class="pr">width</span>=<span class="st-s">"100"</span> <span class="pr">height</span>=<span class="st-s">"100"</span><span class="an">&gt;</span>
+  <span class="an">&lt;circle</span> <span class="pr">cx</span>=<span class="st-s">"50"</span> <span class="pr">cy</span>=<span class="st-s">"50"</span> <span class="pr">r</span>=<span class="st-s">"40"</span> <span class="pr">fill</span>=<span class="st-s">"#38bdf8"</span><span class="an">/&gt;</span>
+<span class="an">&lt;/svg&gt;</span>
+
+<span class="cm">&lt;!-- canvas: vẽ bằng JavaScript, dùng cho game, chart tự vẽ --&gt;</span>
+<span class="an">&lt;canvas</span> <span class="pr">id</span>=<span class="st-s">"chart"</span> <span class="pr">width</span>=<span class="st-s">"200"</span> <span class="pr">height</span>=<span class="st-s">"100"</span><span class="an">&gt;&lt;/canvas&gt;</span></pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S6 — THUỘC TÍNH NÂNG CAO & ACCESSIBILITY ════ -->
+<div class="section" id="s6">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HTML NÂNG CAO</span>
+    <div><h2 class="sec-title">Thuộc tính nâng cao &amp; Accessibility</h2>
+    <p class="sec-sub">data-*, ARIA — giúp trang dễ tương tác hơn với JS và với người khuyết tật</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">data-* — gắn dữ liệu tùy biến cho JavaScript</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">data-attr.html</span><span class="cb-tag ct-y">DATA-*</span></div>
+      <div class="cb-body"><pre><span class="an">&lt;button</span> <span class="pr">data-product-id</span>=<span class="st-s">"128"</span> <span class="pr">data-action</span>=<span class="st-s">"add-to-cart"</span><span class="an">&gt;</span>
+  Thêm vào giỏ
+<span class="an">&lt;/button&gt;</span>
+
+<span class="an">&lt;script&gt;</span>
+<span class="vr">document</span>.<span class="fn">querySelector</span>(<span class="st-s">"button"</span>).<span class="fn">addEventListener</span>(<span class="st-s">"click"</span>, <span class="kw">e</span> <span class="kw">=&gt;</span> {
+  <span class="cm">// đọc data-* qua .dataset (camelCase)</span>
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="kw">e</span>.<span class="vr">target</span>.<span class="vr">dataset</span>.<span class="vr">productId</span>); <span class="cm">// "128"</span>
+});
+<span class="an">&lt;/script&gt;</span></pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">ARIA — hỗ trợ screen reader</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">aria.html</span><span class="cb-tag ct-ins">ARIA</span></div>
+      <div class="cb-body"><pre><span class="cm">&lt;!-- nút chỉ có icon: cần aria-label mô tả chức năng --&gt;</span>
+<span class="an">&lt;button</span> <span class="pr">aria-label</span>=<span class="st-s">"Đóng thông báo"</span><span class="an">&gt;</span>✕<span class="an">&lt;/button&gt;</span>
+
+<span class="cm">&lt;!-- báo trạng thái mở/đóng cho menu thả xuống --&gt;</span>
+<span class="an">&lt;button</span> <span class="pr">aria-expanded</span>=<span class="st-s">"false"</span> <span class="pr">aria-controls</span>=<span class="st-s">"menu"</span><span class="an">&gt;</span>Menu<span class="an">&lt;/button&gt;</span>
+<span class="an">&lt;ul</span> <span class="pr">id</span>=<span class="st-s">"menu"</span> <span class="pr">hidden</span><span class="an">&gt;</span> ... <span class="an">&lt;/ul&gt;</span>
+
+<span class="cm">&lt;!-- vùng cập nhật động (thông báo lỗi form) -&gt; screen reader tự đọc khi đổi --&gt;</span>
+<span class="an">&lt;div</span> <span class="pr">role</span>=<span class="st-s">"alert"</span> <span class="pr">aria-live</span>=<span class="st-s">"polite"</span><span class="an">&gt;</span>Email không hợp lệ<span class="an">&lt;/div&gt;</span></pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">📌</span>
+      <div><strong style="color:var(--text)">Quy tắc số 1 của ARIA:</strong> "No ARIA is better than bad ARIA". Luôn ưu tiên thẻ HTML semantic có sẵn (<code>&lt;button&gt;</code> thay vì <code>&lt;div onclick&gt;</code>) — chỉ thêm ARIA khi thẻ chuẩn không đủ diễn tả.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — CSS CƠ BẢN ════ -->
+<div class="cat-banner cb-sk">
+  <div class="cb-icon">🟣</div>
+  <div>
+    <div class="cb-badge">CSS CƠ BẢN</div>
+    <div class="cb-title">Phần 3 — CSS Cơ bản</div>
+    <div class="cb-sub">Cách nhúng CSS · Selector · Box Model · Màu sắc &amp; Typography</div>
+  </div>
+</div>
+
+<!-- ════ S7 — NHÚNG CSS & SELECTOR ════ -->
+<div class="section" id="s7">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">CSS CƠ BẢN</span>
+    <div><h2 class="sec-title">Cách nhúng CSS &amp; Selector</h2>
+    <p class="sec-sub">3 cách gắn CSS vào HTML, và cách "chọn" đúng phần tử cần style</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">3 cách nhúng CSS</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">nhung-css.html</span><span class="cb-tag ct-sk">3 CÁCH</span></div>
+      <div class="cb-body"><pre><span class="cm">&lt;!-- 1. External: file .css riêng — CÁCH KHUYẾN NGHỊ --&gt;</span>
+<span class="an">&lt;link</span> <span class="pr">rel</span>=<span class="st-s">"stylesheet"</span> <span class="pr">href</span>=<span class="st-s">"style.css"</span><span class="an">&gt;</span>
+
+<span class="cm">&lt;!-- 2. Internal: viết trong thẻ style ở head --&gt;</span>
+<span class="an">&lt;style&gt;</span>
+  <span class="cl">p</span> { <span class="pr">color</span>: <span class="nm">navy</span>; }
+<span class="an">&lt;/style&gt;</span>
+
+<span class="cm">&lt;!-- 3. Inline: viết trực tiếp trên thẻ — tránh dùng, khó bảo trì --&gt;</span>
+<span class="an">&lt;p</span> <span class="pr">style</span>=<span class="st-s">"color: navy;"</span><span class="an">&gt;</span>Xin chào<span class="an">&lt;/p&gt;</span></pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Các loại Selector thường dùng</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">style.css</span><span class="cb-tag ct-t">SELECTOR</span></div>
+      <div class="cb-body"><pre><span class="cm">/* Selector theo thẻ */</span>
+<span class="cl">p</span> { <span class="pr">color</span>: <span class="nm">#333</span>; }
+
+<span class="cm">/* Selector theo class — dùng .tên-class, tái sử dụng nhiều nơi */</span>
+<span class="cl">.btn-primary</span> { <span class="pr">background</span>: <span class="nm">#38bdf8</span>; }
+
+<span class="cm">/* Selector theo id — dùng #id, chỉ nên có 1 phần tử / trang */</span>
+<span class="cl">#header</span> { <span class="pr">height</span>: <span class="nm">64px</span>; }
+
+<span class="cm">/* Selector con trực tiếp (>) và cháu (khoảng trắng) */</span>
+<span class="cl">.card > h3</span> { <span class="pr">margin-top</span>: <span class="nm">0</span>; }
+<span class="cl">.card p</span> { <span class="pr">color</span>: <span class="nm">gray</span>; }
+
+<span class="cm">/* Selector nhiều điều kiện (không có khoảng trắng = AND) */</span>
+<span class="cl">input.error</span> { <span class="pr">border-color</span>: <span class="nm">red</span>; }
+
+<span class="cm">/* Selector theo thuộc tính */</span>
+<span class="cl">input[type="email"]</span> { <span class="pr">border-radius</span>: <span class="nm">6px</span>; }
+
+<span class="cm">/* Nhóm nhiều selector cùng style (phẩy) */</span>
+<span class="cl">h1, h2, h3</span> { <span class="pr">font-family</span>: <span class="st-s">"Be Vietnam Pro"</span>, <span class="nm">sans-serif</span>; }</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Độ ưu tiên (specificity):</strong> inline style &gt; <code>id</code> &gt; <code>class</code>/thuộc tính &gt; thẻ. Khi 2 rule cùng áp dụng, rule "cụ thể hơn" thắng — đây là lý do lạm dụng <code>id</code> hay <code>!important</code> khiến CSS khó bảo trì về sau.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S8 — BOX MODEL ════ -->
+<div class="section" id="s8">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">CSS CƠ BẢN</span>
+    <div><h2 class="sec-title">Box Model</h2>
+    <p class="sec-sub">Nền tảng quan trọng nhất: mọi phần tử đều là một "hộp"</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">4 lớp của một hộp CSS</div>
+    <div class="boxmodel">
+      <div class="bm-margin"><span class="bm-label">margin</span>
+        <div class="bm-border"><span class="bm-label">border</span>
+          <div class="bm-padding"><span class="bm-label">padding</span>
+            <div class="bm-content">content</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>Từ trong ra ngoài: <strong>content</strong> (nội dung thật — chữ, ảnh) → <strong>padding</strong> (khoảng đệm bên trong, giữa nội dung và viền) → <strong>border</strong> (đường viền) → <strong>margin</strong> (khoảng cách với phần tử bên ngoài). Tổng chiều rộng hiển thị = content + padding + border + margin.</p>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">box-model.css</span><span class="cb-tag ct-ins">BOX MODEL</span></div>
+      <div class="cb-body"><pre><span class="cl">.card</span> {
+  <span class="pr">width</span>: <span class="nm">300px</span>;
+  <span class="pr">padding</span>: <span class="nm">20px</span>;          <span class="cm">/* đệm 4 phía */</span>
+  <span class="pr">border</span>: <span class="nm">1px</span> <span class="nm">solid</span> <span class="nm">#ddd</span>;
+  <span class="pr">margin</span>: <span class="nm">16px</span> <span class="nm">auto</span>;    <span class="cm">/* trên/dưới 16px, trái/phải tự căn giữa */</span>
+
+  <span class="cm">/* box-sizing: border-box -> width đã BAO GỒM padding + border
+     -> hộp không "phình to" ngoài ý muốn khi thêm padding. NÊN đặt mặc định! */</span>
+  <span class="pr">box-sizing</span>: <span class="nm">border-box</span>;
+}
+
+<span class="cm">/* Reset kinh điển: áp border-box cho MỌI phần tử */</span>
+<span class="cl">*</span>, <span class="cl">*::before</span>, <span class="cl">*::after</span> {
+  <span class="pr">box-sizing</span>: <span class="nm">border-box</span>;
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Luôn đặt <code>box-sizing: border-box</code> global.</strong> Với <code>content-box</code> (mặc định), thêm padding sẽ làm hộp to hơn <code>width</code> đã khai báo — gây lệch layout khó hiểu. <code>border-box</code> tính padding/border vào trong <code>width</code>, dễ đoán kích thước hơn nhiều.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S9 — MÀU SẮC, TYPOGRAPHY, ĐƠN VỊ ════ -->
+<div class="section" id="s9">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">CSS CƠ BẢN</span>
+    <div><h2 class="sec-title">Màu sắc, Typography &amp; Đơn vị</h2>
+    <p class="sec-sub">Cách khai báo màu, chữ, và các đơn vị đo trong CSS</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Khai báo màu</div>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-box" style="background:#38bdf8"></div><span>#38bdf8</span></div>
+      <div class="swatch"><div class="swatch-box" style="background:rgb(64,216,142)"></div><span>rgb()</span></div>
+      <div class="swatch"><div class="swatch-box" style="background:rgba(255,140,80,.7)"></div><span>rgba()</span></div>
+      <div class="swatch"><div class="swatch-box" style="background:hsl(280,80%,68%)"></div><span>hsl()</span></div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">color.css</span><span class="cb-tag ct-y">COLOR</span></div>
+      <div class="cb-body"><pre><span class="cl">.a</span> { <span class="pr">color</span>: <span class="nm">#38bdf8</span>; }              <span class="cm">/* mã hex */</span>
+<span class="cl">.b</span> { <span class="pr">color</span>: <span class="fn">rgb</span>(<span class="nm">64</span>, <span class="nm">216</span>, <span class="nm">142</span>); }   <span class="cm">/* đỏ, lục, lam 0-255 */</span>
+<span class="cl">.c</span> { <span class="pr">color</span>: <span class="fn">rgba</span>(<span class="nm">255</span>, <span class="nm">140</span>, <span class="nm">80</span>, <span class="nm">.7</span>); } <span class="cm">/* thêm alpha (độ trong suốt) */</span>
+<span class="cl">.d</span> { <span class="pr">color</span>: <span class="fn">hsl</span>(<span class="nm">280</span>, <span class="nm">80%</span>, <span class="nm">68%</span>); }   <span class="cm">/* hue, saturation, lightness — dễ chỉnh sắc độ */</span></pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Typography — kiểu chữ</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">typography.css</span><span class="cb-tag ct-g">FONT</span></div>
+      <div class="cb-body"><pre><span class="cl">body</span> {
+  <span class="pr">font-family</span>: <span class="st-s">"Be Vietnam Pro"</span>, <span class="nm">sans-serif</span>; <span class="cm">/* font dự phòng nếu font 1 không load được */</span>
+  <span class="pr">font-size</span>: <span class="nm">16px</span>;
+  <span class="pr">font-weight</span>: <span class="nm">400</span>;      <span class="cm">/* 400 thường, 700 đậm */</span>
+  <span class="pr">line-height</span>: <span class="nm">1.6</span>;      <span class="cm">/* không đơn vị -&gt; nhân theo font-size, dễ scale */</span>
+  <span class="pr">letter-spacing</span>: <span class="nm">.2px</span>;
+  <span class="pr">text-align</span>: <span class="nm">left</span>;
+}
+<span class="cl">h1</span> { <span class="pr">font-weight</span>: <span class="nm">800</span>; <span class="pr">text-transform</span>: <span class="nm">uppercase</span>; }
+<span class="cl">a</span> { <span class="pr">text-decoration</span>: <span class="nm">none</span>; }</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Đơn vị đo — khi nào dùng gì?</div>
+    <table class="tbl">
+      <tr><th>Đơn vị</th><th>Ý nghĩa</th><th>Nên dùng cho</th></tr>
+      <tr><td><code>px</code></td><td>Pixel — cố định tuyệt đối</td><td>border, box-shadow, chi tiết nhỏ cần chính xác</td></tr>
+      <tr><td><code>%</code></td><td>Phần trăm theo phần tử cha</td><td>width layout co giãn theo container</td></tr>
+      <tr><td><code>rem</code></td><td>Bội số của font-size thẻ <code>html</code> (gốc)</td><td>font-size, spacing — dễ scale toàn trang khi đổi 1 nơi</td></tr>
+      <tr><td><code>em</code></td><td>Bội số của font-size phần tử cha gần nhất</td><td>spacing phụ thuộc ngữ cảnh cục bộ (vd padding nút theo cỡ chữ nút)</td></tr>
+      <tr><td><code>vw / vh</code></td><td>% theo chiều rộng/cao viewport (màn hình)</td><td>hero section full màn hình, font co theo màn hình</td></tr>
+    </table>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Mặc định nên dùng <code>rem</code></strong> cho font-size và spacing thay vì <code>px</code> — người dùng chỉnh cỡ chữ mặc định của trình duyệt (accessibility) sẽ khiến toàn trang scale theo đúng ý, thay vì <code>px</code> cố định không phản hồi.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — CSS LAYOUT ════ -->
+<div class="cat-banner cb-au">
+  <div class="cb-icon">🟡</div>
+  <div>
+    <div class="cb-badge">CSS LAYOUT</div>
+    <div class="cb-title">Phần 4 — CSS Layout</div>
+    <div class="cb-sub">Display &amp; Position · Flexbox · CSS Grid</div>
+  </div>
+</div>
+
+<!-- ════ S10 — DISPLAY & POSITION ════ -->
+<div class="section" id="s10">
+  <div class="sec-head">
+    <span class="sec-tag st-au">CSS LAYOUT</span>
+    <div><h2 class="sec-title">Display &amp; Position</h2>
+    <p class="sec-sub">Cách phần tử chiếm chỗ và cách "ghim" phần tử ra khỏi luồng bình thường</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">display — kiểu hiển thị</div>
+    <table class="tbl">
+      <tr><th>Giá trị</th><th>Đặc điểm</th></tr>
+      <tr><td><code>block</code></td><td>Chiếm hết chiều ngang, luôn xuống dòng mới (div, p, h1...)</td></tr>
+      <tr><td><code>inline</code></td><td>Chỉ chiếm đúng phần nội dung, nằm cùng dòng, <strong>không</strong> set được width/height (span, a, strong...)</td></tr>
+      <tr><td><code>inline-block</code></td><td>Nằm cùng dòng như inline nhưng set được width/height như block</td></tr>
+      <tr><td><code>flex</code></td><td>Biến phần tử thành flex container — xem mục Flexbox</td></tr>
+      <tr><td><code>grid</code></td><td>Biến phần tử thành grid container — xem mục Grid</td></tr>
+      <tr><td><code>none</code></td><td>Ẩn hoàn toàn, không chiếm chỗ (khác <code>visibility:hidden</code> vẫn chiếm chỗ)</td></tr>
+    </table>
+  </div>
+  <div class="sub">
+    <div class="sub-title">position — đưa phần tử ra khỏi luồng</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">position.css</span><span class="cb-tag ct-ins">POSITION</span></div>
+      <div class="cb-body"><pre><span class="cm">/* static: mặc định, top/left/right/bottom vô tác dụng */</span>
+<span class="cl">.normal</span> { <span class="pr">position</span>: <span class="nm">static</span>; }
+
+<span class="cm">/* relative: vẫn chiếm chỗ cũ, dịch chuyển SO VỚI vị trí gốc của chính nó */</span>
+<span class="cl">.shift</span> { <span class="pr">position</span>: <span class="nm">relative</span>; <span class="pr">top</span>: <span class="nm">4px</span>; }
+
+<span class="cm">/* absolute: thoát khỏi luồng, định vị theo tổ tiên gần nhất có position != static */</span>
+<span class="cl">.badge</span> {
+  <span class="pr">position</span>: <span class="nm">absolute</span>;
+  <span class="pr">top</span>: <span class="nm">8px</span>; <span class="pr">right</span>: <span class="nm">8px</span>;
+}
+<span class="cl">.card</span> { <span class="pr">position</span>: <span class="nm">relative</span>; } <span class="cm">/* -&gt; .badge định vị theo .card */</span>
+
+<span class="cm">/* fixed: ghim theo viewport, không di chuyển khi cuộn trang */</span>
+<span class="cl">.back-to-top</span> { <span class="pr">position</span>: <span class="nm">fixed</span>; <span class="pr">bottom</span>: <span class="nm">20px</span>; <span class="pr">right</span>: <span class="nm">20px</span>; }
+
+<span class="cm">/* sticky: dính lại khi cuộn tới ngưỡng, rồi thoát khi cuộn qua khỏi cha */</span>
+<span class="cl">.table-header</span> { <span class="pr">position</span>: <span class="nm">sticky</span>; <span class="pr">top</span>: <span class="nm">0</span>; }</pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">📌</span>
+      <div><strong style="color:var(--text)">Ghi nhớ cặp đôi:</strong> <code>position: absolute</code> luôn cần một phần tử cha có <code>position: relative</code> (hoặc absolute/fixed) để làm "mốc" — nếu không nó sẽ định vị theo toàn bộ trang (<code>&lt;html&gt;</code>).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S11 — FLEXBOX ════ -->
+<div class="section" id="s11">
+  <div class="sec-head">
+    <span class="sec-tag st-au">CSS LAYOUT</span>
+    <div><h2 class="sec-title">Flexbox</h2>
+    <p class="sec-sub">Bố cục 1 chiều (hàng hoặc cột) — công cụ dùng nhiều nhất trong CSS hiện đại</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Flex container &amp; flex item</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">flexbox.css</span><span class="cb-tag ct-ch">FLEXBOX</span></div>
+      <div class="cb-body"><pre><span class="cl">.navbar</span> {
+  <span class="pr">display</span>: <span class="nm">flex</span>;                 <span class="cm">/* bật flex cho container */</span>
+  <span class="pr">flex-direction</span>: <span class="nm">row</span>;       <span class="cm">/* row (mặc định) | column */</span>
+  <span class="pr">justify-content</span>: <span class="nm">space-between</span>; <span class="cm">/* căn theo trục CHÍNH (ngang nếu row) */</span>
+  <span class="pr">align-items</span>: <span class="nm">center</span>;      <span class="cm">/* căn theo trục PHỤ (dọc nếu row) */</span>
+  <span class="pr">gap</span>: <span class="nm">16px</span>;                <span class="cm">/* khoảng cách giữa các item, không cần margin thủ công */</span>
+  <span class="pr">flex-wrap</span>: <span class="nm">wrap</span>;          <span class="cm">/* cho phép xuống dòng khi không đủ chỗ */</span>
+}
+
+<span class="cl">.navbar .logo</span> { <span class="pr">flex</span>: <span class="nm">0</span> <span class="nm">0</span> <span class="nm">auto</span>; } <span class="cm">/* không co giãn, giữ kích thước tự nhiên */</span>
+<span class="cl">.navbar .search</span> { <span class="pr">flex</span>: <span class="nm">1</span>; }       <span class="cm">/* chiếm hết khoảng trống còn lại */</span></pre></div>
+    </div>
+    <table class="tbl">
+      <tr><th>Thuộc tính</th><th>Giá trị hay dùng</th><th>Tác dụng</th></tr>
+      <tr><td><code>justify-content</code></td><td><code>flex-start / center / space-between / space-around</code></td><td>Căn item theo trục chính (thường là ngang)</td></tr>
+      <tr><td><code>align-items</code></td><td><code>flex-start / center / stretch</code></td><td>Căn item theo trục phụ (thường là dọc)</td></tr>
+      <tr><td><code>flex: 1</code></td><td>tương đương <code>flex-grow:1</code></td><td>Item giãn ra chiếm hết không gian thừa</td></tr>
+      <tr><td><code>flex-wrap: wrap</code></td><td>—</td><td>Cho item tự xuống hàng thay vì bị ép co lại</td></tr>
+    </table>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Mẹo căn giữa tuyệt đối:</strong> <code>display:flex; justify-content:center; align-items:center;</code> trên phần tử cha là cách nhanh nhất để căn giữa cả ngang lẫn dọc bất kỳ nội dung con nào — thay thế hoàn toàn kỹ thuật margin âm/absolute thời xưa.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S12 — CSS GRID ════ -->
+<div class="section" id="s12">
+  <div class="sec-head">
+    <span class="sec-tag st-au">CSS LAYOUT</span>
+    <div><h2 class="sec-title">CSS Grid</h2>
+    <p class="sec-sub">Bố cục 2 chiều (hàng và cột cùng lúc) — mạnh nhất cho layout tổng thể trang</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Grid container cơ bản</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">grid.css</span><span class="cb-tag ct-t">GRID</span></div>
+      <div class="cb-body"><pre><span class="cl">.gallery</span> {
+  <span class="pr">display</span>: <span class="nm">grid</span>;
+  <span class="pr">grid-template-columns</span>: <span class="nm">repeat</span>(<span class="nm">3</span>, <span class="nm">1fr</span>); <span class="cm">/* 3 cột bằng nhau */</span>
+  <span class="pr">gap</span>: <span class="nm">16px</span>;
+}
+
+<span class="cm">/* Layout trang kinh điển: header full-width, sidebar + content, footer full-width */</span>
+<span class="cl">.page</span> {
+  <span class="pr">display</span>: <span class="nm">grid</span>;
+  <span class="pr">grid-template-columns</span>: <span class="nm">240px</span> <span class="nm">1fr</span>;   <span class="cm">/* cột 1 cố định 240px, cột 2 chiếm phần còn lại */</span>
+  <span class="pr">grid-template-areas</span>:
+    <span class="st-s">"header header"</span>
+    <span class="st-s">"sidebar content"</span>
+    <span class="st-s">"footer footer"</span>;
+}
+<span class="cl">.header</span>  { <span class="pr">grid-area</span>: <span class="nm">header</span>; }
+<span class="cl">.sidebar</span> { <span class="pr">grid-area</span>: <span class="nm">sidebar</span>; }
+<span class="cl">.content</span> { <span class="pr">grid-area</span>: <span class="nm">content</span>; }
+<span class="cl">.footer</span>  { <span class="pr">grid-area</span>: <span class="nm">footer</span>; }
+
+<span class="cm">/* auto-fit + minmax: số cột tự co giãn theo độ rộng màn hình, không cần media query */</span>
+<span class="cl">.cards</span> {
+  <span class="pr">display</span>: <span class="nm">grid</span>;
+  <span class="pr">grid-template-columns</span>: <span class="nm">repeat</span>(<span class="nm">auto-fit</span>, <span class="nm">minmax</span>(<span class="nm">220px</span>, <span class="nm">1fr</span>));
+  <span class="pr">gap</span>: <span class="nm">14px</span>;
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Flexbox hay Grid?</strong> Bố cục <strong>1 chiều</strong> (thanh menu, nhóm nút, danh sách card cuộn ngang) → <strong>Flexbox</strong>. Bố cục <strong>2 chiều</strong> (toàn bộ khung trang, gallery ảnh nhiều hàng nhiều cột) → <strong>Grid</strong>. Thực tế hầu hết dự án dùng cả hai kết hợp.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — CSS NÂNG CAO ════ -->
+<div class="cat-banner cb-oc">
+  <div class="cb-icon">🔄</div>
+  <div>
+    <div class="cb-badge">CSS NÂNG CAO</div>
+    <div class="cb-title">Phần 5 — CSS Nâng cao</div>
+    <div class="cb-sub">Responsive · Transition/Animation · Pseudo &amp; biến CSS · Transform</div>
+  </div>
+</div>
+
+<!-- ════ S13 — RESPONSIVE & MEDIA QUERY ════ -->
+<div class="section" id="s13">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">CSS NÂNG CAO</span>
+    <div><h2 class="sec-title">Responsive &amp; Media Query</h2>
+    <p class="sec-sub">Làm trang hiển thị tốt trên mọi kích thước màn hình</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Mobile-first với media query</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">responsive.css</span><span class="cb-tag ct-ins">MEDIA QUERY</span></div>
+      <div class="cb-body"><pre><span class="cm">/* Mobile-first: style mặc định dành cho màn hình NHỎ trước */</span>
+<span class="cl">.cards</span> {
+  <span class="pr">display</span>: <span class="nm">grid</span>;
+  <span class="pr">grid-template-columns</span>: <span class="nm">1fr</span>;      <span class="cm">/* mobile: 1 cột */</span>
+  <span class="pr">gap</span>: <span class="nm">12px</span>;
+}
+
+<span class="cm">/* min-width: 768px -&gt; áp dụng khi màn hình RỘNG HƠN mốc tablet */</span>
+<span class="cl">@media (min-width: 768px)</span> {
+  <span class="cl">.cards</span> { <span class="pr">grid-template-columns</span>: <span class="nm">repeat</span>(<span class="nm">2</span>, <span class="nm">1fr</span>); } <span class="cm">/* tablet: 2 cột */</span>
+}
+
+<span class="cl">@media (min-width: 1024px)</span> {
+  <span class="cl">.cards</span> { <span class="pr">grid-template-columns</span>: <span class="nm">repeat</span>(<span class="nm">4</span>, <span class="nm">1fr</span>); } <span class="cm">/* desktop: 4 cột */</span>
+}</pre></div>
+    </div>
+    <table class="tbl">
+      <tr><th>Breakpoint phổ biến</th><th>Thiết bị</th></tr>
+      <tr><td><code>&lt; 576px</code></td><td>Điện thoại</td></tr>
+      <tr><td><code>576px – 768px</code></td><td>Điện thoại lớn / tablet dọc</td></tr>
+      <tr><td><code>768px – 1024px</code></td><td>Tablet ngang</td></tr>
+      <tr><td><code>&gt; 1024px</code></td><td>Desktop</td></tr>
+    </table>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Vì sao "mobile-first"?</strong> Viết CSS mặc định cho mobile rồi <code>min-width</code> mở rộng dần lên desktop giúp CSS gọn hơn (đa số người dùng lướt web bằng điện thoại) và tránh phải "ghi đè" hàng loạt style desktop bằng <code>max-width</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S14 — TRANSITION & ANIMATION ════ -->
+<div class="section" id="s14">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">CSS NÂNG CAO</span>
+    <div><h2 class="sec-title">Transition &amp; Animation</h2>
+    <p class="sec-sub">Tạo chuyển động mượt mà mà không cần JavaScript</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Transition — chuyển đổi mượt giữa 2 trạng thái</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">transition.css</span><span class="cb-tag ct-sk">TRANSITION</span></div>
+      <div class="cb-body"><pre><span class="cl">.btn</span> {
+  <span class="pr">background</span>: <span class="nm">#38bdf8</span>;
+  <span class="pr">transform</span>: <span class="nm">scale</span>(<span class="nm">1</span>);
+  <span class="cm">/* thuộc-tính | thời-gian | kiểu-easing */</span>
+  <span class="pr">transition</span>: <span class="nm">background</span> <span class="nm">.2s</span> <span class="nm">ease</span>, <span class="nm">transform</span> <span class="nm">.2s</span> <span class="nm">ease</span>;
+}
+<span class="cl">.btn:hover</span> {
+  <span class="pr">background</span>: <span class="nm">#0ea5e9</span>;
+  <span class="pr">transform</span>: <span class="nm">scale</span>(<span class="nm">1.04</span>);   <span class="cm">/* phóng to nhẹ khi hover */</span>
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Animation — chuyển động phức tạp, nhiều bước, tự chạy</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">animation.css</span><span class="cb-tag ct-ch">ANIMATION</span></div>
+      <div class="cb-body"><pre><span class="cm">/* khai báo các bước (keyframes) bằng % thời gian */</span>
+<span class="cl">@keyframes</span> <span class="fn">pulse</span> {
+  <span class="nm">0%</span>, <span class="nm">100%</span> { <span class="pr">opacity</span>: <span class="nm">1</span>; <span class="pr">transform</span>: <span class="nm">scale</span>(<span class="nm">1</span>); }
+  <span class="nm">50%</span>       { <span class="pr">opacity</span>: <span class="nm">.5</span>; <span class="pr">transform</span>: <span class="nm">scale</span>(<span class="nm">.85</span>); }
+}
+
+<span class="cl">.dot</span> {
+  <span class="pr">animation</span>: <span class="fn">pulse</span> <span class="nm">2s</span> <span class="nm">ease-in-out</span> <span class="nm">infinite</span>;
+  <span class="cm">/* tên-keyframes | thời-lượng | easing | số-lần-lặp (infinite = vô hạn) */</span>
+}</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Hiệu năng:</strong> Ưu tiên animate <code>transform</code> và <code>opacity</code> — 2 thuộc tính này được GPU tăng tốc, không gây "reflow" (tính lại layout). Animate <code>width</code>, <code>top</code>, <code>margin</code> trực tiếp dễ gây giật lag trên máy yếu.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S15 — PSEUDO-CLASS/ELEMENT & BIẾN CSS ════ -->
+<div class="section" id="s15">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">CSS NÂNG CAO</span>
+    <div><h2 class="sec-title">Pseudo-class, Pseudo-element &amp; biến CSS</h2>
+    <p class="sec-sub">Style theo trạng thái/vị trí, và tái sử dụng giá trị bằng CSS Custom Properties</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Pseudo-class — style theo trạng thái</div>
+    <table class="tbl">
+      <tr><th>Pseudo-class</th><th>Áp dụng khi</th></tr>
+      <tr><td><code>:hover</code></td><td>Chuột đang di trên phần tử</td></tr>
+      <tr><td><code>:focus</code></td><td>Phần tử (input, button) đang được focus</td></tr>
+      <tr><td><code>:first-child</code> / <code>:last-child</code></td><td>Là con đầu tiên / cuối cùng của cha</td></tr>
+      <tr><td><code>:nth-child(2n)</code></td><td>Con thứ chẵn — hay dùng để "sọc vằn" bảng dữ liệu</td></tr>
+      <tr><td><code>:not(.active)</code></td><td>Loại trừ phần tử khớp điều kiện bên trong</td></tr>
+      <tr><td><code>:disabled</code></td><td>Input/button đang bị vô hiệu hóa</td></tr>
+    </table>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Pseudo-element — tạo nội dung "ảo"</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">pseudo.css</span><span class="cb-tag ct-au">PSEUDO</span></div>
+      <div class="cb-body"><pre><span class="cm">/* ::before / ::after: chèn nội dung ảo trước/sau, cần có content */</span>
+<span class="cl">.required::after</span> {
+  <span class="pr">content</span>: <span class="st-s">" *"</span>;
+  <span class="pr">color</span>: <span class="nm">red</span>;
+}
+
+<span class="cm">/* tô sáng chữ được người dùng bôi đen chọn */</span>
+<span class="cl">::selection</span> { <span class="pr">background</span>: <span class="nm">#ffd060</span>; <span class="pr">color</span>: <span class="nm">#000</span>; }
+
+<span class="cm">/* style placeholder của input */</span>
+<span class="cl">input::placeholder</span> { <span class="pr">color</span>: <span class="nm">#999</span>; }</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">CSS Custom Properties (biến CSS)</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">variables.css</span><span class="cb-tag ct-g">VAR</span></div>
+      <div class="cb-body"><pre><span class="cm">/* khai báo biến ở :root -&gt; dùng được toàn trang */</span>
+<span class="cl">:root</span> {
+  <span class="pr">--primary</span>: <span class="nm">#38bdf8</span>;
+  <span class="pr">--radius</span>: <span class="nm">10px</span>;
+  <span class="pr">--space</span>: <span class="nm">16px</span>;
+}
+
+<span class="cl">.btn</span> {
+  <span class="pr">background</span>: <span class="fn">var</span>(<span class="pr">--primary</span>);
+  <span class="pr">border-radius</span>: <span class="fn">var</span>(<span class="pr">--radius</span>);
+  <span class="pr">padding</span>: <span class="fn">var</span>(<span class="pr">--space</span>);
+}
+
+<span class="cm">/* dark mode: chỉ cần đổi giá trị biến trong 1 scope khác */</span>
+<span class="cl">[data-theme="dark"]</span> {
+  <span class="pr">--primary</span>: <span class="nm">#0ea5e9</span>;
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Sức mạnh của biến CSS:</strong> Đổi 1 giá trị ở <code>:root</code> sẽ cập nhật mọi nơi dùng <code>var(--primary)</code> trên toàn trang — cực kỳ hữu ích khi đổi màu thương hiệu hoặc làm dark mode mà không cần class riêng cho từng phần tử.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S16 — TRANSFORM, Z-INDEX & OVERFLOW ════ -->
+<div class="section" id="s16">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">CSS NÂNG CAO</span>
+    <div><h2 class="sec-title">Transform, z-index &amp; Overflow</h2>
+    <p class="sec-sub">Xoay/di chuyển phần tử, xử lý lớp chồng và tràn nội dung</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">transform — biến đổi hình học không ảnh hưởng layout</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">transform.css</span><span class="cb-tag ct-t">TRANSFORM</span></div>
+      <div class="cb-body"><pre><span class="cl">.avatar</span> { <span class="pr">transform</span>: <span class="nm">rotate</span>(<span class="nm">8deg</span>); }              <span class="cm">/* xoay */</span>
+<span class="cl">.card:hover</span> { <span class="pr">transform</span>: <span class="nm">translateY</span>(<span class="nm">-4px</span>); }   <span class="cm">/* dịch lên, hiệu ứng "nổi" */</span>
+<span class="cl">.zoom:hover</span> { <span class="pr">transform</span>: <span class="nm">scale</span>(<span class="nm">1.1</span>); }        <span class="cm">/* phóng to */</span>
+
+<span class="cm">/* căn giữa tuyệt đối kinh điển khi không dùng flex được */</span>
+<span class="cl">.modal</span> {
+  <span class="pr">position</span>: <span class="nm">absolute</span>;
+  <span class="pr">top</span>: <span class="nm">50%</span>; <span class="pr">left</span>: <span class="nm">50%</span>;
+  <span class="pr">transform</span>: <span class="nm">translate</span>(<span class="nm">-50%</span>, <span class="nm">-50%</span>); <span class="cm">/* lùi lại đúng nửa kích thước chính nó */</span>
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">z-index — thứ tự chồng lớp</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">z-index.css</span><span class="cb-tag ct-y">Z-INDEX</span></div>
+      <div class="cb-body"><pre><span class="cm">/* z-index chỉ có tác dụng khi position khác static */</span>
+<span class="cl">.dropdown</span>  { <span class="pr">position</span>: <span class="nm">absolute</span>; <span class="pr">z-index</span>: <span class="nm">10</span>; }
+<span class="cl">.modal-overlay</span> { <span class="pr">position</span>: <span class="nm">fixed</span>;  <span class="pr">z-index</span>: <span class="nm">100</span>; } <span class="cm">/* số cao hơn -&gt; nổi lên trên */</span></pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">📌</span>
+      <div><strong style="color:var(--text)">Mẹo quản lý z-index:</strong> Trong dự án lớn, khai báo sẵn các mốc bằng biến CSS (<code>--z-dropdown: 10; --z-modal: 100; --z-toast: 1000;</code>) thay vì đoán số ngẫu nhiên — tránh tình trạng "chiến tranh z-index" ngày càng tăng.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">overflow — xử lý nội dung tràn</div>
+    <table class="tbl">
+      <tr><th>Giá trị</th><th>Hành vi</th></tr>
+      <tr><td><code>visible</code></td><td>Mặc định — nội dung tràn vẫn hiện ra ngoài hộp</td></tr>
+      <tr><td><code>hidden</code></td><td>Cắt bỏ phần tràn, không hiện, không cuộn được</td></tr>
+      <tr><td><code>scroll</code></td><td>Luôn hiện thanh cuộn dù nội dung có tràn hay không</td></tr>
+      <tr><td><code>auto</code></td><td>Chỉ hiện thanh cuộn khi thật sự tràn — lựa chọn phổ biến nhất</td></tr>
+    </table>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ S17 — BEST PRACTICE & LỖI HAY GẶP ════ -->
+<div class="section" id="s17">
+  <div class="sec-head">
+    <span class="sec-tag st-y">THAM KHẢO</span>
+    <div><h2 class="sec-title">Best Practice &amp; lỗi thường gặp</h2>
+    <p class="sec-sub">Những điều nên làm ngay từ đầu, và lỗi người mới hay mắc</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Checklist khi bắt đầu 1 trang mới</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-L"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-B"><h4>Reset box-sizing &amp; margin mặc định</h4><p>Thêm <code>* { box-sizing: border-box; margin: 0; padding: 0; }</code> ở đầu file CSS để tránh khác biệt mặc định giữa các trình duyệt.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-B"><h4>Dùng thẻ semantic thay vì toàn &lt;div&gt;</h4><p>header/nav/main/section/footer giúp SEO và accessibility tốt hơn mà gần như không tốn thêm công sức.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-B"><h4>Viết CSS theo hướng mobile-first</h4><p>Style mặc định cho màn hình nhỏ, dùng <code>min-width</code> media query để mở rộng dần lên desktop.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">4</div></div>
+        <div class="step-B"><h4>Đặt tên class rõ nghĩa, nhất quán</h4><p>Theo quy ước như BEM (<code>.card__title--active</code>) giúp CSS không xung đột và dễ đọc khi dự án lớn dần.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Lỗi thường gặp</div>
+    <div class="info i-err">
+      <span class="info-ico">❌</span>
+      <div><strong style="color:var(--text)">Quên box-sizing:border-box</strong> — thêm padding làm hộp phình to hơn width đã set, layout bị lệch khó hiểu.</div>
+    </div>
+    <div class="info i-err">
+      <span class="info-ico">❌</span>
+      <div><strong style="color:var(--text)">Lạm dụng <code>!important</code></strong> — chữa cháy specificity ngắn hạn nhưng khiến CSS về sau cực khó ghi đè, nên sửa lại độ ưu tiên selector thay vì dùng <code>!important</code>.</div>
+    </div>
+    <div class="info i-err">
+      <span class="info-ico">❌</span>
+      <div><strong style="color:var(--text)">absolute mà quên relative ở cha</strong> — phần tử bay lệch ra vị trí không mong muốn vì định vị theo <code>&lt;html&gt;</code> thay vì theo card chứa nó.</div>
+    </div>
+    <div class="info i-err">
+      <span class="info-ico">❌</span>
+      <div><strong style="color:var(--text)">Thiếu <code>alt</code> cho ảnh, thiếu <code>label</code> cho input</strong> — vừa hại SEO vừa hại accessibility, và form khó dùng trên mobile do không click được vào label để focus input.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ S18 — CHEAT SHEET ════ -->
+<div class="section" id="s18">
+  <div class="sec-head">
+    <span class="sec-tag st-y">THAM KHẢO</span>
+    <div><h2 class="sec-title">Cheat Sheet</h2>
+    <p class="sec-sub">Tra cứu nhanh thẻ HTML &amp; thuộc tính CSS đã học</p></div>
+  </div>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4 class="h4-ins">🔵 HTML cấu trúc</h4>
+      <div class="cheat-row"><span class="ck">Khung tài liệu</span><span class="cv">html&gt;head+body</span></div>
+      <div class="cheat-row"><span class="ck">Tiêu đề</span><span class="cv">h1..h6</span></div>
+      <div class="cheat-row"><span class="ck">Liên kết</span><span class="cv">&lt;a href&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Ảnh</span><span class="cv">&lt;img src alt&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Danh sách</span><span class="cv">ul/ol &gt; li</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ch">🟢 HTML semantic</h4>
+      <div class="cheat-row"><span class="ck">Đầu trang</span><span class="cv">&lt;header&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Nội dung chính</span><span class="cv">&lt;main&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Bài viết độc lập</span><span class="cv">&lt;article&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Nhóm chủ đề</span><span class="cv">&lt;section&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Nội dung phụ</span><span class="cv">&lt;aside&gt;</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-sk">🟣 CSS Box Model</h4>
+      <div class="cheat-row"><span class="ck">Tính width chuẩn</span><span class="cv">box-sizing:border-box</span></div>
+      <div class="cheat-row"><span class="ck">Đệm trong</span><span class="cv">padding</span></div>
+      <div class="cheat-row"><span class="ck">Khoảng cách ngoài</span><span class="cv">margin</span></div>
+      <div class="cheat-row"><span class="ck">Viền</span><span class="cv">border</span></div>
+      <div class="cheat-row"><span class="ck">Căn giữa khối</span><span class="cv">margin:0 auto</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-au">🟡 Flexbox / Grid</h4>
+      <div class="cheat-row"><span class="ck">Bật flex</span><span class="cv">display:flex</span></div>
+      <div class="cheat-row"><span class="ck">Căn trục chính</span><span class="cv">justify-content</span></div>
+      <div class="cheat-row"><span class="ck">Căn trục phụ</span><span class="cv">align-items</span></div>
+      <div class="cheat-row"><span class="ck">Bật grid</span><span class="cv">display:grid</span></div>
+      <div class="cheat-row"><span class="ck">Số cột</span><span class="cv">grid-template-columns</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-oc">🔄 Nâng cao</h4>
+      <div class="cheat-row"><span class="ck">Responsive</span><span class="cv">@media (min-width:)</span></div>
+      <div class="cheat-row"><span class="ck">Chuyển động mượt</span><span class="cv">transition</span></div>
+      <div class="cheat-row"><span class="ck">Animation nhiều bước</span><span class="cv">@keyframes</span></div>
+      <div class="cheat-row"><span class="ck">Biến CSS</span><span class="cv">var(--name)</span></div>
+      <div class="cheat-row"><span class="ck">Di chuyển không lệch layout</span><span class="cv">transform</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ins">📦 Tiện ích &amp; lỗi hay gặp</h4>
+      <div class="cheat-row"><span class="ck">Chọn trạng thái hover</span><span class="cv">:hover / :focus</span></div>
+      <div class="cheat-row"><span class="ck">Nội dung ảo</span><span class="cv">::before / ::after</span></div>
+      <div class="cheat-row"><span class="ck">Ghim theo màn hình</span><span class="cv">position:fixed</span></div>
+      <div class="cheat-row"><span class="ck">Quên relative ở cha</span><span class="cv">absolute lệch vị trí</span></div>
+      <div class="cheat-row"><span class="ck">Ẩn tràn nội dung</span><span class="cv">overflow:hidden/auto</span></div>
+    </div>
+  </div>
+
+  <div class="info i-ok" style="margin-top:22px">
+    <span class="info-ico">🔗</span>
+    <div style="font-size:13.5px">
+      <strong style="color:var(--text)">Tài nguyên chính thức:</strong><br>
+      <span style="color:var(--muted)">
+        <a href="https://developer.mozilla.org/vi/docs/Web/HTML" style="color:var(--acc)">MDN HTML</a> — Tài liệu HTML chuẩn &nbsp;·&nbsp;
+        <a href="https://developer.mozilla.org/vi/docs/Web/CSS" style="color:var(--acc)">MDN CSS</a> — Tài liệu CSS chuẩn &nbsp;·&nbsp;
+        <a href="https://web.dev/learn" style="color:var(--acc)">web.dev/learn</a> — Khóa học HTML/CSS miễn phí của Google &nbsp;·&nbsp;
+        <a href="https://caniuse.com" style="color:var(--acc)">caniuse.com</a> — Kiểm tra hỗ trợ trình duyệt &nbsp;·&nbsp;
+        <a href="https://cssgridgarden.com" style="color:var(--acc)">CSS Grid Garden</a> — Game luyện Grid &nbsp;·&nbsp;
+        <a href="https://flexboxfroggy.com" style="color:var(--acc)">Flexbox Froggy</a> — Game luyện Flexbox
+      </span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  <span>🌐 HTML &amp; CSS · Hướng dẫn từ cơ bản đến nâng cao · 2026</span>
+  <span style="margin-left:auto;color:var(--faint)">HTML cơ bản ×3 · HTML nâng cao ×3 · CSS cơ bản ×3 · CSS layout ×3 · CSS nâng cao ×4 · Mẹo ×1 · Cheat sheet ×1</span>
+</div>
+</div><!-- /main -->
+
+<script>
+window.addEventListener('scroll',()=>{
+  const el=document.documentElement;
+  document.getElementById('pbar').style.width=(el.scrollTop/(el.scrollHeight-el.clientHeight)*100)+'%';
+});
+const sections=document.querySelectorAll('.section[id]');
+const links=document.querySelectorAll('.nav-link');
+sections.forEach(s=>new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if(a)a.classList.add('active');
+    }
+  });
+},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

@@ -34,12 +34,12 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
 /* PAGE NAV */
-.page-nav{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
-.pn-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:1;padding:10px 6px;text-decoration:none;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.2px;border-bottom:2px solid transparent;transition:all .15s;background:transparent;line-height:1.3;text-align:center}
+.page-nav{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--border);flex-shrink:0}
+.pn-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 4px;text-decoration:none;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.2px;border-bottom:2px solid transparent;transition:all .15s;background:transparent;line-height:1.3;text-align:center}
 .pn-tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
 .pn-tab.pn-active{color:var(--acc);border-bottom-color:var(--acc);background:var(--acc-dim)}
-.pn-icon{font-size:16px;line-height:1}
-.pn-label{font-size:9.5px}
+.pn-icon{font-size:15px;line-height:1}
+.pn-label{font-size:9px}
 
 /* SIDEBAR */
 .sidebar{position:fixed;left:0;top:0;width:268px;height:100vh;background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;z-index:400;display:flex;flex-direction:column}
@@ -233,6 +233,14 @@ hr.dv{border:none;border-top:1px solid var(--border);margin:58px 0}
 <!-- ══ SIDEBAR ══ -->
 <aside class="sidebar">
   <div class="page-nav">
+    <a href="html-css-guide.html" class="pn-tab">
+      <span class="pn-icon">🌐</span>
+      <span class="pn-label">HTML/CSS</span>
+    </a>
+    <a href="typescript-guide.html" class="pn-tab">
+      <span class="pn-icon">🔷</span>
+      <span class="pn-label">TypeScript</span>
+    </a>
     <a href="js-reactjs-guide.html" class="pn-tab">
       <span class="pn-icon">🟨</span>
       <span class="pn-label">JS & React</span>
@@ -242,7 +250,7 @@ hr.dv{border:none;border-top:1px solid var(--border);margin:58px 0}
       <span class="pn-label">Next.js</span>
     </a>
     <a href="react-ecosystem-guide.html" class="pn-tab">
-      <span class="pn-icon">🌐</span>
+      <span class="pn-icon">📦</span>
       <span class="pn-label">Ecosystem</span>
     </a>
     <a href="redux-rtk-query-guide.html" class="pn-tab">

@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔷 TypeScript — Hướng dẫn từ cơ bản đến nâng cao</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080810;--s1:#0e0e1c;--s2:#131326;--s3:#18182e;--s4:#1e1e38;
+  --border:#222240;--border2:#2c2c50;--text:#e6e6f2;--muted:#666698;--faint:#363660;
+  --acc:#3178c6;--acc-d:#2860a3;--acc-dim:rgba(49,120,198,.14);--acc-glow:rgba(49,120,198,.30);
+  --green:#40d88e;--green-dim:rgba(64,216,142,.10);
+  --blue:#5ba8ff;--blue-dim:rgba(91,168,255,.10);
+  --purple:#a07af4;--purple-dim:rgba(160,122,244,.10);
+  --yellow:#ffd060;--yellow-dim:rgba(255,208,96,.10);
+  --teal:#30d8c0;--teal-dim:rgba(48,216,192,.10);
+  --orange:#ff8c50;--orange-dim:rgba(255,140,80,.10);
+  --pink:#ff6584;--pink-dim:rgba(255,101,132,.11);--pink-glow:rgba(255,101,132,.22);
+  --sky:#38bdf8;--sky-dim:rgba(56,189,248,.10);
+  /* TypeScript brand: xanh dương TS -> xanh dương nhạt JS-ish */
+  --oc:#3178c6;--oc-dim:rgba(49,120,198,.14);--oc-glow:rgba(49,120,198,.32);
+  --oc2:#5ba8ff;--oc2-dim:rgba(91,168,255,.12);
+  /* sections */
+  --ins:#5ba8ff;--ins-dim:rgba(91,168,255,.12);--ins-glow:rgba(91,168,255,.28);
+  --ch:#40d88e;--ch-dim:rgba(64,216,142,.12);--ch-glow:rgba(64,216,142,.28);
+  --sk:#a07af4;--sk-dim:rgba(160,122,244,.12);--sk-glow:rgba(160,122,244,.28);
+  --au:#ffd060;--au-dim:rgba(255,208,96,.12);--au-glow:rgba(255,208,96,.28);
+  --code-bg:#05050e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:15px;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* PAGE NAV */
+.page-nav{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--border);flex-shrink:0}
+.pn-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 4px;text-decoration:none;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.2px;border-bottom:2px solid transparent;transition:all .15s;background:transparent;line-height:1.3;text-align:center}
+.pn-tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.pn-tab.pn-active{color:var(--oc2);border-bottom-color:var(--oc2);background:var(--oc-dim)}
+.pn-icon{font-size:15px;line-height:1}
+.pn-label{font-size:9px}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:0;width:268px;height:100vh;background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;z-index:400;display:flex;flex-direction:column}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-brand{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.logo-icon{width:44px;height:44px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,var(--oc),var(--oc2));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;box-shadow:0 0 26px var(--oc-glow)}
+.logo-text h2{font-size:15px;font-weight:800;letter-spacing:-.4px}
+.logo-text p{font-size:10.5px;color:var(--muted);margin-top:2px}
+.prog-wrap{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--oc2),var(--ins),var(--ch),var(--sk),var(--au));width:0%;transition:width .4s;border-radius:2px}
+.nav-section{padding:8px 0 4px}
+.nav-sect-label{padding:8px 18px 3px;font-size:9.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--faint)}
+.nav-group-hdr{display:flex;align-items:center;gap:7px;margin:6px 12px 3px;padding:6px 10px;border-radius:7px;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.ngh-oc{background:var(--oc-dim);color:var(--oc2)}
+.ngh-ins{background:var(--ins-dim);color:var(--ins)}
+.ngh-ch{background:var(--ch-dim);color:var(--ch)}
+.ngh-sk{background:var(--sk-dim);color:var(--sk)}
+.ngh-au{background:var(--au-dim);color:var(--au)}
+.ngh-other{background:rgba(255,255,255,.05);color:var(--muted)}
+.nav-link{display:flex;align-items:center;gap:9px;padding:6px 18px;color:var(--muted);text-decoration:none;font-size:12.5px;font-weight:600;border-left:2px solid transparent;transition:all .14s}
+.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(91,168,255,.08);border-left-color:var(--oc2)}
+.nav-link .ico{font-size:13px;flex-shrink:0;width:16px;text-align:center}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;background:var(--oc-dim);color:var(--oc2)}
+
+/* MAIN */
+.main{margin-left:268px;min-height:100vh}
+.hero{padding:80px 64px 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);
+  background:radial-gradient(ellipse 65% 55% at 75% 22%,rgba(49,120,198,.18) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 55% at 10% 82%,rgba(160,122,244,.08) 0%,transparent 55%),
+             radial-gradient(ellipse 40% 50% at 50% 50%,rgba(64,216,142,.04) 0%,transparent 60%),var(--bg)}
+.hero-dots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.028) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.hero-glow{position:absolute;right:-90px;top:-90px;width:520px;height:520px;background:radial-gradient(circle,rgba(49,120,198,.18) 0%,transparent 65%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--oc-dim);border:1px solid rgba(49,120,198,.4);color:var(--oc2);padding:5px 16px;border-radius:100px;font-size:11.5px;font-weight:700;margin-bottom:26px;letter-spacing:.3px}
+.hero-eyebrow .pulse{width:6px;height:6px;border-radius:50%;background:var(--oc2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero h1{font-size:52px;font-weight:900;letter-spacing:-2.5px;line-height:1.04;margin-bottom:18px}
+.h-oc{color:var(--oc2)}.h-ins{color:var(--ins)}.h-ch{color:var(--ch)}.h-sk{color:var(--sk)}.h-au{color:var(--au)}.h-acc{color:var(--acc)}
+.h-grad{background:linear-gradient(135deg,var(--oc) 0%,var(--oc2) 50%,var(--sk) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:16px;color:var(--muted);max-width:580px;line-height:1.72;margin-bottom:30px}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:5px 14px;border-radius:7px;font-size:12px;font-weight:700}
+.chip-oc{background:var(--oc-dim);color:var(--oc2)}.chip-ins{background:var(--ins-dim);color:var(--ins)}
+.chip-ch{background:var(--ch-dim);color:var(--ch)}.chip-sk{background:var(--sk-dim);color:var(--sk)}
+.chip-au{background:var(--au-dim);color:var(--au)}.chip-t{background:var(--teal-dim);color:var(--teal)}
+.chip-p{background:var(--pink-dim);color:var(--pink)}.chip-s{background:var(--sky-dim);color:var(--sky)}
+
+/* CAT BANNERS */
+.cat-banner{display:flex;align-items:center;gap:16px;padding:20px 24px;border-radius:14px;margin-bottom:44px;position:relative;overflow:hidden}
+.cat-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cb-oc{background:var(--oc-dim);border:1px solid rgba(49,120,198,.32)}.cb-oc::before{background:linear-gradient(90deg,var(--oc),var(--oc2))}
+.cb-ins{background:var(--ins-dim);border:1px solid rgba(91,168,255,.30)}.cb-ins::before{background:linear-gradient(90deg,var(--ins),var(--sky))}
+.cb-ch{background:var(--ch-dim);border:1px solid rgba(64,216,142,.30)}.cb-ch::before{background:linear-gradient(90deg,var(--ch),var(--teal))}
+.cb-sk{background:var(--sk-dim);border:1px solid rgba(160,122,244,.30)}.cb-sk::before{background:linear-gradient(90deg,var(--sk),var(--pink))}
+.cb-au{background:var(--au-dim);border:1px solid rgba(255,208,96,.30)}.cb-au::before{background:linear-gradient(90deg,var(--au),var(--orange))}
+.cb-icon{font-size:38px;flex-shrink:0}
+.cb-badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;display:inline-block;margin-bottom:5px}
+.cb-oc .cb-badge{background:var(--oc-dim);color:var(--oc2)}
+.cb-ins .cb-badge{background:var(--ins-dim);color:var(--ins)}
+.cb-ch .cb-badge{background:var(--ch-dim);color:var(--ch)}
+.cb-sk .cb-badge{background:var(--sk-dim);color:var(--sk)}
+.cb-au .cb-badge{background:var(--au-dim);color:var(--au)}
+.cb-title{font-size:20px;font-weight:800;letter-spacing:-.5px}.cb-sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+
+/* CONTENT */
+.content{padding:56px 64px;max-width:1020px}
+.section{margin-bottom:72px}
+.sec-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:30px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.sec-tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 10px;border-radius:5px;margin-top:5px;flex-shrink:0;letter-spacing:.5px}
+.st-oc{color:var(--oc2);background:var(--oc-dim);border:1px solid var(--oc-glow)}
+.st-ins{color:var(--ins);background:var(--ins-dim);border:1px solid var(--ins-glow)}
+.st-ch{color:var(--ch);background:var(--ch-dim);border:1px solid var(--ch-glow)}
+.st-sk{color:var(--sk);background:var(--sk-dim);border:1px solid var(--sk-glow)}
+.st-au{color:var(--au);background:var(--au-dim);border:1px solid var(--au-glow)}
+.st-y{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(255,208,96,.24)}
+.sec-title{font-size:23px;font-weight:800;letter-spacing:-.6px;margin-bottom:5px}
+.sec-sub{font-size:13px;color:var(--muted)}
+.sub{margin-bottom:38px}
+.sub-title{font-size:14.5px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:10px}
+.sub-title::before{content:'';display:inline-block;width:14px;height:3px;background:var(--oc2);border-radius:2px;flex-shrink:0}
+.sub p,.sub ul,.sub ol{color:var(--muted);font-size:13.5px;margin-bottom:11px;line-height:1.75}
+.sub ul,.sub ol{padding-left:22px}.sub li{margin-bottom:5px}.sub strong{color:var(--text)}
+
+/* GRIDS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:11px;padding:16px;transition:all .2s;cursor:default}
+.card:hover{border-color:var(--oc2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.38)}
+.card-icon{font-size:24px;margin-bottom:8px}.card-title{font-size:13px;font-weight:700;margin-bottom:4px}.card-desc{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* CODE BLOCKS */
+.cblock{background:var(--code-bg);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin:13px 0}
+.cb-head{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--s2);border-bottom:1px solid var(--border)}
+.cb-dots{display:flex;gap:5px}.cbd{width:10px;height:10px;border-radius:50%}
+.cbd.r{background:#ff5f56}.cbd.y{background:#ffbd2e}.cbd.g{background:#27c93f}
+.cb-name{font-size:11.5px;font-weight:700;color:var(--muted);font-family:'JetBrains Mono',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cb-tag{margin-left:auto;font-size:9px;font-weight:700;padding:2px 9px;border-radius:100px;flex-shrink:0}
+.ct-oc{background:var(--oc-dim);color:var(--oc2)}.ct-ins{background:var(--ins-dim);color:var(--ins)}
+.ct-ch{background:var(--ch-dim);color:var(--ch)}.ct-sk{background:var(--sk-dim);color:var(--sk)}
+.ct-au{background:var(--au-dim);color:var(--au)}.ct-y{background:var(--yellow-dim);color:var(--yellow)}
+.ct-g{background:var(--green-dim);color:var(--green)}.ct-t{background:var(--teal-dim);color:var(--teal)}
+.cb-body{padding:18px 20px;overflow-x:auto}
+.cb-body pre{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.72;white-space:pre;color:#8899bb}
+/* syntax */
+.kw{color:#c792ea}.tp{color:#ffcb6b}.fn{color:#82aaff}.st-s{color:#c3e88d}
+.cm{color:#546e7a;font-style:italic}.nm{color:#f78c6c}.an{color:#ff6584}
+.pr{color:#89ddff}.vr{color:#eeffff}.cl{color:#ffcb6b}
+
+/* INFO BOXES */
+.info{display:flex;gap:12px;padding:14px 16px;border-radius:9px;margin:13px 0;font-size:13px;line-height:1.6}
+.info-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.i-ok{background:var(--green-dim);border:1px solid rgba(64,216,142,.2);color:#30a870}
+.i-warn{background:var(--yellow-dim);border:1px solid rgba(255,208,96,.2);color:#b09030}
+.i-tip{background:var(--blue-dim);border:1px solid rgba(91,168,255,.2);color:#3878d0}
+.i-note{background:var(--purple-dim);border:1px solid rgba(160,122,244,.2);color:#8060d0}
+.i-err{background:var(--pink-dim);border:1px solid rgba(255,101,132,.2);color:#cc3355}
+
+/* RW BOX */
+.rw-box{background:var(--s1);border:1px solid var(--border2);border-radius:12px;padding:18px 20px;margin:14px 0;position:relative;overflow:hidden}
+.rw-box::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.rw-oc::before{background:var(--oc2)}.rw-ins::before{background:var(--ins)}
+.rw-ch::before{background:var(--ch)}.rw-sk::before{background:var(--sk)}
+.rw-au::before{background:var(--au)}.rw-y::before{background:var(--yellow)}
+.rw-label{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.rw-oc .rw-label{color:var(--oc2)}.rw-ins .rw-label{color:var(--ins)}
+.rw-ch .rw-label{color:var(--ch)}.rw-sk .rw-label{color:var(--sk)}
+.rw-au .rw-label{color:var(--au)}.rw-y .rw-label{color:var(--yellow)}
+.rw-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.rw-body{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:13px 0;border-radius:11px;overflow:hidden}
+.tbl th{background:var(--s3);padding:10px 14px;text-align:left;font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-bottom:1px solid var(--border2)}
+.tbl td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted);vertical-align:top}
+.tbl tr:hover td{background:rgba(255,255,255,.025)}
+.tbl code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--code-bg);padding:2px 7px;border-radius:4px;color:var(--teal)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;margin:14px 0}
+.step{display:flex;gap:16px}
+.step-L{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
+.step-num{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--oc2);background:var(--oc-dim);border:2px solid var(--oc-glow)}
+.step-line{width:2px;flex:1;background:var(--border);margin:5px 0;min-height:14px}
+.step-B{padding:3px 0 26px}.step-B h4{font-size:14px;font-weight:700;margin-bottom:5px}
+.step-B p{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* CHEAT SHEET */
+.cheat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.cheat-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:15px}
+.cheat-card h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:11px}
+.h4-oc{color:var(--oc2)}.h4-ins{color:var(--ins)}.h4-ch{color:var(--ch)}.h4-sk{color:var(--sk)}.h4-au{color:var(--au)}
+.cheat-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.cheat-row:last-child{border-bottom:none}.ck{color:var(--muted)}.cv{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--teal)}
+
+/* ARCH DIAGRAM */
+.arch{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:0;margin:18px 0}
+.arch-box{background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;text-align:center}
+.arch-title{font-size:12px;font-weight:700;margin-bottom:3px}
+.arch-desc{font-size:11px;color:var(--muted)}
+.arch-arrow{text-align:center;color:var(--muted);font-size:20px;padding:0 8px}
+
+p code,li code,td code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(91,168,255,.12);color:var(--ins);padding:2px 6px;border-radius:4px}
+hr.dv{border:none;border-top:1px solid var(--border);margin:58px 0}
+.footer{border-top:1px solid var(--border);padding:28px 64px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+@media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.hero,.content,.footer{padding-left:22px;padding-right:22px}.hero h1{font-size:32px}.grid-2,.grid-3,.grid-4,.cheat-grid{grid-template-columns:1fr}.arch{grid-template-columns:1fr;gap:8px}.arch-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="page-nav">
+    <a href="html-css-guide.html" class="pn-tab">
+      <span class="pn-icon">🌐</span>
+      <span class="pn-label">HTML/CSS</span>
+    </a>
+    <a href="typescript-guide.html" class="pn-tab pn-active">
+      <span class="pn-icon">🔷</span>
+      <span class="pn-label">TypeScript</span>
+    </a>
+    <a href="js-reactjs-guide.html" class="pn-tab">
+      <span class="pn-icon">🟨</span>
+      <span class="pn-label">JS & React</span>
+    </a>
+    <a href="react-nextjs-guide.html" class="pn-tab">
+      <span class="pn-icon">⚛️</span>
+      <span class="pn-label">Next.js</span>
+    </a>
+    <a href="react-ecosystem-guide.html" class="pn-tab">
+      <span class="pn-icon">📦</span>
+      <span class="pn-label">Ecosystem</span>
+    </a>
+    <a href="redux-rtk-query-guide.html" class="pn-tab">
+      <span class="pn-icon">🔄</span>
+      <span class="pn-label">Redux</span>
+    </a>
+  </div>
+  <div class="sb-logo">
+    <div class="sb-brand">
+      <div class="logo-icon">TS</div>
+      <div class="logo-text"><h2>TypeScript</h2><p>Cơ bản đến nâng cao</p></div>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar" id="pbar"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-sect-label">Tổng quan</div>
+    <a href="#s0" class="nav-link active"><span class="ico">🗺️</span> Bản đồ TypeScript <span class="nav-badge">START</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ins">🔵 Kiểu dữ liệu cơ bản — 3 sections</div>
+    <a href="#s1" class="nav-link"><span class="ico">⚙️</span> Cài đặt &amp; cấu hình tsconfig</a>
+    <a href="#s2" class="nav-link"><span class="ico">🔤</span> Kiểu dữ liệu cơ bản</a>
+    <a href="#s3" class="nav-link"><span class="ico">🧩</span> Type Alias &amp; Interface</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-ch">🟢 Hàm &amp; đối tượng — 3 sections</div>
+    <a href="#s4" class="nav-link"><span class="ico">🧮</span> Function Types</a>
+    <a href="#s5" class="nav-link"><span class="ico">🔀</span> Union, Intersection &amp; Literal</a>
+    <a href="#s6" class="nav-link"><span class="ico">🏷️</span> Enum &amp; const assertions</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-sk">🟣 OOP &amp; Generics — 3 sections</div>
+    <a href="#s7" class="nav-link"><span class="ico">🏛️</span> Classes trong TypeScript</a>
+    <a href="#s8" class="nav-link"><span class="ico">📐</span> Generics cơ bản</a>
+    <a href="#s9" class="nav-link"><span class="ico">🔧</span> Generic Constraints nâng cao</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-au">🟡 Kiểu nâng cao — 4 sections</div>
+    <a href="#s10" class="nav-link"><span class="ico">🔍</span> Type Narrowing &amp; Type Guards</a>
+    <a href="#s11" class="nav-link"><span class="ico">🧭</span> Discriminated Unions</a>
+    <a href="#s12" class="nav-link"><span class="ico">🛠️</span> Utility Types</a>
+    <a href="#s13" class="nav-link"><span class="ico">🌀</span> Mapped &amp; Conditional Types</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-oc">🔷 Thực chiến — 3 sections</div>
+    <a href="#s14" class="nav-link"><span class="ico">📦</span> Module &amp; file khai báo .d.ts</a>
+    <a href="#s15" class="nav-link"><span class="ico">⏳</span> Async/Await &amp; Promise&lt;T&gt;</a>
+    <a href="#s16" class="nav-link"><span class="ico">⚛️</span> TypeScript với DOM &amp; React</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-other">📦 Mẹo &amp; lỗi thường gặp</div>
+    <a href="#s17" class="nav-link"><span class="ico">🧰</span> Best practice &amp; lỗi hay gặp</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-hdr ngh-other">📋 Tham khảo nhanh</div>
+    <a href="#s18" class="nav-link"><span class="ico">📋</span> Cheat Sheet</a>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-dots"></div><div class="hero-glow"></div>
+  <div class="hero-eyebrow"><span class="pulse"></span> TypeScript 5 · JavaScript có kiểu dữ liệu · 2026</div>
+  <h1><span class="h-grad">TypeScript</span> 🔷<br><span class="h-acc" style="color:var(--oc2)">Hướng dẫn chi tiết</span><br><span class="h-ins">Cơ bản → Nâng cao</span></h1>
+  <p class="hero-desc">Toàn bộ kiến thức nền tảng để viết TypeScript vững tay — từ kiểu dữ liệu, interface, function, class, cho tới generics, union types, utility types và các kỹ thuật nâng cao — kèm ví dụ code cụ thể, giải thích dễ hiểu, áp dụng được ngay vào dự án thực tế.</p>
+  <div class="hero-chips">
+    <span class="chip chip-ins">🔤 Kiểu dữ liệu</span>
+    <span class="chip chip-ch">🧩 Interface</span>
+    <span class="chip chip-sk">📐 Generics</span>
+    <span class="chip chip-au">🔀 Union Types</span>
+    <span class="chip chip-oc">🛠️ Utility Types</span>
+    <span class="chip chip-t">⏳ Async/Await</span>
+    <span class="chip chip-p">🔍 Type Guards</span>
+    <span class="chip chip-s">✅ Ví dụ thực tế</span>
+  </div>
+</div>
+
+<div class="content">
+<!-- ════ S0 — OVERVIEW ════ -->
+<div class="section" id="s0">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">OVERVIEW</span>
+    <div><h2 class="sec-title">Bản đồ TypeScript — JavaScript cộng thêm hệ thống kiểu</h2>
+    <p class="sec-sub">TypeScript không phải ngôn ngữ mới, mà là một lớp kiểm tra kiểu (type-check) nằm trên JavaScript</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">TypeScript là gì, giải quyết vấn đề gì?</div>
+    <p><strong>TypeScript</strong> là một ngôn ngữ do Microsoft phát triển, là <strong>tập hợp mở rộng (superset)</strong> của JavaScript — nghĩa là mọi file JavaScript hợp lệ đều là TypeScript hợp lệ. Điểm khác biệt cốt lõi: TypeScript thêm vào <strong>hệ thống kiểu tĩnh (static typing)</strong>, cho phép khai báo rõ một biến/hàm nhận và trả về kiểu dữ liệu gì. Trình biên dịch <code>tsc</code> sẽ kiểm tra lỗi kiểu <strong>ngay khi viết code</strong>, trước khi chạy — thay vì JavaScript chỉ phát hiện lỗi lúc runtime. Sau khi biên dịch, TypeScript được chuyển hoàn toàn thành JavaScript thuần để chạy trên trình duyệt hoặc Node.js.</p>
+    <div class="grid-4">
+      <div class="card"><div class="card-icon">🛡️</div><div class="card-title" style="color:var(--ins)">An toàn kiểu</div><div class="card-desc">Bắt lỗi gõ nhầm tên thuộc tính, sai kiểu tham số ngay lúc viết code, không cần chạy thử.</div></div>
+      <div class="card"><div class="card-icon">🧠</div><div class="card-title" style="color:var(--ch)">Gợi ý thông minh</div><div class="card-desc">Editor (VS Code) autocomplete chính xác nhờ biết rõ kiểu của từng biến, hàm, object.</div></div>
+      <div class="card"><div class="card-icon">📖</div><div class="card-title" style="color:var(--sk)">Code tự tài liệu hóa</div><div class="card-desc">Kiểu dữ liệu chính là tài liệu sống — nhìn signature hàm là biết cần truyền gì.</div></div>
+      <div class="card"><div class="card-icon">🔧</div><div class="card-title" style="color:var(--au)">Refactor an toàn</div><div class="card-desc">Đổi tên/xóa thuộc tính, trình biên dịch chỉ ngay chỗ nào trong code bị ảnh hưởng.</div></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">TypeScript "biến mất" như thế nào khi chạy?</div>
+    <div class="arch">
+      <div class="arch-box" style="border-color:rgba(91,168,255,.3)">
+        <div class="arch-title" style="color:var(--ins)">1️⃣ Viết code .ts</div>
+        <div class="arch-desc">Khai báo kiểu cho biến, hàm,<br>interface, class...</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(160,122,244,.3)">
+        <div class="arch-title" style="color:var(--sk)">2️⃣ tsc biên dịch</div>
+        <div class="arch-desc">Kiểm tra kiểu, báo lỗi nếu sai<br>rồi xóa hết annotation kiểu</div>
+      </div>
+      <div class="arch-arrow">⟶</div>
+      <div class="arch-box" style="border-color:rgba(255,208,96,.3)">
+        <div class="arch-title" style="color:var(--au)">3️⃣ File .js thuần</div>
+        <div class="arch-desc">Chạy được trên mọi trình duyệt<br>hoặc Node.js như JS bình thường</div>
+      </div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Nguyên tắc học:</strong> TypeScript chỉ là "thêm kiểu" — nếu đã biết JavaScript, bạn chỉ cần học <strong>cách khai báo kiểu</strong> cho những gì mình đã biết viết. Học chắc kiểu cơ bản (primitives, interface) trước khi sang generics và utility types nâng cao.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — CƠ BẢN ════ -->
+<div class="cat-banner cb-ins">
+  <div class="cb-icon">🔵</div>
+  <div>
+    <div class="cb-badge">CƠ BẢN</div>
+    <div class="cb-title">Phần 1 — Kiểu dữ liệu cơ bản</div>
+    <div class="cb-sub">Cài đặt &amp; cấu hình · Kiểu dữ liệu · Type Alias &amp; Interface</div>
+  </div>
+</div>
+
+<!-- ════ S1 — CÀI ĐẶT & CẤU HÌNH ════ -->
+<div class="section" id="s1">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">CƠ BẢN</span>
+    <div><h2 class="sec-title">Cài đặt &amp; cấu hình tsconfig.json</h2>
+    <p class="sec-sub">Chuẩn bị môi trường trước khi viết dòng TypeScript đầu tiên</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Cài đặt &amp; biên dịch</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-L"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-B"><h4>Cài TypeScript qua npm</h4><p>Chạy <code>npm install -D typescript</code> để cài vào dự án, hoặc <code>npm install -g typescript</code> để dùng lệnh <code>tsc</code> toàn cục.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-B"><h4>Khởi tạo tsconfig.json</h4><p>Chạy <code>npx tsc --init</code> để sinh file cấu hình mặc định, nơi khai báo cách trình biên dịch xử lý project.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-L"><div class="step-num">3</div></div>
+        <div class="step-B"><h4>Biên dịch sang JavaScript</h4><p>Chạy <code>npx tsc</code> để biên dịch toàn bộ project, hoặc <code>npx tsc --watch</code> để tự biên dịch lại mỗi khi lưu file.</p></div>
+      </div>
+    </div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">tsconfig.json</span><span class="cb-tag ct-ins">CONFIG</span></div>
+      <div class="cb-body"><pre>{
+  <span class="pr">"compilerOptions"</span>: {
+    <span class="pr">"target"</span>: <span class="st-s">"ES2020"</span>,          <span class="cm">// phiên bản JS đầu ra</span>
+    <span class="pr">"module"</span>: <span class="st-s">"ESNext"</span>,          <span class="cm">// hệ thống module dùng để biên dịch</span>
+    <span class="pr">"strict"</span>: <span class="kw">true</span>,               <span class="cm">// bật TẤT CẢ kiểm tra kiểu nghiêm ngặt — nên luôn bật</span>
+    <span class="pr">"outDir"</span>: <span class="st-s">"./dist"</span>,          <span class="cm">// thư mục chứa file .js sau biên dịch</span>
+    <span class="pr">"rootDir"</span>: <span class="st-s">"./src"</span>,          <span class="cm">// thư mục chứa file .ts nguồn</span>
+    <span class="pr">"esModuleInterop"</span>: <span class="kw">true</span>,      <span class="cm">// cho phép import kiểu CommonJS mượt hơn</span>
+    <span class="pr">"skipLibCheck"</span>: <span class="kw">true</span>,         <span class="cm">// bỏ qua kiểm tra kiểu trong node_modules cho nhanh</span>
+    <span class="pr">"forceConsistentCasingInFileNames"</span>: <span class="kw">true</span>
+  },
+  <span class="pr">"include"</span>: [<span class="st-s">"src/**/*"</span>]
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Luôn bật <code>"strict": true</code>:</strong> Đây là tùy chọn quan trọng nhất — bật hàng loạt kiểm tra như <code>strictNullChecks</code>, <code>noImplicitAny</code>... giúp TypeScript bắt lỗi tối đa. Tắt strict khiến TypeScript gần như chỉ còn tác dụng autocomplete.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S2 — KIỂU DỮ LIỆU CƠ BẢN ════ -->
+<div class="section" id="s2">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">CƠ BẢN</span>
+    <div><h2 class="sec-title">Kiểu dữ liệu cơ bản</h2>
+    <p class="sec-sub">Primitives, mảng, tuple và các kiểu đặc biệt any / unknown / never / void</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Kiểu nguyên thủy (primitives)</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">primitives.ts</span><span class="cb-tag ct-ins">TYPES</span></div>
+      <div class="cb-body"><pre><span class="kw">let</span> <span class="vr">ten</span>: <span class="tp">string</span> = <span class="st-s">"An"</span>;
+<span class="kw">let</span> <span class="vr">tuoi</span>: <span class="tp">number</span> = <span class="nm">25</span>;
+<span class="kw">let</span> <span class="vr">daKichHoat</span>: <span class="tp">boolean</span> = <span class="kw">true</span>;
+<span class="kw">let</span> <span class="vr">khongCoGiaTri</span>: <span class="tp">null</span> = <span class="kw">null</span>;
+<span class="kw">let</span> <span class="vr">chuaXacDinh</span>: <span class="tp">undefined</span> = <span class="kw">undefined</span>;
+
+<span class="cm">// TypeScript tự suy luận kiểu (type inference) nếu không khai báo</span>
+<span class="kw">let</span> <span class="vr">diem</span> = <span class="nm">9.5</span>; <span class="cm">// tự hiểu là number, không cần viết ": number"</span></pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Mảng (array) &amp; Tuple</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">array-tuple.ts</span><span class="cb-tag ct-ch">ARRAY</span></div>
+      <div class="cb-body"><pre><span class="cm">// mảng: 2 cách viết tương đương</span>
+<span class="kw">let</span> <span class="vr">diemSo</span>: <span class="tp">number</span>[] = [<span class="nm">8</span>, <span class="nm">9</span>, <span class="nm">10</span>];
+<span class="kw">let</span> <span class="vr">danhSachTen</span>: <span class="tp">Array</span>&lt;<span class="tp">string</span>&gt; = [<span class="st-s">"An"</span>, <span class="st-s">"Bình"</span>];
+
+<span class="cm">// tuple: mảng có SỐ LƯỢNG và KIỂU từng vị trí cố định</span>
+<span class="kw">let</span> <span class="vr">nguoiDung</span>: [<span class="tp">string</span>, <span class="tp">number</span>] = [<span class="st-s">"An"</span>, <span class="nm">25</span>]; <span class="cm">// [tên, tuổi]</span>
+<span class="cm">// nguoiDung = [25, "An"];  ❌ lỗi: sai thứ tự kiểu</span>
+
+<span class="cm">// tuple có tên thành phần (dễ đọc hơn), hỗ trợ từ TS 4.0+</span>
+<span class="kw">let</span> <span class="vr">toaDo</span>: [<span class="vr">x</span>: <span class="tp">number</span>, <span class="vr">y</span>: <span class="tp">number</span>] = [<span class="nm">10</span>, <span class="nm">20</span>];</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Khi nào dùng tuple?</strong> Dùng khi số phần tử và kiểu từng vị trí đã biết trước, ví dụ trả về cặp <code>[value, setValue]</code> giống <code>useState</code> trong React.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">any, unknown, never &amp; void — các kiểu đặc biệt</div>
+    <table class="tbl">
+      <tr><th>Kiểu</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>any</code></td><td>Tắt hoàn toàn kiểm tra kiểu cho biến này — <strong>tránh dùng</strong>, vì mất hết lợi ích của TypeScript</td></tr>
+      <tr><td><code>unknown</code></td><td>Giống <code>any</code> nhưng an toàn hơn: phải kiểm tra/ép kiểu trước khi dùng — nên dùng thay <code>any</code> khi chưa biết kiểu dữ liệu</td></tr>
+      <tr><td><code>never</code></td><td>Kiểu của giá trị <strong>không bao giờ xảy ra</strong> — hàm luôn ném lỗi, hoặc vòng lặp vô hạn</td></tr>
+      <tr><td><code>void</code></td><td>Kiểu trả về của hàm <strong>không trả về giá trị gì</strong> (không có <code>return</code>, hoặc <code>return;</code> trống)</td></tr>
+    </table>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">special-types.ts</span><span class="cb-tag ct-sk">SPECIAL</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">ghiLog</span>(<span class="vr">msg</span>: <span class="tp">string</span>): <span class="tp">void</span> {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">msg</span>); <span class="cm">// không return gì cả</span>
+}
+
+<span class="kw">function</span> <span class="fn">baoLoi</span>(<span class="vr">msg</span>: <span class="tp">string</span>): <span class="tp">never</span> {
+  <span class="kw">throw</span> <span class="kw">new</span> <span class="cl">Error</span>(<span class="vr">msg</span>); <span class="cm">// hàm không bao giờ trả về bình thường</span>
+}
+
+<span class="kw">let</span> <span class="vr">duLieu</span>: <span class="tp">unknown</span> = <span class="fn">JSON</span>.<span class="fn">parse</span>(<span class="st-s">'{"ten":"An"}'</span>);
+<span class="cm">// duLieu.ten;  ❌ lỗi: chưa biết duLieu có thuộc tính ten không</span>
+<span class="kw">if</span> (<span class="kw">typeof</span> <span class="vr">duLieu</span> === <span class="st-s">"object"</span> &amp;&amp; <span class="vr">duLieu</span> !== <span class="kw">null</span> &amp;&amp; <span class="st-s">"ten"</span> <span class="kw">in</span> <span class="vr">duLieu</span>) {
+  <span class="vr">console</span>.<span class="fn">log</span>((<span class="vr">duLieu</span> <span class="kw">as</span> { <span class="pr">ten</span>: <span class="tp">string</span> }).<span class="vr">ten</span>); <span class="cm">// ✅ đã kiểm tra mới dùng</span>
+}</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Tránh <code>any</code> bằng mọi giá:</strong> Dùng <code>any</code> tương đương tắt TypeScript cho biến đó — lỗi vẫn xảy ra, chỉ là bạn không được cảnh báo trước nữa. Ưu tiên <code>unknown</code> nếu thật sự chưa biết kiểu.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S3 — TYPE ALIAS & INTERFACE ════ -->
+<div class="section" id="s3">
+  <div class="sec-head">
+    <span class="sec-tag st-ins">CƠ BẢN</span>
+    <div><h2 class="sec-title">Type Alias &amp; Interface</h2>
+    <p class="sec-sub">Hai cách đặt tên cho một "hình dạng" dữ liệu, dùng nhiều nhất trong TypeScript</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Interface — định nghĩa hình dạng object</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">interface.ts</span><span class="cb-tag ct-ins">INTERFACE</span></div>
+      <div class="cb-body"><pre><span class="kw">interface</span> <span class="cl">User</span> {
+  <span class="pr">id</span>: <span class="tp">number</span>;
+  <span class="pr">ten</span>: <span class="tp">string</span>;
+  <span class="pr">email</span>?: <span class="tp">string</span>;        <span class="cm">// dấu ? = thuộc tính tùy chọn</span>
+  <span class="kw">readonly</span> <span class="pr">taoLuc</span>: <span class="tp">Date</span>; <span class="cm">// readonly = chỉ gán được lúc khởi tạo</span>
+}
+
+<span class="kw">const</span> <span class="vr">user1</span>: <span class="cl">User</span> = {
+  <span class="pr">id</span>: <span class="nm">1</span>,
+  <span class="pr">ten</span>: <span class="st-s">"An"</span>,
+  <span class="pr">taoLuc</span>: <span class="kw">new</span> <span class="cl">Date</span>()
+};
+<span class="cm">// user1.taoLuc = new Date();  ❌ lỗi: readonly không được gán lại</span>
+
+<span class="cm">// interface có thể "extends" (kế thừa) interface khác</span>
+<span class="kw">interface</span> <span class="cl">Admin</span> <span class="kw">extends</span> <span class="cl">User</span> {
+  <span class="pr">quyenHan</span>: <span class="tp">string</span>[];
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Type Alias — đặt tên cho bất kỳ kiểu nào</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">type-alias.ts</span><span class="cb-tag ct-ch">TYPE</span></div>
+      <div class="cb-body"><pre><span class="kw">type</span> <span class="cl">Point</span> = { <span class="pr">x</span>: <span class="tp">number</span>; <span class="pr">y</span>: <span class="tp">number</span> };
+
+<span class="cm">// type có thể đặt tên cho union, tuple, primitive... interface thì không</span>
+<span class="kw">type</span> <span class="cl">ID</span> = <span class="tp">string</span> | <span class="tp">number</span>;
+<span class="kw">type</span> <span class="cl">TrangThai</span> = <span class="st-s">"cho"</span> | <span class="st-s">"dangXuLy"</span> | <span class="st-s">"hoanThanh"</span>;
+
+<span class="cm">// kết hợp nhiều type bằng "&" (intersection)</span>
+<span class="kw">type</span> <span class="cl">Nguoi</span> = { <span class="pr">ten</span>: <span class="tp">string</span> };
+<span class="kw">type</span> <span class="cl">NhanVien</span> = <span class="cl">Nguoi</span> &amp; { <span class="pr">luong</span>: <span class="tp">number</span> };
+
+<span class="kw">const</span> <span class="vr">nv</span>: <span class="cl">NhanVien</span> = { <span class="pr">ten</span>: <span class="st-s">"Bình"</span>, <span class="pr">luong</span>: <span class="nm">15000000</span> };</pre></div>
+    </div>
+    <table class="tbl">
+      <tr><th>Tiêu chí</th><th><code>interface</code></th><th><code>type</code></th></tr>
+      <tr><td>Đặt tên cho object</td><td>✅ mạnh nhất</td><td>✅ được</td></tr>
+      <tr><td>Đặt tên cho union / tuple / primitive</td><td>❌ không hỗ trợ</td><td>✅ được</td></tr>
+      <tr><td>Mở rộng nhiều lần cùng tên (declaration merging)</td><td>✅ tự động gộp</td><td>❌ báo lỗi trùng tên</td></tr>
+      <tr><td>Kế thừa</td><td><code>extends</code></td><td><code>&amp;</code> (intersection)</td></tr>
+    </table>
+    <div class="info i-note">
+      <span class="info-ico">📌</span>
+      <div><strong style="color:var(--text)">Quy ước phổ biến:</strong> Dùng <code>interface</code> để định nghĩa hình dạng object/class (props, model dữ liệu). Dùng <code>type</code> cho union, tuple, hoặc khi cần kết hợp nhiều kiểu lại với nhau.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — HÀM & ĐỐI TƯỢNG ════ -->
+<div class="cat-banner cb-ch">
+  <div class="cb-icon">🟢</div>
+  <div>
+    <div class="cb-badge">HÀM &amp; ĐỐI TƯỢNG</div>
+    <div class="cb-title">Phần 2 — Hàm &amp; Đối tượng</div>
+    <div class="cb-sub">Function Types · Union/Intersection/Literal · Enum</div>
+  </div>
+</div>
+
+<!-- ════ S4 — FUNCTION TYPES ════ -->
+<div class="section" id="s4">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HÀM &amp; ĐỐI TƯỢNG</span>
+    <div><h2 class="sec-title">Function Types</h2>
+    <p class="sec-sub">Khai báo kiểu tham số, giá trị trả về, tham số tùy chọn/mặc định và overload</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Kiểu tham số &amp; giá trị trả về</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">functions.ts</span><span class="cb-tag ct-ch">FUNCTION</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">cong</span>(<span class="vr">a</span>: <span class="tp">number</span>, <span class="vr">b</span>: <span class="tp">number</span>): <span class="tp">number</span> {
+  <span class="kw">return</span> <span class="vr">a</span> + <span class="vr">b</span>;
+}
+
+<span class="cm">// tham số tùy chọn: dấu ? — phải đứng SAU tham số bắt buộc</span>
+<span class="kw">function</span> <span class="fn">chaoHoi</span>(<span class="vr">ten</span>: <span class="tp">string</span>, <span class="vr">loiChao</span>?: <span class="tp">string</span>): <span class="tp">string</span> {
+  <span class="kw">return</span> `${<span class="vr">loiChao</span> ?? <span class="st-s">"Xin chào"</span>}, ${<span class="vr">ten</span>}!`;
+}
+
+<span class="cm">// tham số mặc định: TS tự suy luận kiểu từ giá trị mặc định</span>
+<span class="kw">function</span> <span class="fn">taoUser</span>(<span class="vr">ten</span>: <span class="tp">string</span>, <span class="vr">tuoi</span> = <span class="nm">18</span>) {
+  <span class="kw">return</span> { <span class="vr">ten</span>, <span class="vr">tuoi</span> };
+}
+
+<span class="cm">// rest parameter: gom nhiều tham số thành 1 mảng</span>
+<span class="kw">function</span> <span class="fn">tongTatCa</span>(...<span class="vr">soList</span>: <span class="tp">number</span>[]): <span class="tp">number</span> {
+  <span class="kw">return</span> <span class="vr">soList</span>.<span class="fn">reduce</span>((<span class="vr">tong</span>, <span class="vr">n</span>) =&gt; <span class="vr">tong</span> + <span class="vr">n</span>, <span class="nm">0</span>);
+}
+
+<span class="cm">// arrow function với kiểu tường minh</span>
+<span class="kw">const</span> <span class="vr">nhan</span>: (<span class="vr">a</span>: <span class="tp">number</span>, <span class="vr">b</span>: <span class="tp">number</span>) =&gt; <span class="tp">number</span> = (<span class="vr">a</span>, <span class="vr">b</span>) =&gt; <span class="vr">a</span> * <span class="vr">b</span>;</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Function Overload — nhiều "chữ ký" cho cùng 1 hàm</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">overload.ts</span><span class="cb-tag ct-sk">OVERLOAD</span></div>
+      <div class="cb-body"><pre><span class="cm">// khai báo các "chữ ký" hàm có thể có (không có phần thân)</span>
+<span class="kw">function</span> <span class="fn">taoThe</span>(<span class="vr">id</span>: <span class="tp">number</span>): <span class="tp">string</span>;
+<span class="kw">function</span> <span class="fn">taoThe</span>(<span class="vr">id</span>: <span class="tp">number</span>, <span class="vr">ten</span>: <span class="tp">string</span>): <span class="tp">string</span>;
+
+<span class="cm">// phần thân thực thi — phải xử lý được mọi trường hợp overload ở trên</span>
+<span class="kw">function</span> <span class="fn">taoThe</span>(<span class="vr">id</span>: <span class="tp">number</span>, <span class="vr">ten</span>?: <span class="tp">string</span>): <span class="tp">string</span> {
+  <span class="kw">return</span> <span class="vr">ten</span> ? `#${<span class="vr">id</span>} - ${<span class="vr">ten</span>}` : `#${<span class="vr">id</span>}`;
+}
+
+<span class="fn">taoThe</span>(<span class="nm">1</span>);           <span class="cm">// ✅ hợp lệ</span>
+<span class="fn">taoThe</span>(<span class="nm">1</span>, <span class="st-s">"An"</span>);     <span class="cm">// ✅ hợp lệ</span></pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Khi nào cần overload?</strong> Khi một hàm có thể được gọi theo nhiều "bộ tham số" khác nhau và kiểu trả về phụ thuộc vào cách gọi — với hàm đơn giản, dùng tham số tùy chọn (<code>?</code>) thường đủ và dễ đọc hơn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S5 — UNION, INTERSECTION & LITERAL ════ -->
+<div class="section" id="s5">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HÀM &amp; ĐỐI TƯỢNG</span>
+    <div><h2 class="sec-title">Union, Intersection &amp; Literal Types</h2>
+    <p class="sec-sub">Kết hợp nhiều kiểu lại với nhau, hoặc giới hạn giá trị cụ thể</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Union Type — "kiểu này HOẶC kiểu kia"</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">union.ts</span><span class="cb-tag ct-ins">UNION</span></div>
+      <div class="cb-body"><pre><span class="kw">function</span> <span class="fn">inID</span>(<span class="vr">id</span>: <span class="tp">string</span> | <span class="tp">number</span>) {
+  <span class="cm">// phải kiểm tra kiểu trước khi dùng phương thức riêng của từng kiểu</span>
+  <span class="kw">if</span> (<span class="kw">typeof</span> <span class="vr">id</span> === <span class="st-s">"string"</span>) {
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">id</span>.<span class="fn">toUpperCase</span>()); <span class="cm">// chỉ string mới có toUpperCase</span>
+  } <span class="kw">else</span> {
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">id</span>.<span class="fn">toFixed</span>(<span class="nm">0</span>));    <span class="cm">// chỉ number mới có toFixed</span>
+  }
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Literal Type — giới hạn giá trị cụ thể</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">literal.ts</span><span class="cb-tag ct-ch">LITERAL</span></div>
+      <div class="cb-body"><pre><span class="cm">// literal type: biến chỉ được nhận đúng những giá trị liệt kê</span>
+<span class="kw">type</span> <span class="cl">KichThuoc</span> = <span class="st-s">"nho"</span> | <span class="st-s">"vua"</span> | <span class="st-s">"lon"</span>;
+
+<span class="kw">function</span> <span class="fn">datAo</span>(<span class="vr">size</span>: <span class="cl">KichThuoc</span>) { <span class="cm">/* ... */</span> }
+
+<span class="fn">datAo</span>(<span class="st-s">"vua"</span>);  <span class="cm">// ✅ hợp lệ</span>
+<span class="cm">// datAo("XL");  ❌ lỗi: "XL" không nằm trong KichThuoc</span>
+
+<span class="cm">// kết hợp với union để tạo enum "nhẹ" không cần từ khóa enum</span>
+<span class="kw">type</span> <span class="cl">HuongDiChuyen</span> = <span class="st-s">"len"</span> | <span class="st-s">"xuong"</span> | <span class="st-s">"trai"</span> | <span class="st-s">"phai"</span>;</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Literal union rất phổ biến:</strong> Thay vì dùng chuỗi tự do dễ gõ sai (<code>"vue"</code> thay vì <code>"vua"</code>), literal type buộc chỉ được chọn 1 trong các giá trị hợp lệ — editor còn tự gợi ý sẵn danh sách.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S6 — ENUM & CONST ASSERTIONS ════ -->
+<div class="section" id="s6">
+  <div class="sec-head">
+    <span class="sec-tag st-ch">HÀM &amp; ĐỐI TƯỢNG</span>
+    <div><h2 class="sec-title">Enum &amp; const assertions</h2>
+    <p class="sec-sub">Đặt tên cho một tập hợp giá trị hằng số cố định</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Enum — tập hợp hằng số có tên</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">enum.ts</span><span class="cb-tag ct-au">ENUM</span></div>
+      <div class="cb-body"><pre><span class="kw">enum</span> <span class="cl">VaiTro</span> {
+  <span class="vr">Khach</span>,      <span class="cm">// = 0, tự tăng dần nếu không gán giá trị</span>
+  <span class="vr">NguoiDung</span>, <span class="cm">// = 1</span>
+  <span class="vr">QuanTri</span>    <span class="cm">// = 2</span>
+}
+
+<span class="kw">function</span> <span class="fn">kiemTraQuyen</span>(<span class="vr">vaiTro</span>: <span class="cl">VaiTro</span>) {
+  <span class="kw">if</span> (<span class="vr">vaiTro</span> === <span class="cl">VaiTro</span>.<span class="vr">QuanTri</span>) <span class="vr">console</span>.<span class="fn">log</span>(<span class="st-s">"Có toàn quyền"</span>);
+}
+
+<span class="cm">// string enum: rõ ràng hơn khi debug/log ra console</span>
+<span class="kw">enum</span> <span class="cl">TrangThaiDonHang</span> {
+  <span class="vr">Cho</span> = <span class="st-s">"CHO_XU_LY"</span>,
+  <span class="vr">DangGiao</span> = <span class="st-s">"DANG_GIAO"</span>,
+  <span class="vr">HoanThanh</span> = <span class="st-s">"HOAN_THANH"</span>
+}</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Enum vs Literal union:</strong> Nhiều đội nhóm hiện đại (kể cả team TypeScript) khuyên dùng <strong>literal union type</strong> (<code>"CHO_XU_LY" | "DANG_GIAO"</code>) thay vì <code>enum</code> vì nhẹ hơn, không sinh code JS thừa và dễ kết hợp với union khác.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">const assertion — "khóa cứng" kiểu về literal</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">const-assertion.ts</span><span class="cb-tag ct-sk">AS CONST</span></div>
+      <div class="cb-body"><pre><span class="kw">let</span> <span class="vr">mau1</span> = <span class="st-s">"do"</span>;             <span class="cm">// kiểu suy luận: string (rộng)</span>
+<span class="kw">let</span> <span class="vr">mau2</span> = <span class="st-s">"do"</span> <span class="kw">as</span> <span class="kw">const</span>; <span class="cm">// kiểu suy luận: "do" (literal, hẹp)</span>
+
+<span class="cm">// dùng "as const" trên object/mảng: mọi thuộc tính thành readonly + literal</span>
+<span class="kw">const</span> <span class="vr">cauHinh</span> = {
+  <span class="pr">theme</span>: <span class="st-s">"dark"</span>,
+  <span class="pr">phienBan</span>: <span class="nm">1</span>
+} <span class="kw">as</span> <span class="kw">const</span>;
+<span class="cm">// cauHinh.theme = "light";  ❌ lỗi: readonly sau khi as const</span>
+
+<span class="cm">// rất hữu ích để tạo literal union từ 1 mảng có sẵn</span>
+<span class="kw">const</span> <span class="vr">MAU_SAC</span> = [<span class="st-s">"do"</span>, <span class="st-s">"xanh"</span>, <span class="st-s">"vang"</span>] <span class="kw">as</span> <span class="kw">const</span>;
+<span class="kw">type</span> <span class="cl">MauSac</span> = <span class="kw">typeof</span> <span class="vr">MAU_SAC</span>[<span class="tp">number</span>]; <span class="cm">// "do" | "xanh" | "vang"</span></pre></div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — OOP & GENERICS ════ -->
+<div class="cat-banner cb-sk">
+  <div class="cb-icon">🟣</div>
+  <div>
+    <div class="cb-badge">OOP &amp; GENERICS</div>
+    <div class="cb-title">Phần 3 — OOP &amp; Generics</div>
+    <div class="cb-sub">Classes · Generics cơ bản · Generic Constraints nâng cao</div>
+  </div>
+</div>
+
+<!-- ════ S7 — CLASSES ════ -->
+<div class="section" id="s7">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">OOP &amp; GENERICS</span>
+    <div><h2 class="sec-title">Classes trong TypeScript</h2>
+    <p class="sec-sub">Access modifiers, readonly, abstract class và implements interface</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Access modifiers — public, private, protected</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">class.ts</span><span class="cb-tag ct-sk">CLASS</span></div>
+      <div class="cb-body"><pre><span class="kw">class</span> <span class="cl">TaiKhoan</span> {
+  <span class="kw">public</span> <span class="pr">ten</span>: <span class="tp">string</span>;            <span class="cm">// truy cập được từ mọi nơi (mặc định)</span>
+  <span class="kw">private</span> <span class="pr">matKhau</span>: <span class="tp">string</span>;      <span class="cm">// chỉ truy cập được TRONG class này</span>
+  <span class="kw">protected</span> <span class="pr">soDu</span>: <span class="tp">number</span>;      <span class="cm">// truy cập được trong class này VÀ class con</span>
+  <span class="kw">readonly</span> <span class="pr">taoLuc</span> = <span class="kw">new</span> <span class="cl">Date</span>(); <span class="cm">// chỉ gán được 1 lần trong constructor</span>
+
+  <span class="cm">// cú pháp rút gọn: khai báo + gán tham số ngay trong constructor</span>
+  <span class="fn">constructor</span>(<span class="vr">ten</span>: <span class="tp">string</span>, <span class="vr">matKhau</span>: <span class="tp">string</span>) {
+    <span class="kw">this</span>.<span class="vr">ten</span> = <span class="vr">ten</span>;
+    <span class="kw">this</span>.<span class="vr">matKhau</span> = <span class="vr">matKhau</span>;
+    <span class="kw">this</span>.<span class="vr">soDu</span> = <span class="nm">0</span>;
+  }
+
+  <span class="fn">napTien</span>(<span class="vr">soTien</span>: <span class="tp">number</span>): <span class="tp">void</span> {
+    <span class="kw">this</span>.<span class="vr">soDu</span> += <span class="vr">soTien</span>;
+  }
+}
+
+<span class="kw">const</span> <span class="vr">tk</span> = <span class="kw">new</span> <span class="cl">TaiKhoan</span>(<span class="st-s">"An"</span>, <span class="st-s">"123456"</span>);
+<span class="vr">tk</span>.<span class="fn">napTien</span>(<span class="nm">100000</span>);
+<span class="cm">// tk.matKhau;  ❌ lỗi: private, không truy cập được từ bên ngoài</span></pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">implements interface &amp; abstract class</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">abstract.ts</span><span class="cb-tag ct-au">ABSTRACT</span></div>
+      <div class="cb-body"><pre><span class="kw">interface</span> <span class="cl">CoTheBay</span> {
+  <span class="fn">bay</span>(): <span class="tp">void</span>;
+}
+
+<span class="cm">// abstract class: không thể "new" trực tiếp, chỉ dùng để kế thừa</span>
+<span class="kw">abstract</span> <span class="kw">class</span> <span class="cl">DongVat</span> <span class="kw">implements</span> <span class="cl">CoTheBay</span> {
+  <span class="fn">constructor</span>(<span class="kw">protected</span> <span class="pr">ten</span>: <span class="tp">string</span>) {}
+
+  <span class="kw">abstract</span> <span class="fn">bay</span>(): <span class="tp">void</span>; <span class="cm">// bắt buộc class con phải tự cài đặt</span>
+
+  <span class="fn">gioiThieu</span>(): <span class="tp">void</span> { <span class="cm">// method dùng chung, class con thừa hưởng luôn</span>
+    <span class="vr">console</span>.<span class="fn">log</span>(`Tôi là ${<span class="kw">this</span>.<span class="vr">ten</span>}`);
+  }
+}
+
+<span class="kw">class</span> <span class="cl">ChimSe</span> <span class="kw">extends</span> <span class="cl">DongVat</span> {
+  <span class="fn">bay</span>(): <span class="tp">void</span> { <span class="vr">console</span>.<span class="fn">log</span>(`${<span class="kw">this</span>.<span class="vr">ten</span>} vỗ cánh bay`); }
+}
+<span class="cm">// new DongVat("x");  ❌ lỗi: không thể khởi tạo abstract class</span></pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">📌</span>
+      <div><strong style="color:var(--text)">interface vs abstract class:</strong> <code>interface</code> chỉ mô tả "hình dạng" (không có code thực thi). <code>abstract class</code> vừa ép buộc method con phải cài đặt, vừa cho phép chia sẻ code dùng chung giữa các lớp con.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S8 — GENERICS CƠ BẢN ════ -->
+<div class="section" id="s8">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">OOP &amp; GENERICS</span>
+    <div><h2 class="sec-title">Generics cơ bản</h2>
+    <p class="sec-sub">Viết hàm/class dùng lại được với nhiều kiểu dữ liệu khác nhau, vẫn giữ an toàn kiểu</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Vì sao cần Generics?</div>
+    <p>Nếu viết hàm nhận <code>any</code>, TypeScript sẽ mất khả năng kiểm tra kiểu trả về. <strong>Generics</strong> cho phép "để trống" một kiểu (thường viết là <code>T</code>) khi định nghĩa hàm/class, rồi kiểu đó sẽ được xác định thực sự khi hàm được gọi — vừa dùng lại được cho nhiều kiểu, vừa giữ nguyên mối liên hệ giữa kiểu đầu vào và đầu ra.</p>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">generics-basic.ts</span><span class="cb-tag ct-sk">GENERIC</span></div>
+      <div class="cb-body"><pre><span class="cm">// không dùng generic: mất thông tin kiểu, trả về "any"</span>
+<span class="kw">function</span> <span class="fn">phanTuDauXau</span>(<span class="vr">arr</span>: <span class="tp">any</span>[]): <span class="tp">any</span> {
+  <span class="kw">return</span> <span class="vr">arr</span>[<span class="nm">0</span>];
+}
+
+<span class="cm">// dùng generic &lt;T&gt;: đầu vào kiểu gì, đầu ra giữ nguyên kiểu đó</span>
+<span class="kw">function</span> <span class="fn">phanTuDau</span>&lt;<span class="tp">T</span>&gt;(<span class="vr">arr</span>: <span class="tp">T</span>[]): <span class="tp">T</span> {
+  <span class="kw">return</span> <span class="vr">arr</span>[<span class="nm">0</span>];
+}
+
+<span class="kw">const</span> <span class="vr">so</span> = <span class="fn">phanTuDau</span>&lt;<span class="tp">number</span>&gt;([<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>]);   <span class="cm">// so có kiểu number</span>
+<span class="kw">const</span> <span class="vr">chu</span> = <span class="fn">phanTuDau</span>([<span class="st-s">"a"</span>, <span class="st-s">"b"</span>]);        <span class="cm">// TS tự suy luận T = string, không cần khai báo</span>
+
+<span class="cm">// generic class: hộp chứa 1 giá trị kiểu bất kỳ</span>
+<span class="kw">class</span> <span class="cl">Hop</span>&lt;<span class="tp">T</span>&gt; {
+  <span class="fn">constructor</span>(<span class="kw">private</span> <span class="pr">giaTri</span>: <span class="tp">T</span>) {}
+  <span class="fn">layGiaTri</span>(): <span class="tp">T</span> { <span class="kw">return</span> <span class="kw">this</span>.<span class="vr">giaTri</span>; }
+}
+
+<span class="kw">const</span> <span class="vr">hopSo</span> = <span class="kw">new</span> <span class="cl">Hop</span>&lt;<span class="tp">number</span>&gt;(<span class="nm">42</span>);</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Cách đọc <code>&lt;T&gt;</code>:</strong> Hãy nghĩ <code>T</code> như một tham số — giống tham số thường của hàm, nhưng thay vì truyền giá trị, bạn "truyền" một kiểu dữ liệu. Tên <code>T</code> chỉ là quy ước (Type), có thể đặt tên khác như <code>TItem</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S9 — GENERIC CONSTRAINTS NÂNG CAO ════ -->
+<div class="section" id="s9">
+  <div class="sec-head">
+    <span class="sec-tag st-sk">OOP &amp; GENERICS</span>
+    <div><h2 class="sec-title">Generic Constraints nâng cao</h2>
+    <p class="sec-sub">Giới hạn generic chỉ nhận những kiểu có "hình dạng" nhất định</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">extends — ràng buộc generic</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">generic-constraint.ts</span><span class="cb-tag ct-au">CONSTRAINT</span></div>
+      <div class="cb-body"><pre><span class="kw">interface</span> <span class="cl">CoDoDai</span> {
+  <span class="pr">length</span>: <span class="tp">number</span>;
+}
+
+<span class="cm">// T phải là kiểu CÓ thuộc tính "length" — string, array, object có length đều hợp lệ</span>
+<span class="kw">function</span> <span class="fn">inDoDai</span>&lt;<span class="tp">T</span> <span class="kw">extends</span> <span class="cl">CoDoDai</span>&gt;(<span class="vr">item</span>: <span class="tp">T</span>): <span class="tp">T</span> {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">item</span>.<span class="vr">length</span>);
+  <span class="kw">return</span> <span class="vr">item</span>;
+}
+
+<span class="fn">inDoDai</span>(<span class="st-s">"xin chao"</span>);      <span class="cm">// ✅ string có length</span>
+<span class="fn">inDoDai</span>([<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>]);      <span class="cm">// ✅ array có length</span>
+<span class="cm">// inDoDai(42);           ❌ lỗi: number không có length</span>
+
+<span class="cm">// "keyof T": lấy union tất cả tên thuộc tính của T</span>
+<span class="kw">function</span> <span class="fn">layGiaTri</span>&lt;<span class="tp">T</span>, <span class="tp">K</span> <span class="kw">extends</span> <span class="kw">keyof</span> <span class="tp">T</span>&gt;(<span class="vr">obj</span>: <span class="tp">T</span>, <span class="vr">key</span>: <span class="tp">K</span>): <span class="tp">T</span>[<span class="tp">K</span>] {
+  <span class="kw">return</span> <span class="vr">obj</span>[<span class="vr">key</span>];
+}
+
+<span class="kw">const</span> <span class="vr">user</span> = { <span class="pr">ten</span>: <span class="st-s">"An"</span>, <span class="pr">tuoi</span>: <span class="nm">25</span> };
+<span class="fn">layGiaTri</span>(<span class="vr">user</span>, <span class="st-s">"ten"</span>);   <span class="cm">// ✅ trả về string</span>
+<span class="cm">// layGiaTri(user, "diaChi");  ❌ lỗi: "diaChi" không phải key của user</span></pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Cặp đôi kinh điển:</strong> <code>&lt;T, K extends keyof T&gt;</code> là mẫu cực kỳ phổ biến để viết hàm truy cập thuộc tính an toàn — TypeScript sẽ tự chặn ngay lúc gõ code nếu <code>key</code> không tồn tại trên <code>T</code>.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — KIỂU NÂNG CAO ════ -->
+<div class="cat-banner cb-au">
+  <div class="cb-icon">🟡</div>
+  <div>
+    <div class="cb-badge">KIỂU NÂNG CAO</div>
+    <div class="cb-title">Phần 4 — Kiểu nâng cao</div>
+    <div class="cb-sub">Type Narrowing · Discriminated Unions · Utility Types · Mapped &amp; Conditional Types</div>
+  </div>
+</div>
+
+<!-- ════ S10 — TYPE NARROWING & TYPE GUARDS ════ -->
+<div class="section" id="s10">
+  <div class="sec-head">
+    <span class="sec-tag st-au">KIỂU NÂNG CAO</span>
+    <div><h2 class="sec-title">Type Narrowing &amp; Type Guards</h2>
+    <p class="sec-sub">Thu hẹp kiểu union về kiểu cụ thể trong từng nhánh code</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Các cách thu hẹp kiểu phổ biến</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">narrowing.ts</span><span class="cb-tag ct-y">NARROWING</span></div>
+      <div class="cb-body"><pre><span class="cm">// 1) typeof — cho kiểu nguyên thủy</span>
+<span class="kw">function</span> <span class="fn">xuLy</span>(<span class="vr">gtri</span>: <span class="tp">string</span> | <span class="tp">number</span>) {
+  <span class="kw">if</span> (<span class="kw">typeof</span> <span class="vr">gtri</span> === <span class="st-s">"string"</span>) <span class="vr">gtri</span>.<span class="fn">trim</span>(); <span class="cm">// gtri: string</span>
+}
+
+<span class="cm">// 2) instanceof — cho class</span>
+<span class="kw">function</span> <span class="fn">xuLyLoi</span>(<span class="vr">err</span>: <span class="tp">Error</span> | <span class="tp">string</span>) {
+  <span class="kw">if</span> (<span class="vr">err</span> <span class="kw">instanceof</span> <span class="cl">Error</span>) <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">err</span>.<span class="vr">message</span>); <span class="cm">// err: Error</span>
+}
+
+<span class="cm">// 3) in — kiểm tra thuộc tính có tồn tại trên object</span>
+<span class="kw">type</span> <span class="cl">Meo</span> = { <span class="pr">keu</span>: () =&gt; <span class="tp">void</span> };
+<span class="kw">type</span> <span class="cl">Cho</span> = { <span class="pr">sua</span>: () =&gt; <span class="tp">void</span> };
+<span class="kw">function</span> <span class="fn">amThanh</span>(<span class="vr">vat</span>: <span class="cl">Meo</span> | <span class="cl">Cho</span>) {
+  <span class="kw">if</span> (<span class="st-s">"keu"</span> <span class="kw">in</span> <span class="vr">vat</span>) <span class="vr">vat</span>.<span class="fn">keu</span>(); <span class="cm">// vat: Meo</span>
+  <span class="kw">else</span> <span class="vr">vat</span>.<span class="fn">sua</span>();          <span class="cm">// vat: Cho</span>
+}
+
+<span class="cm">// 4) custom type guard — hàm trả về "gtri is KieuX"</span>
+<span class="kw">function</span> <span class="fn">laChuoi</span>(<span class="vr">gtri</span>: <span class="kw">unknown</span>): <span class="vr">gtri</span> <span class="kw">is</span> <span class="tp">string</span> {
+  <span class="kw">return</span> <span class="kw">typeof</span> <span class="vr">gtri</span> === <span class="st-s">"string"</span>;
+}
+<span class="kw">function</span> <span class="fn">inHoa</span>(<span class="vr">gtri</span>: <span class="kw">unknown</span>) {
+  <span class="kw">if</span> (<span class="fn">laChuoi</span>(<span class="vr">gtri</span>)) <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">gtri</span>.<span class="fn">toUpperCase</span>()); <span class="cm">// gtri: string</span>
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Custom type guard hữu ích khi nào?</strong> Khi kiểm tra kiểu phức tạp hơn <code>typeof</code>/<code>instanceof</code> cho phép, ví dụ kiểm tra một object có đủ các thuộc tính của interface hay không — gói logic đó vào 1 hàm dùng lại nhiều nơi.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S11 — DISCRIMINATED UNIONS ════ -->
+<div class="section" id="s11">
+  <div class="sec-head">
+    <span class="sec-tag st-au">KIỂU NÂNG CAO</span>
+    <div><h2 class="sec-title">Discriminated Unions</h2>
+    <p class="sec-sub">Mẫu thiết kế cực mạnh: dùng 1 thuộc tính chung để TypeScript tự phân biệt từng nhánh union</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Thuộc tính "kind" làm điểm phân biệt</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">discriminated-union.ts</span><span class="cb-tag ct-t">DISCRIMINATED</span></div>
+      <div class="cb-body"><pre><span class="kw">interface</span> <span class="cl">HinhTron</span> {
+  <span class="pr">kind</span>: <span class="st-s">"tron"</span>;    <span class="cm">// "kind" là thuộc tính phân biệt (discriminant)</span>
+  <span class="pr">banKinh</span>: <span class="tp">number</span>;
+}
+<span class="kw">interface</span> <span class="cl">HinhVuong</span> {
+  <span class="pr">kind</span>: <span class="st-s">"vuong"</span>;
+  <span class="pr">canh</span>: <span class="tp">number</span>;
+}
+<span class="kw">type</span> <span class="cl">Hinh</span> = <span class="cl">HinhTron</span> | <span class="cl">HinhVuong</span>;
+
+<span class="kw">function</span> <span class="fn">tinhDienTich</span>(<span class="vr">hinh</span>: <span class="cl">Hinh</span>): <span class="tp">number</span> {
+  <span class="kw">switch</span> (<span class="vr">hinh</span>.<span class="vr">kind</span>) {
+    <span class="kw">case</span> <span class="st-s">"tron"</span>:
+      <span class="kw">return</span> <span class="fn">Math</span>.<span class="vr">PI</span> * <span class="vr">hinh</span>.<span class="vr">banKinh</span> ** <span class="nm">2</span>; <span class="cm">// hinh tự thu hẹp thành HinhTron</span>
+    <span class="kw">case</span> <span class="st-s">"vuong"</span>:
+      <span class="kw">return</span> <span class="vr">hinh</span>.<span class="vr">canh</span> ** <span class="nm">2</span>;          <span class="cm">// hinh tự thu hẹp thành HinhVuong</span>
+  }
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Rất phổ biến khi mô hình hóa trạng thái:</strong> Ví dụ trạng thái gọi API <code>{kind:"loading"} | {kind:"success", data} | {kind:"error", message}</code> — <code>switch(kind)</code> giúp không bao giờ quên xử lý 1 trạng thái, và TypeScript báo lỗi ngay nếu thiếu case.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S12 — UTILITY TYPES ════ -->
+<div class="section" id="s12">
+  <div class="sec-head">
+    <span class="sec-tag st-au">KIỂU NÂNG CAO</span>
+    <div><h2 class="sec-title">Utility Types</h2>
+    <p class="sec-sub">Bộ công cụ có sẵn của TypeScript để biến đổi type đã có thành type mới</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Các Utility Type dùng nhiều nhất</div>
+    <table class="tbl">
+      <tr><th>Utility Type</th><th>Công dụng</th></tr>
+      <tr><td><code>Partial&lt;T&gt;</code></td><td>Biến mọi thuộc tính của T thành tùy chọn (<code>?</code>) — hữu ích khi update 1 phần object</td></tr>
+      <tr><td><code>Required&lt;T&gt;</code></td><td>Ngược lại Partial — bắt buộc mọi thuộc tính phải có giá trị</td></tr>
+      <tr><td><code>Readonly&lt;T&gt;</code></td><td>Biến mọi thuộc tính thành chỉ đọc, không gán lại được</td></tr>
+      <tr><td><code>Pick&lt;T, K&gt;</code></td><td>Chọn ra một tập con thuộc tính K từ T</td></tr>
+      <tr><td><code>Omit&lt;T, K&gt;</code></td><td>Loại bỏ tập thuộc tính K khỏi T, giữ lại phần còn lại</td></tr>
+      <tr><td><code>Record&lt;K, V&gt;</code></td><td>Tạo kiểu object với key thuộc K, value đều thuộc kiểu V</td></tr>
+      <tr><td><code>ReturnType&lt;F&gt;</code></td><td>Lấy ra kiểu giá trị trả về của hàm F</td></tr>
+    </table>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">utility-types.ts</span><span class="cb-tag ct-au">UTILITY</span></div>
+      <div class="cb-body"><pre><span class="kw">interface</span> <span class="cl">SanPham</span> {
+  <span class="pr">id</span>: <span class="tp">number</span>;
+  <span class="pr">ten</span>: <span class="tp">string</span>;
+  <span class="pr">gia</span>: <span class="tp">number</span>;
+  <span class="pr">moTa</span>: <span class="tp">string</span>;
+}
+
+<span class="cm">// Partial: dùng khi chỉ update 1 vài trường</span>
+<span class="kw">function</span> <span class="fn">capNhatSanPham</span>(<span class="vr">id</span>: <span class="tp">number</span>, <span class="vr">thayDoi</span>: <span class="cl">Partial</span>&lt;<span class="cl">SanPham</span>&gt;) { <span class="cm">/* ... */</span> }
+<span class="fn">capNhatSanPham</span>(<span class="nm">1</span>, { <span class="pr">gia</span>: <span class="nm">99000</span> }); <span class="cm">// ✅ chỉ cần truyền đúng 1 trường</span>
+
+<span class="cm">// Pick: chỉ lấy ra id và ten, dùng cho danh sách rút gọn</span>
+<span class="kw">type</span> <span class="cl">SanPhamRutGon</span> = <span class="cl">Pick</span>&lt;<span class="cl">SanPham</span>, <span class="st-s">"id"</span> | <span class="st-s">"ten"</span>&gt;;
+
+<span class="cm">// Omit: bỏ id ra vì id sẽ do server tự sinh khi tạo mới</span>
+<span class="kw">type</span> <span class="cl">SanPhamMoi</span> = <span class="cl">Omit</span>&lt;<span class="cl">SanPham</span>, <span class="st-s">"id"</span>&gt;;
+
+<span class="cm">// Record: object dạng "bảng tra cứu" theo key</span>
+<span class="kw">type</span> <span class="cl">GioHang</span> = <span class="cl">Record</span>&lt;<span class="tp">number</span>, <span class="tp">number</span>&gt;; <span class="cm">// { [productId: number]: soLuong }</span>
+<span class="kw">const</span> <span class="vr">gio</span>: <span class="cl">GioHang</span> = { <span class="nm">1</span>: <span class="nm">2</span>, <span class="nm">5</span>: <span class="nm">1</span> };
+
+<span class="cm">// ReturnType: lấy kiểu trả về mà không cần viết lại</span>
+<span class="kw">function</span> <span class="fn">taoUser</span>() { <span class="kw">return</span> { <span class="pr">id</span>: <span class="nm">1</span>, <span class="pr">ten</span>: <span class="st-s">"An"</span> }; }
+<span class="kw">type</span> <span class="cl">UserType</span> = <span class="cl">ReturnType</span>&lt;<span class="kw">typeof</span> <span class="fn">taoUser</span>&gt;; <span class="cm">// { id: number; ten: string }</span></pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Không cần nhớ hết:</strong> Chỉ cần thuộc <code>Partial</code>, <code>Pick</code>, <code>Omit</code>, <code>Record</code> — 4 utility type này chiếm phần lớn nhu cầu thực tế hằng ngày khi làm việc với API và form.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S13 — MAPPED & CONDITIONAL TYPES ════ -->
+<div class="section" id="s13">
+  <div class="sec-head">
+    <span class="sec-tag st-au">KIỂU NÂNG CAO</span>
+    <div><h2 class="sec-title">Mapped Types &amp; Conditional Types</h2>
+    <p class="sec-sub">Tự viết "công thức" biến đổi type — nền tảng đứng sau mọi Utility Type có sẵn</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Mapped Type — lặp qua từng thuộc tính của T</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">mapped-type.ts</span><span class="cb-tag ct-sk">MAPPED</span></div>
+      <div class="cb-body"><pre><span class="cm">// đây thực chất là cách Partial<T> được viết bên trong TypeScript</span>
+<span class="kw">type</span> <span class="cl">PartialCuaToi</span>&lt;<span class="tp">T</span>&gt; = {
+  [<span class="tp">K</span> <span class="kw">in</span> <span class="kw">keyof</span> <span class="tp">T</span>]?: <span class="tp">T</span>[<span class="tp">K</span>];
+};
+
+<span class="cm">// tự viết mapped type riêng: biến mọi thuộc tính thành kiểu hàm getter</span>
+<span class="kw">type</span> <span class="cl">Getters</span>&lt;<span class="tp">T</span>&gt; = {
+  [<span class="tp">K</span> <span class="kw">in</span> <span class="kw">keyof</span> <span class="tp">T</span> <span class="kw">as</span> `get${<span class="tp">string</span> &amp; <span class="tp">K</span>}`]: () =&gt; <span class="tp">T</span>[<span class="tp">K</span>];
+};
+<span class="kw">type</span> <span class="cl">User</span> = { <span class="pr">ten</span>: <span class="tp">string</span>; <span class="pr">tuoi</span>: <span class="tp">number</span> };
+<span class="cm">// UserGetters = { getTen: () => string; getTuoi: () => number }</span>
+<span class="kw">type</span> <span class="cl">UserGetters</span> = <span class="cl">Getters</span>&lt;<span class="cl">User</span>&gt;;</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Conditional Type — "nếu ... thì ..." ở cấp độ kiểu</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">conditional-type.ts</span><span class="cb-tag ct-y">CONDITIONAL</span></div>
+      <div class="cb-body"><pre><span class="cm">// cú pháp: T extends U ? KieuNeuDung : KieuNeuSai</span>
+<span class="kw">type</span> <span class="cl">LaMang</span>&lt;<span class="tp">T</span>&gt; = <span class="tp">T</span> <span class="kw">extends</span> <span class="tp">any</span>[] ? <span class="st-s">"co"</span> : <span class="st-s">"khong"</span>;
+<span class="kw">type</span> <span class="cl">A</span> = <span class="cl">LaMang</span>&lt;<span class="tp">string</span>[]&gt;; <span class="cm">// "co"</span>
+<span class="kw">type</span> <span class="cl">B</span> = <span class="cl">LaMang</span>&lt;<span class="tp">number</span>&gt;;   <span class="cm">// "khong"</span>
+
+<span class="cm">// infer: "trích xuất" 1 kiểu con từ bên trong kiểu phức tạp</span>
+<span class="kw">type</span> <span class="cl">PhanTuCuaMang</span>&lt;<span class="tp">T</span>&gt; = <span class="tp">T</span> <span class="kw">extends</span> (<span class="kw">infer</span> <span class="tp">U</span>)[] ? <span class="tp">U</span> : <span class="tp">never</span>;
+<span class="kw">type</span> <span class="cl">C</span> = <span class="cl">PhanTuCuaMang</span>&lt;<span class="tp">number</span>[]&gt;; <span class="cm">// number</span></pre></div>
+    </div>
+    <div class="info i-note">
+      <span class="info-ico">📌</span>
+      <div><strong style="color:var(--text)">Không cần thành thạo ngay:</strong> Mapped &amp; Conditional Type là kiến thức nâng cao, chủ yếu dùng khi viết thư viện dùng chung. 90% công việc thực tế chỉ cần dùng thành thạo các utility type có sẵn ở phần trước.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ BANNER — THỰC CHIẾN ════ -->
+<div class="cat-banner cb-oc">
+  <div class="cb-icon">🔷</div>
+  <div>
+    <div class="cb-badge">THỰC CHIẾN</div>
+    <div class="cb-title">Phần 5 — Thực chiến</div>
+    <div class="cb-sub">Module &amp; .d.ts · Async/Await · TypeScript với DOM &amp; React</div>
+  </div>
+</div>
+
+<!-- ════ S14 — MODULE & .D.TS ════ -->
+<div class="section" id="s14">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">THỰC CHIẾN</span>
+    <div><h2 class="sec-title">Module &amp; file khai báo .d.ts</h2>
+    <p class="sec-sub">Chia code thành nhiều file, và mô tả kiểu cho thư viện JavaScript thuần</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">import / export</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">module.ts</span><span class="cb-tag ct-ins">MODULE</span></div>
+      <div class="cb-body"><pre><span class="cm">// math.ts — export nhiều thứ (named export)</span>
+<span class="kw">export</span> <span class="kw">function</span> <span class="fn">cong</span>(<span class="vr">a</span>: <span class="tp">number</span>, <span class="vr">b</span>: <span class="tp">number</span>) { <span class="kw">return</span> <span class="vr">a</span> + <span class="vr">b</span>; }
+<span class="kw">export</span> <span class="kw">interface</span> <span class="cl">PhepTinh</span> { <span class="pr">a</span>: <span class="tp">number</span>; <span class="pr">b</span>: <span class="tp">number</span>; }
+
+<span class="cm">// export default — chỉ 1 export mặc định mỗi file</span>
+<span class="kw">export</span> <span class="kw">default</span> <span class="kw">class</span> <span class="cl">MayTinh</span> { <span class="cm">/* ... */</span> }
+
+<span class="cm">// app.ts — import lại</span>
+<span class="kw">import</span> <span class="cl">MayTinh</span>, { <span class="fn">cong</span>, <span class="cl">PhepTinh</span> } <span class="kw">from</span> <span class="st-s">"./math"</span>;
+<span class="kw">import</span> <span class="kw">type</span> { <span class="cl">PhepTinh</span> <span class="kw">as</span> <span class="cl">Tinh</span> } <span class="kw">from</span> <span class="st-s">"./math"</span>; <span class="cm">// import type: chỉ lấy kiểu, không lấy code</span></pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">File khai báo .d.ts cho thư viện JS thuần</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">my-lib.d.ts</span><span class="cb-tag ct-au">DECLARE</span></div>
+      <div class="cb-body"><pre><span class="cm">// khai báo kiểu cho 1 thư viện JS không có sẵn type (không chứa code thực thi)</span>
+<span class="kw">declare</span> <span class="kw">module</span> <span class="st-s">"thu-vien-cu"</span> {
+  <span class="kw">export</span> <span class="kw">function</span> <span class="fn">khoiTao</span>(<span class="vr">tuyChon</span>: { <span class="pr">debug</span>: <span class="tp">boolean</span> }): <span class="tp">void</span>;
+  <span class="kw">export</span> <span class="kw">const</span> <span class="vr">phienBan</span>: <span class="tp">string</span>;
+}</pre></div>
+    </div>
+    <div class="info i-tip">
+      <span class="info-ico">💡</span>
+      <div><strong style="color:var(--text)">Thường không cần tự viết:</strong> Phần lớn thư viện phổ biến đã có sẵn type trong kho <code>@types/...</code> (ví dụ <code>npm i -D @types/lodash</code>) — chỉ cần tự viết <code>.d.ts</code> khi dùng thư viện nội bộ hoặc quá cũ không có type.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S15 — ASYNC/AWAIT & PROMISE ════ -->
+<div class="section" id="s15">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">THỰC CHIẾN</span>
+    <div><h2 class="sec-title">Async/Await &amp; Promise&lt;T&gt;</h2>
+    <p class="sec-sub">Khai báo kiểu cho code bất đồng bộ — gọi API, đọc file, chờ timer</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Promise&lt;T&gt; — T là kiểu giá trị "sẽ có" trong tương lai</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">async-await.ts</span><span class="cb-tag ct-t">ASYNC</span></div>
+      <div class="cb-body"><pre><span class="kw">interface</span> <span class="cl">User</span> { <span class="pr">id</span>: <span class="tp">number</span>; <span class="pr">ten</span>: <span class="tp">string</span>; }
+
+<span class="cm">// hàm async luôn trả về Promise<T>, dù bạn chỉ viết "return T"</span>
+<span class="kw">async</span> <span class="kw">function</span> <span class="fn">layUser</span>(<span class="vr">id</span>: <span class="tp">number</span>): <span class="cl">Promise</span>&lt;<span class="cl">User</span>&gt; {
+  <span class="kw">const</span> <span class="vr">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(`/api/users/${<span class="vr">id</span>}`);
+  <span class="kw">if</span> (!<span class="vr">res</span>.<span class="vr">ok</span>) {
+    <span class="kw">throw</span> <span class="kw">new</span> <span class="cl">Error</span>(<span class="st-s">"Không lấy được user"</span>);
+  }
+  <span class="kw">const</span> <span class="vr">du</span>: <span class="cl">User</span> = <span class="kw">await</span> <span class="vr">res</span>.<span class="fn">json</span>();
+  <span class="kw">return</span> <span class="vr">du</span>; <span class="cm">// TypeScript tự bọc lại thành Promise<User></span>
+}
+
+<span class="cm">// gọi và xử lý lỗi bằng try/catch</span>
+<span class="kw">async</span> <span class="kw">function</span> <span class="fn">main</span>() {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="vr">user</span> = <span class="kw">await</span> <span class="fn">layUser</span>(<span class="nm">1</span>);
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">user</span>.<span class="vr">ten</span>);
+  } <span class="kw">catch</span> (<span class="vr">loi</span>) {
+    <span class="cm">// biến bắt trong catch mặc định có kiểu "unknown", phải kiểm tra trước khi dùng</span>
+    <span class="kw">if</span> (<span class="vr">loi</span> <span class="kw">instanceof</span> <span class="cl">Error</span>) <span class="vr">console</span>.<span class="fn">error</span>(<span class="vr">loi</span>.<span class="vr">message</span>);
+  }
+}
+
+<span class="cm">// Promise.all: chờ nhiều promise, kiểu trả về là tuple tương ứng</span>
+<span class="kw">async</span> <span class="kw">function</span> <span class="fn">layNhieuUser</span>() {
+  <span class="kw">const</span> [<span class="vr">u1</span>, <span class="vr">u2</span>] = <span class="kw">await</span> <span class="fn">Promise</span>.<span class="fn">all</span>([<span class="fn">layUser</span>(<span class="nm">1</span>), <span class="fn">layUser</span>(<span class="nm">2</span>)]);
+}</pre></div>
+    </div>
+    <div class="info i-warn">
+      <span class="info-ico">⚠️</span>
+      <div><strong style="color:var(--text)">Biến trong <code>catch</code> luôn là <code>unknown</code>:</strong> TypeScript không biết code nào ném ra lỗi gì, nên luôn cần <code>instanceof Error</code> hoặc kiểm tra kiểu trước khi đọc thuộc tính như <code>.message</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S16 — TYPESCRIPT VỚI DOM & REACT ════ -->
+<div class="section" id="s16">
+  <div class="sec-head">
+    <span class="sec-tag st-oc">THỰC CHIẾN</span>
+    <div><h2 class="sec-title">TypeScript với DOM &amp; React</h2>
+    <p class="sec-sub">Kiểu cho phần tử HTML, sự kiện, và props/state trong component React</p></div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Kiểu cho DOM &amp; sự kiện</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">dom.ts</span><span class="cb-tag ct-ins">DOM</span></div>
+      <div class="cb-body"><pre><span class="cm">// querySelector trả về "Element | null" -> cần ép kiểu hoặc kiểm tra null</span>
+<span class="kw">const</span> <span class="vr">input</span> = <span class="vr">document</span>.<span class="fn">querySelector</span>&lt;<span class="cl">HTMLInputElement</span>&gt;(<span class="st-s">"#ten"</span>);
+<span class="kw">if</span> (<span class="vr">input</span>) {
+  <span class="vr">input</span>.<span class="fn">addEventListener</span>(<span class="st-s">"input"</span>, (<span class="vr">e</span>: <span class="cl">Event</span>) =&gt; {
+    <span class="kw">const</span> <span class="vr">target</span> = <span class="vr">e</span>.<span class="vr">target</span> <span class="kw">as</span> <span class="cl">HTMLInputElement</span>;
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">target</span>.<span class="vr">value</span>);
+  });
+}</pre></div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Props &amp; State trong React (.tsx)</div>
+    <div class="cblock">
+      <div class="cb-head"><div class="cb-dots"><div class="cbd r"></div><div class="cbd y"></div><div class="cbd g"></div></div><span class="cb-name">Button.tsx</span><span class="cb-tag ct-sk">REACT</span></div>
+      <div class="cb-body"><pre><span class="kw">import</span> { <span class="fn">useState</span> } <span class="kw">from</span> <span class="st-s">"react"</span>;
+
+<span class="cm">// interface mô tả rõ props: tên, kiểu, có bắt buộc hay không</span>
+<span class="kw">interface</span> <span class="cl">ButtonProps</span> {
+  <span class="pr">nhan</span>: <span class="tp">string</span>;
+  <span class="pr">onClick</span>: () =&gt; <span class="tp">void</span>;
+  <span class="pr">disabled</span>?: <span class="tp">boolean</span>; <span class="cm">// props tùy chọn</span>
+}
+
+<span class="kw">function</span> <span class="fn">Button</span>({ <span class="vr">nhan</span>, <span class="vr">onClick</span>, <span class="vr">disabled</span> = <span class="kw">false</span> }: <span class="cl">ButtonProps</span>) {
+  <span class="cm">// useState<T>: khai báo rõ kiểu state, tránh TS suy luận sai</span>
+  <span class="kw">const</span> [<span class="vr">soLanClick</span>, <span class="fn">setSoLanClick</span>] = <span class="fn">useState</span>&lt;<span class="tp">number</span>&gt;(<span class="nm">0</span>);
+
+  <span class="kw">return</span> (
+    &lt;<span class="vr">button</span> <span class="pr">disabled</span>={<span class="vr">disabled</span>} <span class="pr">onClick</span>={() =&gt; {
+      <span class="fn">setSoLanClick</span>((<span class="vr">n</span>) =&gt; <span class="vr">n</span> + <span class="nm">1</span>);
+      <span class="vr">onClick</span>();
+    }}&gt;
+      {<span class="vr">nhan</span>} ({<span class="vr">soLanClick</span>})
+    &lt;/<span class="vr">button</span>&gt;
+  );
+}</pre></div>
+    </div>
+    <div class="info i-ok">
+      <span class="info-ico">✅</span>
+      <div><strong style="color:var(--text)">Luôn định nghĩa interface Props riêng:</strong> Đặt tên rõ ràng (<code>ButtonProps</code>) thay vì inline — dễ tái sử dụng, dễ đọc, và editor gợi ý chính xác khi component được dùng ở nơi khác.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ S17 — BEST PRACTICE & LỖI HAY GẶP ════ -->
+<div class="section" id="s17">
+  <div class="sec-head">
+    <span class="sec-tag st-y">MẸO &amp; LỖI HAY GẶP</span>
+    <div><h2 class="sec-title">Best Practice &amp; lỗi hay gặp</h2>
+    <p class="sec-sub">Những sai lầm phổ biến của người mới học TypeScript</p></div>
+  </div>
+  <div class="sub">
+    <div class="rw-box rw-ins">
+      <div class="rw-label">✅ NÊN LÀM</div>
+      <div class="rw-title">Luôn bật <code>strict: true</code> trong tsconfig.json</div>
+      <div class="rw-body">Không có strict mode, TypeScript bỏ qua rất nhiều lỗi tiềm ẩn quan trọng như giá trị <code>null</code>/<code>undefined</code> không được kiểm tra — gần như phí phạm lý do dùng TypeScript.</div>
+    </div>
+    <div class="rw-box rw-ch">
+      <div class="rw-label">✅ NÊN LÀM</div>
+      <div class="rw-title">Ưu tiên để TypeScript tự suy luận kiểu (type inference)</div>
+      <div class="rw-body">Chỉ khai báo kiểu tường minh khi TS không tự suy luận được (tham số hàm, kiểu trả về của hàm public) — khai báo thừa ở mọi biến làm code rườm rà không cần thiết.</div>
+    </div>
+    <div class="rw-box rw-y">
+      <div class="rw-label">❌ TRÁNH</div>
+      <div class="rw-title">Lạm dụng <code>any</code> hoặc ép kiểu <code>as</code> để "cho qua" lỗi</div>
+      <div class="rw-body">Dùng <code>any</code>/<code>as</code> để tắt lỗi đỏ thường chỉ chuyển lỗi từ lúc biên dịch sang lúc chạy thực tế — hãy sửa đúng kiểu dữ liệu thay vì ép TypeScript im lặng.</div>
+    </div>
+    <div class="rw-box rw-au">
+      <div class="rw-label">❌ TRÁNH</div>
+      <div class="rw-title">Quên xử lý <code>null</code>/<code>undefined</code> khi strictNullChecks bật</div>
+      <div class="rw-body">Với strict mode, mọi biến có thể <code>null</code> đều bắt buộc kiểm tra trước khi dùng — đừng dùng dấu <code>!</code> (non-null assertion) tùy tiện chỉ để code biên dịch được.</div>
+    </div>
+  </div>
+  <div class="sub">
+    <div class="sub-title">Bảng lỗi thường gặp</div>
+    <table class="tbl">
+      <tr><th>Lỗi</th><th>Nguyên nhân &amp; cách sửa</th></tr>
+      <tr><td><code>Object is possibly 'undefined'</code></td><td>Truy cập thuộc tính trên giá trị có thể <code>undefined</code> — dùng optional chaining <code>?.</code> hoặc kiểm tra <code>if</code> trước</td></tr>
+      <tr><td><code>Type 'X' is not assignable to type 'Y'</code></td><td>Gán sai kiểu dữ liệu — kiểm tra lại kiểu khai báo có đúng với giá trị thực tế không</td></tr>
+      <tr><td><code>Property does not exist on type</code></td><td>Truy cập thuộc tính không có trong interface/type — kiểm tra tên gõ đúng chưa, hoặc thêm thuộc tính vào type</td></tr>
+      <tr><td><code>Argument of type X is not assignable to parameter of type Y</code></td><td>Truyền sai kiểu tham số khi gọi hàm — đối chiếu lại kiểu tham số hàm yêu cầu</td></tr>
+    </table>
+  </div>
+</div>
+
+<hr class="dv">
+
+<!-- ════ S18 — CHEAT SHEET ════ -->
+<div class="section" id="s18">
+  <div class="sec-head">
+    <span class="sec-tag st-y">THAM KHẢO</span>
+    <div><h2 class="sec-title">Cheat Sheet</h2>
+    <p class="sec-sub">Tra cứu nhanh cú pháp TypeScript đã học</p></div>
+  </div>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4 class="h4-ins">🔵 Kiểu dữ liệu</h4>
+      <div class="cheat-row"><span class="ck">Khai báo biến</span><span class="cv">let x: number</span></div>
+      <div class="cheat-row"><span class="ck">Mảng</span><span class="cv">T[] / Array&lt;T&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Tuple</span><span class="cv">[string, number]</span></div>
+      <div class="cheat-row"><span class="ck">Kiểu bất kỳ an toàn</span><span class="cv">unknown</span></div>
+      <div class="cheat-row"><span class="ck">Không bao giờ trả về</span><span class="cv">never</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ch">🟢 Hàm &amp; đối tượng</h4>
+      <div class="cheat-row"><span class="ck">Tham số tùy chọn</span><span class="cv">(x?: T)</span></div>
+      <div class="cheat-row"><span class="ck">Union type</span><span class="cv">T | U</span></div>
+      <div class="cheat-row"><span class="ck">Intersection type</span><span class="cv">T &amp; U</span></div>
+      <div class="cheat-row"><span class="ck">Literal union</span><span class="cv">"a" | "b"</span></div>
+      <div class="cheat-row"><span class="ck">Khóa kiểu literal</span><span class="cv">as const</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-sk">🟣 OOP &amp; Generics</h4>
+      <div class="cheat-row"><span class="ck">Thuộc tính riêng tư</span><span class="cv">private</span></div>
+      <div class="cheat-row"><span class="ck">Chỉ đọc</span><span class="cv">readonly</span></div>
+      <div class="cheat-row"><span class="ck">Kế thừa interface</span><span class="cv">extends</span></div>
+      <div class="cheat-row"><span class="ck">Hàm generic</span><span class="cv">function f&lt;T&gt;()</span></div>
+      <div class="cheat-row"><span class="ck">Ràng buộc generic</span><span class="cv">T extends U</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-au">🟡 Kiểu nâng cao</h4>
+      <div class="cheat-row"><span class="ck">Thu hẹp kiểu</span><span class="cv">typeof / instanceof / in</span></div>
+      <div class="cheat-row"><span class="ck">Type guard tự viết</span><span class="cv">x is T</span></div>
+      <div class="cheat-row"><span class="ck">Lấy tên key</span><span class="cv">keyof T</span></div>
+      <div class="cheat-row"><span class="ck">Điều kiện ở cấp kiểu</span><span class="cv">T extends U ? A : B</span></div>
+      <div class="cheat-row"><span class="ck">Trích kiểu con</span><span class="cv">infer U</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-oc">🔷 Utility Types</h4>
+      <div class="cheat-row"><span class="ck">Mọi thuộc tính tùy chọn</span><span class="cv">Partial&lt;T&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Chọn 1 số thuộc tính</span><span class="cv">Pick&lt;T,K&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Loại bỏ thuộc tính</span><span class="cv">Omit&lt;T,K&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Bảng tra cứu</span><span class="cv">Record&lt;K,V&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Kiểu trả về của hàm</span><span class="cv">ReturnType&lt;F&gt;</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4 class="h4-ins">📦 Bất đồng bộ &amp; module</h4>
+      <div class="cheat-row"><span class="ck">Kiểu Promise</span><span class="cv">Promise&lt;T&gt;</span></div>
+      <div class="cheat-row"><span class="ck">Export nhiều giá trị</span><span class="cv">export { a, b }</span></div>
+      <div class="cheat-row"><span class="ck">Export mặc định</span><span class="cv">export default</span></div>
+      <div class="cheat-row"><span class="ck">Chỉ import kiểu</span><span class="cv">import type</span></div>
+      <div class="cheat-row"><span class="ck">Khai báo lib JS cũ</span><span class="cv">declare module</span></div>
+    </div>
+  </div>
+
+  <div class="info i-ok" style="margin-top:22px">
+    <span class="info-ico">🔗</span>
+    <div style="font-size:13.5px">
+      <strong style="color:var(--text)">Tài nguyên chính thức:</strong><br>
+      <span style="color:var(--muted)">
+        <a href="https://www.typescriptlang.org/docs/" style="color:var(--oc2)">typescriptlang.org/docs</a> — Tài liệu TypeScript chính thức &nbsp;·&nbsp;
+        <a href="https://www.typescriptlang.org/play" style="color:var(--oc2)">TypeScript Playground</a> — Chạy thử code trực tiếp trên trình duyệt &nbsp;·&nbsp;
+        <a href="https://www.typescriptlang.org/cheatsheets" style="color:var(--oc2)">TS Cheatsheets</a> — Cheat sheet chính thức dạng PDF &nbsp;·&nbsp;
+        <a href="https://github.com/type-challenges/type-challenges" style="color:var(--oc2)">Type Challenges</a> — Luyện tập type nâng cao &nbsp;·&nbsp;
+        <a href="https://www.totaltypescript.com" style="color:var(--oc2)">Total TypeScript</a> — Bài học chuyên sâu miễn phí
+      </span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  <span>🔷 TypeScript · Hướng dẫn từ cơ bản đến nâng cao · 2026</span>
+  <span style="margin-left:auto;color:var(--faint)">Cơ bản ×3 · Hàm &amp; đối tượng ×3 · OOP &amp; Generics ×3 · Kiểu nâng cao ×4 · Thực chiến ×3 · Mẹo ×1 · Cheat sheet ×1</span>
+</div>
+</div><!-- /main -->
+
+<script>
+window.addEventListener('scroll',()=>{
+  const el=document.documentElement;
+  document.getElementById('pbar').style.width=(el.scrollTop/(el.scrollHeight-el.clientHeight)*100)+'%';
+});
+const sections=document.querySelectorAll('.section[id]');
+const links=document.querySelectorAll('.nav-link');
+sections.forEach(s=>new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if(a)a.classList.add('active');
+    }
+  });
+},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
